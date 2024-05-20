@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | TechPoints</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="src" href="../js/login.js">
+    <script src="../js/login.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <img src="../imgs/logo_img.png" alt="Logo" class="logo">
+        <button onclick="voltar()" id="voltar_btn">Voltar</button>
+        <h2>Boas Vindas!</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="senha" name="password" required>
+            </div>
+            <button onclick="realizarLogin()" type="button">Entrar</button>
+            <h5><a href="#">Esqueci minha senha</a></h5>
+        </form>
+    </div>
+</body>
+</html>
