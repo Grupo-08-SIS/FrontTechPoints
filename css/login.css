@@ -5,70 +5,93 @@ body {
     height: 100vh;
     background-color: #D9D9D9;
     margin: 0;
-    font-family: Arial, sans-serif;
 }
 
 .login-container {
+    background-color: #cc2f2f;
+    border-radius: 20px;
+    width: 1280px;
+    height: 642px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-meio {
+    background-color: #244AA5;
+    display: flex;
+    justify-content: space-between; 
+    width: 1016px;
+    height: 500px;
+    border-radius: 40px;
+}
+
+.container-esquerda,
+.container-direita {
+    width: calc((100% - 100px) / 2); 
+    height: 500px;
+    border-radius: 40px;
+    padding: 20px; 
+}
+
+.container-esquerda {
+    background-color: #244AA5;
+}
+
+.container-direita {
     background-color: #fff;
-    padding: 20px 25px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 731px;
-    height: 519px;
+}
+
+.left-content {
+    margin-left: 20px;
+    color: #fff; 
+}
+
+#exampleInputEmail1,
+#exampleInputPassword1 {
+    width: 330px;
+}
+.titulo-esquerda,
+.titulo-direita {
+    margin-bottom: 15px; 
     text-align: center;
+    margin-top: 50px;
 }
 
-.login-container h2 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.input-group {
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.input-group input {
-    width: 289px;
-    height: 25px;
-    padding: 10px;
-    border: 1px solid #000000;
-    background-color: #D9D9D9;
-    border-radius: 3px;
-}
-
-button {
+.container-direita button {
     width: 124px;
-    height: 56px;
-    padding: 10px;
-    border: none;
+    margin-bottom: 15px; 
+}
+
+.container-esquerda button {
+    width: 124px;
+    height: 50px;
+    background-color: #FABC09;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    margin-top: 20px;
     border-radius: 10px;
-    background-color: #FABC09;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
+    font-family: 'Poppins',
 }
-
-#voltar_btn{
-    position: absolute;
-    top: 40px;
-    left: 1268px;
+.container-esquerda button:hover {
+    background-color: #a37b01;
 }
-
-button:hover {
-    background-color: #FABC09;
+#titulo1-esquerda {
+    font-size: 32px;
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-family: 'Inter', 
 }
-
-.logo {
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    width: 233px; 
-    height: 55px;
+#titulo2-esquerda {
+    font-size: 16px; 
+    font-family: 'Inter', 
+}
+#titulo2-esquerda:first-of-type {
+    margin-bottom: 0; 
+    font-weight: lighter;
+}
+#titulo2-esquerda:last-of-type {
+    font-weight: lighter; 
 }
