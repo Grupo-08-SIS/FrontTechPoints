@@ -11,6 +11,9 @@
 </head>
 <body>
     <div class="login-container">
+        <div class="logo">
+            <img src="../imgs/logo_arrastao.png" alt="Imagem da logo do Arrastão com a escrita 'TechJobs'" id="logoArrastao">
+        </div>
         <div class="container-meio">
             <div class="container-esquerda">
         
@@ -23,15 +26,15 @@
                     <form id="loginForm">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1">
+                            <input type="email" class="form-control" id="InputEmail" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPassword1" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control" id="InputSenha" required>
                         </div>
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Lembrar identificação de usuário</label>
+                            <input type="checkbox" class="form-check-input" id="conectado">
+                            <label class="form-check-label" for="conectado">Lembrar identificação de usuário</label>
                         </div>
                         <span id="titulo2-esquerda">Esqueci minha senha</span>
                         <button type="submit" class="btn btn-primary">Login</button>
@@ -40,14 +43,17 @@
              </div>
             <div class="container-direita">
              <div class="titulo-direita">
-                <h3>Não possui uma conta?</h3>
-                <h5>Se junte a gente, clicando no botão abaixo.</h5>
+                <h3 id="titulo1-direita">Não possui uma conta?</h3>
+                <h5 id="titulo2-direita">Se junte a gente, clicando no botão abaixo.</h5>
              </div>
-                <button type="submit" class="btn btn-primary">Cadastre-se</button>
-                <h5>Ou se quiser voltar para o Menu Inicial, clique no botão abaixo.</h5>
-                <button type="submit" class="btn btn-primary">Voltar</button>
+                <div class="container-btn-direita">
+                    <button type="submit" class="btn btn-primary" id="btn-cadastrar">Cadastre-se</button>
+                </div>
+                <h5 id="titulo2-direita">Ou se quiser voltar para o Menu Inicial, clique no botão abaixo.</h5>
+                <div class="container-btn-direita">
+                    <button type="submit" class="btn btn-primary" id="btn-voltar">Voltar</button>
+                </div>
             </div>
-     
         </div>
     </div>
 </body>

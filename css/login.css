@@ -2,19 +2,39 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: url('../imgs/fundoArrastao.png') no-repeat center center fixed;
+    background-size: cover;
     height: 100vh;
     background-color: #D9D9D9;
     margin: 0;
 }
 
 .login-container {
-    background-color: #cc2f2f;
+    background-color: #ffffff;
     border-radius: 20px;
-    width: 1280px;
-    height: 642px;
+    width: 1240px;
+    height: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 2px solid black;
+}
+
+.logo{
+    display: flex;
+    position: absolute;
+    top: 3.3%; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 273px;
+    height: 50px;
+    background-color: #ffffff;
+    border-top: 2px solid black; 
+    border-left: 2px solid black; 
+    border-right: 2px solid black; 
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px; 
+    justify-content: center;
 }
 
 .container-meio {
@@ -28,18 +48,26 @@ body {
 
 .container-esquerda,
 .container-direita {
-    width: calc((100% - 100px) / 2); 
+    width: calc((100% - 80px) / 2); 
     height: 500px;
     border-radius: 40px;
     padding: 20px; 
 }
-
+.container-esquerda{
+    height: 500px;
+}
+.container-direita {
+    height: 497px;
+    align-self: center;
+}
 .container-esquerda {
     background-color: #244AA5;
 }
 
 .container-direita {
+    
     background-color: #fff;
+    border: 2px solid black;
 }
 
 .left-content {
@@ -47,8 +75,8 @@ body {
     color: #fff; 
 }
 
-#exampleInputEmail1,
-#exampleInputPassword1 {
+#InputEmail,
+#InputSenha {
     width: 330px;
 }
 .titulo-esquerda,
@@ -56,11 +84,6 @@ body {
     margin-bottom: 15px; 
     text-align: center;
     margin-top: 50px;
-}
-
-.container-direita button {
-    width: 124px;
-    margin-bottom: 15px; 
 }
 
 .container-esquerda button {
@@ -94,4 +117,65 @@ body {
 }
 #titulo2-esquerda:last-of-type {
     font-weight: lighter; 
+}
+
+#titulo1-direita {
+    font-size: 32px;
+    font-weight: bold; 
+    text-transform: uppercase;
+    color: #244AA5; 
+    font-family: 'Inter', 
+}
+#titulo2-direita {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #244AA5;  
+    font-family: 'Inter', 
+}
+#titulo2-direita:first-of-type {
+    margin-bottom: 0; 
+    font-weight: lighter;
+}
+#titulo2-direita:last-of-type {
+    font-weight: lighter; 
+}
+
+#btn-cadastrar{
+    width: 200px;
+    height: 50px;
+    background-color: #FABC09;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    align-self: flex-end;
+    font-family: 'Poppins',
+}
+
+#btn-voltar{
+    margin-top: 10px;
+    width: 124px;
+    height: 50px;
+    background-color: #FABC09;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    align-self: flex-end;
+    font-family: 'Poppins',
+}
+
+#btn-cadastrar:hover,
+#btn-voltar:hover {
+    background-color: #a37b01;
+}
+.container-btn-direita{
+    margin-top: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
 }
