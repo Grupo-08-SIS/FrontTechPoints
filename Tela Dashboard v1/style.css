@@ -1,0 +1,282 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    height: 60px;
+}
+
+
+.notifications .bi, .menu .bi {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.user-profile img {
+    cursor: pointer;
+}
+
+.notifications-dropdown, .user-details {
+    top: 50px;
+    right: 0;
+    display: none;
+    z-index: 1;
+    width: 200px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+main {
+    padding: 20px;
+}
+
+.logo img {
+   width: 50%;
+   margin-left: 40px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.menu {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.notifications, .user-profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.notifications .bi, .menu .bi, .user-profile img {
+    width: 24px;
+    height: 24px;
+}
+
+.user-profile span {
+    font-size: 16px;
+    color: #333;
+    margin-left: 10px;
+}
+
+/* .notifications-dropdown, .user-details {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 1;
+    animation: fadeIn 0.3s ease-in-out;
+    width: 200px;
+} */
+
+.notifications-dropdown p, .user-details p {
+    margin: 0;
+    padding: 5px;
+}
+
+
+.user-details {
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-details img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.user-details span {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+main {
+    padding: 20px;
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.welcome-section {
+    background: url('img/Group\ 45.png') no-repeat;
+    background-size: cover;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 70%;
+    position: relative;
+}
+
+.welcome-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: 20%;
+}
+
+.welcome-section h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+
+.welcome-section button {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #ffc107;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    width: 300px;
+}
+
+.course-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 35%;
+    margin-left: 30px;
+    height: 350px;
+    border: 2px solid #244AA5; 
+}
+
+.course-section h2 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: 'Inter' sans-serif;
+}
+
+.course-section hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+.course-section img {
+    margin-top: 50px;
+
+}
+
+.course-info {
+    margin-top: 10px;
+    background-color: #244AA5;
+    border-radius: 20px;
+    height: 50px;
+    margin-top: 30px;
+    width: 70%;
+    margin-left: 60px;
+}
+
+.course-info p {
+    margin: 5px 0;
+    color: white
+}
+
+.course-level {
+    font-weight: bold;
+}
+
+.course-info img {
+    width: 50px;
+}
+
+.gold-text {
+    background: linear-gradient(90deg, #FFD700, #FF8C00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.stats-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.stat-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin: 0 10px;
+    border: 1px solid #244AA5;
+}
+
+.stat-item p {
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.stat-item img {
+    width: 50px;
+    margin-top: 20px;
+}
+
+.stat-value {
+    font-size: 24px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.stat-change {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.last-week {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.course-select {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.course-select select {
+    margin-left: 5px;
+    border-radius: 20px; /* Tornar o select mais arredondado */
+    padding: 10px;
+    border: 2px solid #244AA5; /* Borda azul */
+}
