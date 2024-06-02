@@ -1,10 +1,8 @@
+async function realizarLogin() {
+    const email = document.getElementById('inputEmail').value;
+    const senha = document.getElementById('inputSenha').value;
 
-async function realizarLogin(){
 
-    
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('senha').value;
-    
     try {
         const response = await fetch('http://localhost:8080/usuarios/login', {
             method: 'POST',
@@ -20,12 +18,16 @@ async function realizarLogin(){
 
         if (data.success) {
             sessionStorage.setItem('user', JSON.stringify(data.user));
-            console.alert('Login bem sucedido');
+            console.log('Login bem sucedido');
         } else {
-            console.alert('Email ou senha incorretos');
+            console.log('Email ou senha incorretos');
         }
     } catch (error) {
         console.error('Erro:', error);
         alert('Erro ao tentar fazer login');
     }
+}
+
+function esqueciSenha() {
+    
 }
