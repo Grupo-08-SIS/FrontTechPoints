@@ -1,12 +1,24 @@
 async function realizarCadastro() {
     const enderecoId = await cadastrarEndereco();
-    if (enderecoId !== null) {
-        await cadastrarUsuario(enderecoId); // Usar await para garantir a execução completa antes de prosseguir
-    } else {
-        console.error('Erro ao cadastrar endereço');
-    }
-}
+    const isRH = document.getElementById('is-rh').checked;
+    const tipoUsuario = isRH ? 3 : 2;
+    
 
+    if (enderecoId !== null) {
+        
+        const id = await cadastrarUsuario(enderecoId)
+        
+        if (tipoUsuario == 3) {
+            await cadastrarDadosEmpresa(id)
+        } 
+    } else console.error('Erro ao cadastrar endereço')
+    
+}
+function printarRh() {
+    const isRH = document.getElementById('is-rh').checked;
+    const tipoUsuario = isRH ? 3 : 2;
+    console.log(tipoUsuario)
+}
 async function cadastrarEndereco() {
     const logradouro = document.getElementById('street').value;
     const cidade = document.getElementById('city').value;
@@ -85,8 +97,7 @@ async function cadastrarUsuario(idEndereco) {
 
         if (response.status === 201) {
             console.log('Cadastro bem sucedido');
-        
-            window.location.href = '/dashboard'; //redirecionar futuramente para a tela de dash
+            return data.idUsuario; 
         } else if (response.status === 400) {
             console.error('Erro ao realizar cadastro: Email já cadastrado');
         } else if (response.status === 500) {
@@ -94,9 +105,11 @@ async function cadastrarUsuario(idEndereco) {
         } else {
             console.error('Erro ao tentar fazer cadastro', response.status);
         }
+        return null;
     } catch (error) {
         console.error('Erro:', error);
         alert('Erro ao tentar fazer cadastro');
+        return null;
     }
 }
 
@@ -127,6 +140,42 @@ function formatarCpf() {
     }
 
     cpfFormatar.value = cpfFormatado;
+}
+
+function formatarCnpj() {
+    const cnpjFormatar = document.getElementById('cnpj');
+    let cnpjFormatado = cnpjFormatar.value.replace(/\D/g, '');
+
+    if (cnpjFormatado.length <= 2) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{1,2})/, '$1');
+    } else if (cnpjFormatado.length <= 5) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{1,3})/, '$1.$2');
+    } else if (cnpjFormatado.length <= 8) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    } else if (cnpjFormatado.length <= 12) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{3})(\d{3})(\d{1,4})/, '$1.$2.$3/$4');
+    } else if (cnpjFormatado.length <= 14) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})/, '$1.$2.$3/$4-$5');
+    }
+
+    cnpjFormatar.value = cnpjFormatado;
+}
+
+function formatarTelefone() {
+    const telefoneFormatar = document.getElementById('corporate-phone');
+    let telefoneFormatado = telefoneFormatar.value.replace(/\D/g, ''); 
+
+    if (telefoneFormatado.length <= 2) {
+        telefoneFormatado = telefoneFormatado.replace(/(\d{1,2})/, '($1');
+    } else if (telefoneFormatado.length <= 6) {
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{1,4})/, '($1) $2');
+    } else if (telefoneFormatado.length <= 10) {
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{4})(\d{1,4})/, '($1) $2-$3');
+    } else if (telefoneFormatado.length <= 11) {
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1) $2-$3');
+    }
+
+    telefoneFormatar.value = telefoneFormatado;
 }
 
 function buscarCep() {
@@ -161,5 +210,59 @@ function buscarCep() {
             .catch(error => {
                 console.error('Erro ao buscar CEP:', error);
             });
+    }
+}
+
+async function cadastrarDadosEmpresa(id) {
+    const nomeEmpresa = document.getElementById('company-name').value;
+    const setorIndustria = document.getElementById('industry-sector').value;
+    const cargoUsuario = document.getElementById('user-role').value;
+    const cnpj = document.getElementById('cnpj').value.replace(/\D/g, ''); // Remove pontos, barras e traços
+    const emailCorporativo = document.getElementById('email').value;
+    const telefoneCorporativo = document.getElementById('corporate-phone').value.replace(/\D/g, ''); // Remove formatação
+
+    const dadosEmpresa = {
+        nomeEmpresa: nomeEmpresa,
+        setorIndustria: setorIndustria,
+        cargoUsuario: cargoUsuario,
+        cnpj: cnpj,
+        emailCorporativo: emailCorporativo,
+        telefoneContatoCorporativo: telefoneCorporativo,
+        fkUsuario: id
+    };
+
+    try {
+        const response = await fetch('http://localhost:8080/empresa/cadastro', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosEmpresa)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Resposta do servidor:', data);
+            if (response.status === 201) {
+                console.log('Empresa cadastrada com sucesso');
+                window.location.href = 'dashboard.html'; // Redirecionar para a tela do rh 
+            } else {
+                console.error('Erro ao cadastrar empresa:', data.message);
+                alert(`Erro ao cadastrar empresa: ${data.message}`);
+            }
+        } else if (response.status === 400) {
+            const errorData = await response.json();
+            console.error('Erro de validação dos dados:', errorData.message);
+            alert(`Erro de validação dos dados: ${errorData.message}`);
+        } else if (response.status === 500) {
+            console.error('Erro interno do servidor');
+            alert('Erro interno do servidor');
+        } else {
+            console.error('Erro desconhecido:', response.status);
+            alert(`Erro desconhecido: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Erro ao enviar requisição:', error);
+        alert('Erro ao tentar cadastrar empresa');
     }
 }
