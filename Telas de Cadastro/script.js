@@ -27,25 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    registerForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Evita o envio do formulário para testes
-
-        // Verificações adicionais
-        const isValidCPF = validateCPF(cpfInput.value);
-
-        if (!isValidCPF) {
-            alert('CPF inválido. Por favor, verifique e tente novamente.');
-            return;
-        }
-
-        registerForm.submit();
-    });
-
-      
-      function validateCPF(cpf) {
-        // Implementação da validação de CPF
-        return true; 
-    }
 
     continueBtn.addEventListener('click', function () {
         const username = document.getElementById('username').value;

@@ -44,17 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function validateForm() {
-        const fields = steps[currentStep].querySelectorAll('input[required]');
-        for (let i = 0; i < fields.length; i++) {
-            if (!fields[i].value) {
-                alert('Preencha todos os campos antes de continuar.');
-                return false;
-            }
-        }
-        return true;
-    }
-
     document.querySelectorAll('.continue-btn').forEach(btn => btn.addEventListener('click', nextStep));
     document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', prevStep));
 
