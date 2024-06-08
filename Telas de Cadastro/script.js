@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const helpBtn = document.querySelector('.help-btn');
     const infoModal = document.getElementById('info-modal');
     const closeInfoModal = document.querySelector('#info-modal .close');
+    const isRHCheckbox = document.getElementById('is-rh');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
@@ -26,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
             personalData.style.display = tab.id === 'shape2' ? 'block' : 'none';
         });
     });
-
 
     continueBtn.addEventListener('click', function () {
         const username = document.getElementById('username').value;
@@ -82,8 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    const isRHCheckbox = document.getElementById('is-rh');
-
     isRHCheckbox.addEventListener('change', function () {
         if (this.checked) {
             // Redirecionar para a tela de cadastro do RH
@@ -115,6 +113,26 @@ document.addEventListener('DOMContentLoaded', function () {
         showSlide(slideIndex);
     }
 
+    function checkScreenSize() {
+        if (window.innerWidth < 768) {
+            slides.forEach(slide => {
+                slide.style.display = 'none';
+            });
+            dots.forEach(dot => {
+                dot.style.display = 'none';
+            });
+            leftArrow.style.display = 'none';
+            rightArrow.style.display = 'none';
+        } else {
+            showSlide(slideIndex); // Restores the current slide display
+            dots.forEach(dot => {
+                dot.style.display = 'block';
+            });
+            leftArrow.style.display = 'block';
+            rightArrow.style.display = 'block';
+        }
+    }
+
     dots.forEach((dot, index) => {
         dot.addEventListener('click', () => showSlide(index));
     });
@@ -123,6 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
     rightArrow.addEventListener('click', nextSlide);
 
     showSlide(slideIndex);
+    checkScreenSize(); // Verifica o tamanho da tela ao carregar a página
 
-    setInterval(nextSlide, 3000); // Change image every 3 seconds
+    setInterval(() => {
+        nextSlide();
+        checkScreenSize(); // Certifica-se de verificar o tamanho da tela em cada mudança de slide
+    }, 3000);
+
+    window.addEventListener('resize', checkScreenSize); // Adiciona um listener para verificar o tamanho da tela quando a janela é redimensionada
 });
