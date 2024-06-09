@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Tech Jobs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="img/logo-arrastao.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <img src="img/logo-techJobs.JPG" alt="Logo" class="logo">
+        <button type="button" class="back-btn-top">Voltar</button>
+    </header>
+
+    <main class="container">
+        <section class="form-container">
+            <div class="custom-shape active" id="shape1">
+                <span>Dados do Perfil</span>
+            </div>
+            <div class="custom-shape" id="shape2">
+                <span>Dados Pessoais</span>
+            </div>
+
+            <div class="form-step" id="step1">
+                <form class="form">
+                    <h2>Cadastre-se</h2>
+                    <p>Comece moldando o seu amanhã agora mesmo: crie sua conta</p>
+
+                    <label for="username">Apelido</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="button" class="continue-btn">Continuar <span class="arrow-right"></span></button>
+                    <a href="#" class="login-link">Já possui uma conta? Faça Login!</a>
+                    <div class="toggle-rh">
+                        <label class="switch">
+                            <input type="checkbox" id="is-rh" name="is-rh" oninput="printarRh()">
+                            <span class="slider round"></span>
+                        </label>
+                        <label for="is-rh">Sou RH</label>
+                        <button type="button" class="help-btn">?</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-step" id="step2" style="display: none;">
+                <form class="form">
+                    <h2>Cadastre-se</h2>
+                    <p>Comece moldando o seu amanhã agora mesmo: crie sua conta</p>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="firstname">Nome</label>
+                            <input type="text" id="firstname" name="firstname" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="lastname">Sobrenome</label>
+                            <input type="text" id="lastname" name="lastname" required>
+                        </div>
+                    </div>
+
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" required onkeyup="formatarCpf()">
+
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" required onkeyup="formatarCep()" oninput="buscarCep()">
+
+                    <label for="state">Estado</label>
+                    <input type="text" id="state" name="state" required>
+
+                    <label for="city">Cidade</label>
+                    <input type="text" id="city" name="city" required>
+
+                    <label for="street">Rua</label>
+                    <input type="text" id="street" name="street" required>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">Concordo com os <span id="terms-link">termos de uso</span> dos meus dados</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="notifications" name="notifications">
+                        <label for="notifications">Gostaria de receber e-mails e notificações sobre a plataforma</label>
+                    </div>
+
+                    <button type="button" class="back-btn"><span class="arrow-left"></span> Voltar</button>
+                    <button type="button" class="submit-btn" onclick="realizarCadastro()">Cadastrar</button>
+                </form>
+            </div>
+        </section>
+
+        <aside class="image-container">
+            <div class="image" id="image1">
+                <img src="img/slider1.JPG" alt="Imagem 1">
+            </div>
+            <div class="image" id="image2" style="display: none;">
+                <img src="img/slider2.JPG" alt="Imagem 2">
+            </div>
+            <div class="image" id="image3" style="display: none;">
+                <img src="img/slider3.jpeg" alt="Imagem 3">
+            </div>
+            <div class="dots">
+                <div class="dot" onclick="showSlide(0)"></div>
+                <div class="dot" onclick="showSlide(1)"></div>
+                <div class="dot" onclick="showSlide(2)"></div>
+            </div>
+            <div class="arrow arrow-left1">&lt;</div>
+            <div class="arrow arrow-right1">&gt;</div>
+        </aside>
+
+        <div id="terms-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Termos de Uso</h2>
+                <p>Bem-vindo aos nossos Termos de Uso. Por favor, leia cuidadosamente.</p>
+                <ul>
+                    <li><strong>Conta de Usuário:</strong> Você é responsável por manter a confidencialidade de sua conta e senha.</li>
+                    <li><strong>Uso Aceitável:</strong> Você concorda em usar nossos serviços apenas para fins legais e de acordo com os termos.</li>
+                    <li><strong>Propriedade Intelectual:</strong> Todos os conteúdos e serviços são protegidos por direitos autorais e outras leis de propriedade intelectual.</li>
+                    <li><strong>Rescisão:</strong> Reservamo-nos o direito de suspender ou encerrar sua conta a qualquer momento por violação dos termos.</li>
+                    <li><strong>Limitação de Responsabilidade:</strong> Não nos responsabilizamos por quaisquer danos diretos, indiretos, incidentais ou consequenciais resultantes do uso dos nossos serviços.</li>
+                    <li><strong>Alterações nos Termos:</strong> Podemos modificar os termos a qualquer momento. As alterações serão publicadas nesta página.</li>
+                </ul>
+                <p>Se você tiver dúvidas sobre estes termos, entre em contato conosco.</p>
+            </div>
+        </div>
+
+        <!-- Modal de informações sobre o cadastro de RH -->
+        <div id="info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Informações sobre o cadastro de RH</h2>
+                <p>Este slider libera o cadastro para usuários que querem utilizar a plataforma para contratar alunos. Use este caso seu objetivo seja oferecer oportunidades de trabalho.</p>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+    <script src="script_api.js"></script>
+</body>
+
+</html>
