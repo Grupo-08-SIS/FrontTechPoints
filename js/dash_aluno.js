@@ -92,5 +92,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
+    $j(document).ready(function() {
+        const editProfileButton = document.querySelector('.user-details .btn-primary');
+        const editProfileModal = document.getElementById('editProfileModal');
+    
+        editProfileButton.addEventListener('click', () => {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            if (user) {
+                document.getElementById('editPrimeiroNomeUsuario').value = user.primeiroNomeUsuario || '';
+                document.getElementById('editSobrenomeUsuario').value = user.sobrenomeUsuario || '';
+                document.getElementById('editNomeUsuario').value = user.nomeUsuario || '';
+                document.getElementById('editEmailUsuario').value = user.email || '';
+                document.getElementById('profilePicture').src = user.profilePicture || '../imgs/user photo.png';
+            }
+            $j(editProfileModal).modal('show');
+        });
+    
+        document.getElementById('editProfileForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const updatedUser = {
+                primeiroNomeUsuario: document.getElementById('editPrimeiroNomeUsuario').value,
+                sobrenomeUsuario: document.getElementById('editSobrenomeUsuario').value,
+                nomeUsuario: document.getElementById('editNomeUsuario').value,
+                email: document.getElementById('editEmailUsuario').value,
+                profilePicture: document.getElementById('profilePicture').src
+            };
+            sessionStorage.setItem('user', JSON.stringify(updatedUser));
+            $j(editProfileModal).modal('hide');
+            document.querySelectorAll('#nomeUsuario').forEach(el => el.textContent = updatedUser.nomeUsuario);
+        });
+    
+        document.getElementById('deleteProfileButton').addEventListener('click', () => {
+            if (confirm('Tem certeza que deseja excluir seu perfil?')) {
+                sessionStorage.removeItem('user');
+                window.location.href = '/login.html';
+            }
+        });
+    
+        document.getElementById('profilePictureInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePicture').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+    
+
+
     
 });
