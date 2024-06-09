@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard do Aluno - Arrastart</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/dash_aluno.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="img/logo-arrastao.png">
+    <link rel="icon" type="image/x-icon" href="../imgs/logo-arrastao.png">
 
 </head>
 <body>
     <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
         <div class="logo">
-            <img src="img/logo-tech-jobs.JPG" alt="Logo" class="img-fluid" style="width: 30%; margin-left: 40px;">
+            <img src="../imgs/logo-tech-jobs.JPG" alt="Logo" class="img-fluid" style="width: 30%; margin-left: 40px;">
         </div>
         <div class="d-flex align-items-center">
             <div class="notifications position-relative mr-3">
@@ -24,12 +24,12 @@
                 </div>
             </div>
             <div class="user-profile d-flex align-items-center position-relative">
-                <img src="img/user photo.png" alt="Junior Juares" class="rounded-circle" width="40" height="40">
-                <span class="ml-2">Junior Juares</span>
+                <img src="../imgs/user photo.png" alt="Sua foto de perfil" class="rounded-circle" width="40" height="40">
+                <span class="ml-2" id="nomeUsuario"></span>
                 <div class="user-details position-absolute bg-white shadow p-3 rounded" style="display: none;">
                     <div class="text-center">
-                        <img src="img/user photo.png" alt="Junior Juares" class="rounded-circle" width="60" height="60">
-                        <p class="mt-2 mb-0">Junior Juares</p>
+                        <img src="../imgs/user photo.png" alt="Sua foto de perfil" class="rounded-circle" width="60" height="60">
+                        <p class="mt-2 mb-0" id="nomeUsuario" ></p>
                         <button class="btn btn-sm btn-primary mt-2">Mudar Foto</button>
                     </div>
                 </div>
@@ -43,28 +43,26 @@
     <div class="geral-container">
 
         <div class="total-left">
-
-            
             <div class="main-content">
                     <section class="welcome-section">
                         <div class="welcome-text">
-                            <h1>Bem Vindo,<br><span><b>Junior Juares</b></span></h1>
+                            <h1>Bem Vindo,<br><span id="nomeUsuario"><b></b></span></h1>
                             <button>Gerar relatório de ganho de pontos</button>
                         </div>
+                        <img id="img-welcome" src="../imgs/Group 45.png" alt="">
                     </section>
-                    
                 
                 
                 </section>
                 <section class="stats-section mt-4">
                     <div class="stat-item">
-                        <p>Atividades Entregues</p>
-                        <p id="atividades-entregues" class="stat-value red">30%</p>
-                        <p id="atividades-entregues-change" class="stat-change red">— ⬇</p>
+                        <p id="kpi-titulo">Atividades Entregues</p>
+                        <p id="atividades-entregues" class="stat-value">0%</p>
+                        <p id="atividades-entregues-change" class="stat-change">— ⬇</p>
                     </div>
                     <div class="stat-item">
+                        <p id="kpi-titulo">Medalhas do Curso</p>
                         <div class="course-select mt-3">
-                            <p>Medalhas do Curso</p>
                             <select id="course-select" class="custom-select">
                                 <option value="excel">Excel</option>
                                 <option value="confeitaria" selected>Confeitaria</option>
@@ -72,15 +70,15 @@
                             </select>
                         </div>
                         
-                        <img id="medalha-curso" src="img/Group 46.png" alt="Ouro">
+                        <img id="medalha-curso" src="../imgs/Group 46.png" alt="Ouro">
                     </div>
                     <div class="stat-item">
-                        <p>Pontos da Semana</p>
-                        <p id="pontos-semana" class="stat-value red">0 pts</p>
-                        <p id="pontos-semana-change" class="stat-change red">— ⬇</p>
+                        <p id="kpi-titulo">Pontos da Semana</p>
+                        <p id="pontos-semana" class="stat-value">0 pts</p>
+                        <p id="pontos-semana-change" class="stat-change">— ⬇</p>
                         <p class="last-week green">
                             <span>Semana Passada</span>
-                            <span id="semana-passada-change" class="points-change">+ ⬆ 2K pts</span>
+                            <span id="semana-passada-change" class="points-change">+ ⬆ 0 pts</span>
                         </p>
                     </div>
                 </section>
@@ -117,8 +115,8 @@
                 </section>
             </div>
 
-            <div class="dash-atual">
-                <section class="course-section">
+            <div id ="kpiClassificacao" class="dash-atual">
+                <section id="CardClassificacao" class="course-section">
                     <h2>Classificação do seu melhor curso:</h2>
                    
                   <hr>
@@ -127,7 +125,7 @@
                         <p class="course-level">Nível: <span class="gold-text">Ouro</span></p>
                     
                     </div>
-                    <img src="img/Group 46.png" alt="Ouro">
+                    <img src="../imgs/Group 46.png" alt="Ouro">
                 </section>
             </div>
 
@@ -159,8 +157,21 @@
         </div>
 
     </div>
-    
-
-<script src="script.js"></script>
+<script src="../js/dash_aluno.js"></script>
+<script src="../js/dash_aluno_api.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            if (user && user.nomeUsuario) {
+                const userNameElements = document.querySelectorAll('#nomeUsuario');
+                userNameElements.forEach(element => {
+                    element.innerHTML = user.nomeUsuario;
+                });
+            } else {
+            
+                window.location.href = '/login.html';
+            }
+        });
+</script>
 </body>
 </html>
