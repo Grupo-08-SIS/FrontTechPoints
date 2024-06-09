@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Aluno - Arrastart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="img/logo-arrastao.png">
+
+</head>
+<body>
+    <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
+        <div class="logo">
+            <img src="img/logo-tech-jobs.JPG" alt="Logo" class="img-fluid" style="width: 30%; margin-left: 40px;">
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="notifications position-relative mr-3">
+                <i class="bi bi-bell"></i>
+                <div class="notifications-dropdown position-absolute bg-white shadow p-3 rounded" style="display: none;">
+                    <p>Você não tem novas notificações.</p>
+                </div>
+            </div>
+            <div class="user-profile d-flex align-items-center position-relative">
+                <img src="img/user photo.png" alt="Junior Juares" class="rounded-circle" width="40" height="40">
+                <span class="ml-2">Junior Juares</span>
+                <div class="user-details position-absolute bg-white shadow p-3 rounded" style="display: none;">
+                    <div class="text-center">
+                        <img src="img/user photo.png" alt="Junior Juares" class="rounded-circle" width="60" height="60">
+                        <p class="mt-2 mb-0">Junior Juares</p>
+                        <button class="btn btn-sm btn-primary mt-2">Mudar Foto</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu ml-3">
+                <i class="bi bi-list"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="geral-container">
+
+        <div class="total-left">
+
+            
+            <div class="main-content">
+                    <section class="welcome-section">
+                        <div class="welcome-text">
+                            <h1>Bem Vindo,<br><span><b>Junior Juares</b></span></h1>
+                            <button>Gerar relatório de ganho de pontos</button>
+                        </div>
+                    </section>
+                    
+                
+                
+                </section>
+                <section class="stats-section mt-4">
+                    <div class="stat-item">
+                        <p>Atividades Entregues</p>
+                        <p id="atividades-entregues" class="stat-value red">30%</p>
+                        <p id="atividades-entregues-change" class="stat-change red">— ⬇</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="course-select mt-3">
+                            <p>Medalhas do Curso</p>
+                            <select id="course-select" class="custom-select">
+                                <option value="excel">Excel</option>
+                                <option value="confeitaria" selected>Confeitaria</option>
+                                <option value="design">Design Gráfico</option>
+                            </select>
+                        </div>
+                        
+                        <img id="medalha-curso" src="img/Group 46.png" alt="Ouro">
+                    </div>
+                    <div class="stat-item">
+                        <p>Pontos da Semana</p>
+                        <p id="pontos-semana" class="stat-value red">0 pts</p>
+                        <p id="pontos-semana-change" class="stat-change red">— ⬇</p>
+                        <p class="last-week green">
+                            <span>Semana Passada</span>
+                            <span id="semana-passada-change" class="points-change">+ ⬆ 2K pts</span>
+                        </p>
+                    </div>
+                </section>
+                
+                <div class="longo-do-tempo">
+                    <h3>Pontos ao Longo do Tempo (Dias)</h3>
+
+                    <div class="dash-longoDoTempo"></div>
+
+                </div>
+            
+                    <div class="cada-curso">
+                        <h3>Pontos de Cada Curso ao Mês</h3>
+                        <div class="dash-pontosCadaCurso"></div>
+                    </div>
+               
+            </div>
+
+        </div>
+
+        <div class="total-right">
+
+            <div class="dash-atual">
+                <section class="course-section">
+                    <h2>Atualmente sua Dash está no:</h2>
+                    <hr>
+                    <p><b>Se quiser trocar ela selecione outro curso abaixo</b></p>
+                    
+                    <div class="course-info">
+                        <p>Geral</p>
+                        
+                    </div>
+                    
+                </section>
+            </div>
+
+            <div class="dash-atual">
+                <section class="course-section">
+                    <h2>Classificação do seu melhor curso:</h2>
+                   
+                  <hr>
+                    <div class="course-info">
+                        <p>Confeitaria</p>
+                        <p class="course-level">Nível: <span class="gold-text">Ouro</span></p>
+                    
+                    </div>
+                    <img src="img/Group 46.png" alt="Ouro">
+                </section>
+            </div>
+
+            <div class="dash-atual">
+                <section class="course-section">
+                    <h2>Meta de estudo</h2>
+                    <hr>
+                    <div class="porcentagem-estudo" style="background-color: blue; height: 3vh;">  </div>
+                    <p>Sua meta de estudo é 1h 30m por dia, totalizando 10h 50m por semana</p>
+
+                    <div class="dias-semana" style="background-color: aquamarine; height: 10vh;"></div>
+
+                    <h3>Progresso atual</h3>
+                    <p>6h foram concluídas da meta atual definida</p>.
+                    
+                </section>
+            </div>
+    
+            <div class="dash-atual">
+                <section class="course-section-2">
+                <div class="frase-dia">
+
+                    <h2>Frase do Dia:</h2>
+                    <p><b>Miyato Musashi</b></p>
+                    <p>“Tanto ao lutar quanto na vida cotidiana, você deve ser determinado,  ainda que calmo. Vá de encontro à situação sem tensão, mas também sem  desleixo, com o espírito  estável, mas sem prejulgamentos.”</p>
+                    
+                </div>
+
+        </div>
+
+    </div>
+    
+
+<script src="script.js"></script>
+</body>
+</html>
