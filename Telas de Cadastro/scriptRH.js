@@ -74,6 +74,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    const isRHCheckbox = document.getElementById('is-rh');
+    
+    isRHCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            // Redirecionar para a tela de cadastro do RH
+            window.location = 'indexNormal.html';
+        }
+    });
+
 
     let slideIndex = 0;
     const slides = document.querySelectorAll('.image');
