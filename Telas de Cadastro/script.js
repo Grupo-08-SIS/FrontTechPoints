@@ -149,4 +149,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 3000);
 
     window.addEventListener('resize', checkScreenSize); // Adiciona um listener para verificar o tamanho da tela quando a janela é redimensionada
+
+
+
+    
 });
+

@@ -142,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
 
-
     
 });
+
+function toggleDay(element) {
+    element.classList.toggle('active');
+}
