@@ -385,7 +385,7 @@ main {
 .cada-curso{
     background-color: #244AA5;
     
-    height: 45vh;
+    height: 65vh;
     border-radius: 30px;
     display: flex;
     justify-content: center;
@@ -400,7 +400,7 @@ main {
 
 .dash-pontosCadaCurso{
     background-color: white;
-    height: 35vh;
+    height: 45vh;
     width: 90%;
     border-radius: 30px;
 }
@@ -451,18 +451,19 @@ main {
     background-color: #fff;
 }
 
-.progress-bar {
-    height: 20px;
-    background-color: #f1f1f1;
+.progresso-aluno{
+    background-color: #ffffff;
     border-radius: 10px;
     overflow: hidden;
     margin: 10px 0;
 }
 
-.progress-bar div {
-    height: 100%;
-    width: 8%; /* Ajuste de acordo com o progresso */
-    background-color: #f7b700;
+.progress-bar {
+    background-color: #ffffff; 
+}
+
+.progress-bar-striped.progress-bar-animated {
+    background-color: #f7b700; 
 }
 
 .days {
@@ -545,3 +546,6 @@ footer {
     width: 255px;
     height: 100px;
 }
+
+
+
