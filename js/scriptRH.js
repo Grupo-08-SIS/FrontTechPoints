@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     isRHCheckbox.addEventListener('change', function () {
         if (this.checked) {
             // Redirecionar para a tela de cadastro do RH
-            window.location = 'indexNormal.html';
+            window.location = 'cadastro.html';
         }
     });
 

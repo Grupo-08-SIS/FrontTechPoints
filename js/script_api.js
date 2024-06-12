@@ -1,8 +1,8 @@
 async function realizarCadastro() {
     const enderecoId = await cadastrarEndereco();
-    const isRH = document.getElementById('is-rh').checked;
+    const isRH = window.location.pathname.includes('cadastro_rh');
     const tipoUsuario = isRH ? 3 : 2;
-    
+
 
     if (enderecoId !== null) {
         
@@ -14,11 +14,7 @@ async function realizarCadastro() {
     } else console.error('Erro ao cadastrar endereço')
     
 }
-function printarRh() {
-    const isRH = document.getElementById('is-rh').checked;
-    const tipoUsuario = isRH ? 3 : 2;
-    console.log(tipoUsuario)
-}
+
 async function cadastrarEndereco() {
     const logradouro = document.getElementById('street').value;
     const cidade = document.getElementById('city').value;
@@ -97,7 +93,10 @@ async function cadastrarUsuario(idEndereco) {
 
         if (response.status === 201) {
             console.log('Cadastro bem sucedido');
-            return data.idUsuario; 
+            if(tipoUsuario != 3){
+                return data.idUsuario
+            }
+            return data.idUsuario, window.location = '/html/home.html';
         } else if (response.status === 400) {
             console.error('Erro ao realizar cadastro: Email já cadastrado');
         } else if (response.status === 500) {
@@ -168,15 +167,16 @@ function formatarTelefone() {
     if (telefoneFormatado.length <= 2) {
         telefoneFormatado = telefoneFormatado.replace(/(\d{1,2})/, '($1');
     } else if (telefoneFormatado.length <= 6) {
-        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{1,4})/, '($1) $2');
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{1,4})/, '($1)$2');
     } else if (telefoneFormatado.length <= 10) {
-        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{4})(\d{1,4})/, '($1) $2-$3');
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{4})(\d{1,4})/, '($1)$2-$3');
     } else if (telefoneFormatado.length <= 11) {
-        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1) $2-$3');
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1)$2-$3');
     }
 
     telefoneFormatar.value = telefoneFormatado;
 }
+
 
 function buscarCep() {
     const cepInput = document.getElementById('cep');
@@ -214,12 +214,12 @@ function buscarCep() {
 }
 
 async function cadastrarDadosEmpresa(id) {
-    const nomeEmpresa = document.getElementById('company-name').value;
-    const setorIndustria = document.getElementById('industry-sector').value;
-    const cargoUsuario = document.getElementById('user-role').value;
-    const cnpj = document.getElementById('cnpj').value.replace(/\D/g, ''); // Remove pontos, barras e traços
-    const emailCorporativo = document.getElementById('email').value;
-    const telefoneCorporativo = document.getElementById('corporate-phone').value.replace(/\D/g, ''); // Remove formatação
+    const nomeEmpresa = document.getElementById('company-name').value.trim();
+    const setorIndustria = document.getElementById('industry-sector').value.trim();
+    const cargoUsuario = document.getElementById('user-role').value.trim();
+    const cnpj = document.getElementById('cnpj').value.replace(/\D/g, '').trim();
+    const emailCorporativo = document.getElementById('email').value.trim();
+    const telefoneCorporativo = document.getElementById('corporate-phone').value.replace(/\D/g, '').trim();
 
     const dadosEmpresa = {
         nomeEmpresa: nomeEmpresa,
@@ -227,9 +227,11 @@ async function cadastrarDadosEmpresa(id) {
         cargoUsuario: cargoUsuario,
         cnpj: cnpj,
         emailCorporativo: emailCorporativo,
-        telefoneContatoCorporativo: telefoneCorporativo,
-        fkUsuario: id
+        telefoneContato: telefoneCorporativo,
+        idUsuario: id 
     };
+
+    console.log('Dados enviados:', dadosEmpresa); 
 
     try {
         const response = await fetch('http://localhost:8080/empresa/cadastro', {
@@ -240,20 +242,20 @@ async function cadastrarDadosEmpresa(id) {
             body: JSON.stringify(dadosEmpresa)
         });
 
+        const data = await response.json(); 
+
         if (response.ok) {
-            const data = await response.json();
             console.log('Resposta do servidor:', data);
             if (response.status === 201) {
                 console.log('Empresa cadastrada com sucesso');
-                window.location.href = 'dashboard.html'; // Redirecionar para a tela do rh 
+                window.location.href = '/html/home.html'; 
             } else {
                 console.error('Erro ao cadastrar empresa:', data.message);
                 alert(`Erro ao cadastrar empresa: ${data.message}`);
             }
         } else if (response.status === 400) {
-            const errorData = await response.json();
-            console.error('Erro de validação dos dados:', errorData.message);
-            alert(`Erro de validação dos dados: ${errorData.message}`);
+            console.error('Erro de validação dos dados:', data.message);
+            alert(`Erro de validação dos dados: ${data.message}`);
         } else if (response.status === 500) {
             console.error('Erro interno do servidor');
             alert('Erro interno do servidor');
@@ -266,3 +268,5 @@ async function cadastrarDadosEmpresa(id) {
         alert('Erro ao tentar cadastrar empresa');
     }
 }
+
+

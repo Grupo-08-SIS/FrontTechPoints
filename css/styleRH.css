@@ -101,7 +101,7 @@ body {
         padding: 0 20px;
         position: absolute;
         clip-path: path("M 0 0 Q 50 50 0 100 L 200 100 Q 250 50 200 0 Z");
-        right: 770px;
+        right: 800px;
     }
 
     .custom-shape span {
