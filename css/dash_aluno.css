@@ -224,7 +224,7 @@ main {
     align-items:center ;
     text-align: center;
     width: 75%;
-    height: auto;
+    height: 45vh;
     border: 4px solid #244AA5; 
 }
 
@@ -243,6 +243,7 @@ main {
 
 .course-section img {
     margin-top: 50px;
+    width: 130px;
 
 }
 
@@ -252,7 +253,7 @@ main {
     margin-top: 30px;
     width: 70%;
     margin-left: 45px;
-    height: 4vh;
+    height: 7vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -357,7 +358,7 @@ main {
 .total-left{
     display: flex;
     flex-direction: column;
-    width: 77%;
+    width: 75%;
     height: auto;
     padding-top: 4vh;
 }
@@ -451,8 +452,6 @@ main {
 }
 
 
-
-
 .course-section-2{
     background-color: #244AA5;
     color: white;
@@ -461,9 +460,39 @@ main {
     align-items:center ;
     text-align: center;
     width: 75%;
-    height: auto;
+    height: 50.4vh;
     border: 2px solid #244AA5; 
 }
+
+
+.course-section-3 {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    align-items:center ;
+    text-align: center;
+    width: 75%;
+    height: 60vh;
+    border: 4px solid #244AA5; 
+}
+
+.course-section-3 h2 {
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: 'Inter' sans-serif;
+}
+
+.course-section-3 hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+
+
+
+
 
 
 .modal-backdrop {
@@ -579,5 +608,15 @@ footer {
     height: 100px;
 }
 
+#p-geral{
+    color: red;
+}
 
+#p-curso{
+    font-size: 24px;
+}
 
+.p-descricao{
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
