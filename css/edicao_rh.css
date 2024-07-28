@@ -1,0 +1,453 @@
+/* styles.css */
+body {
+    font-family: Inter, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: #fff;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+a {
+    text-decoration: none; 
+    outline: none; 
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 100px;
+    z-index: 2;
+}
+
+.barra_de_pesquisa {
+    position: relative;
+    display: inline-block;
+    width: 100%; 
+    max-width: 500px;
+}
+
+.barra_pesquisar {
+    width: 100%;
+    padding: 2vh;
+    border-radius: 10px;
+    font-size: 16px;
+    border: 4px solid #244aa5;
+}
+
+.barra_pesquisar::placeholder {
+    color: #999; /* Cor do texto placeholder */
+}
+
+.lupa_de_pesquisa {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.lupa_de_pesquisa img {
+    display: block;
+}
+
+.drop_down {
+    position: relative; /* Define o contêiner pai para o posicionamento absoluto do dropdown */
+    display: inline-block;
+    background-color: #f9f9f9; /* Cor de fundo */
+    border: 3px solid #000000; /* Borda */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 10px; /* Espaçamento interno */
+    cursor: pointer; /* Cursor de mão para indicar interatividade */
+    transition: background-color 0.3s; /* Transição suave para cor de fundo */
+    z-index: 10; /* Garante que o contêiner esteja acima do dropdown */
+}
+
+.container_nome_usuario {
+    display: flex;
+    align-items: center; /* Alinha o texto verticalmente ao centro */
+    pointer-events: none;
+}
+
+.container_nome_usuario h1 {
+    font-size: 18px; /* Tamanho da fonte */
+    color: #333; /* Cor do texto */
+    margin: 0; /* Remove margens */
+    padding-right: 10px; /* Espaço entre o texto e a imagem */
+}
+
+.tracos_drop {
+    width: 20px; /* Largura da imagem */
+    height: auto; /* Altura automática para manter a proporção */
+    pointer-events: none;
+}
+
+.dropdown_content {
+    position: absolute; /* Posiciona o dropdown em relação ao contêiner pai */
+    background-color: #f9f9f9; /* Cor de fundo */
+    border: 3px solid #000000; /* Borda */
+    border-top: none; /* Remove a borda superior */
+    border-radius: 0 0 5px 5px; /* Apenas as bordas inferiores serão arredondadas */
+    padding: 10px; /* Espaçamento interno */
+    margin-top: 8px; /* Espaço entre o dropdown e o conteúdo */
+    width: calc(100% - 25px); /* Ajusta a largura do dropdown, subtraindo o padding */
+    max-height: 0; /* Inicialmente com altura 0 */
+    overflow: hidden; /* Esconde o conteúdo que ultrapassa o contêiner */
+    opacity: 0; /* Inicialmente transparente */
+    transition: max-height 0.3s ease, opacity 0.3s ease; /* Transições suaves */
+    z-index: 1; /* Garante que o dropdown fique atrás do contêiner principal */
+    left: 0; /* Alinha o dropdown com o início do contêiner pai */
+}
+
+.dropdown_content a {
+    color: #333; /* Cor do texto */
+    padding: 8px 12px; /* Espaçamento interno */
+    text-decoration: none; /* Remove o sublinhado */
+    display: block; /* Faz o link ocupar a largura toda */
+}
+
+.dropdown_content a:hover {
+    background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+}
+
+.show {
+    max-height: 300px; /* Define a altura máxima do dropdown, ajuste conforme necessário */
+    opacity: 1; /* Torna o conteúdo opaco */
+}
+
+.container_perfil {
+    width: 100%;
+    height: 17vh;
+    margin-top: 10vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.container_interno_perfil {
+    display: flex;
+    background-color: #244aa5;
+    width: 70%;
+    height: 100%;
+    border-radius: 20px;
+    color: white;
+    align-items: center;
+}
+
+.container_interno_perfil h1 {
+    padding: 10px;
+}
+
+.linha {
+    background-color: white;
+    width: 124vh;
+    height: 3px;
+}
+
+.container_separacao {
+    width: 100%;
+    height: 10vh;
+    margin-top: 10vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.container_interno_separacao {
+    display: flex;
+    background-color: #fabc09;
+    width: 70%;
+    height: 100%;
+    border-radius: 20px;
+    color: #244aa5;
+    align-items: center;
+}
+
+.container_interno_separacao h1 {
+    padding: 10px;
+    font-size: 25px;
+}
+
+.container_fundo_aluno {
+    width: 100%;
+    height: 35vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bloco_alunos {
+    width: 71%;
+    height: 100%;
+    display: flex; /* Ativa o flexbox */
+    flex-wrap: wrap; /* Permite que os itens quebrem linha se necessário */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    align-items: center; /* Centraliza os itens verticalmente */
+}
+
+.box_Aluno {
+    background-color: #244aa5; /* Fundo do bloco */
+    border: 3px solid #ddd; /* Borda sutil */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267); /* Sombra */
+    width: 250px; /* Largura do bloco */
+    padding: 20px; /* Espaçamento interno */
+    margin: 10px; /* Espaçamento entre blocos */
+    display: flex;
+    flex-direction: column; /* Colocar elementos em coluna */
+    align-items: center; /* Centralizar itens horizontalmente */
+    position: relative; /* Necessário para posicionamento absoluto */
+    color: #ffffff;
+}
+
+.box_Aluno span:first-child {
+    font-weight: bold; /* Negrito para o nome do aluno */
+    font-size: 1.2rem; /* Tamanho da fonte para o nome do aluno */
+    margin-bottom: 10px; /* Espaçamento abaixo do nome do aluno */
+    text-align: center; /* Centraliza o texto */
+}
+
+.box_Aluno span:nth-child(2) {
+    font-size: 0.9rem; /* Tamanho da fonte para o texto */
+    margin-bottom: 10px; /* Espaçamento abaixo do texto */
+    text-align: center; /* Centraliza o texto */
+}
+
+.box_Aluno img {
+    width: 50px; /* Largura da imagem */
+    height: auto; /* Manter a proporção da imagem */
+    margin-top: 10px; /* Espaçamento acima da imagem */
+}
+
+.box_Aluno .solicitacao {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.box_Aluno button {
+    background-color: #ed1b24; /* Cor de fundo */
+    border: none; /* Sem borda */
+    color: #ffffff; /* Cor do texto */
+    padding: 5px 10px; /* Espaçamento interno reduzido */
+    font-size: 0.75rem; /* Tamanho da fonte reduzido */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de mãozinha */
+    position: absolute; /* Posição absoluta */
+    bottom: 10px; /* Alinhado ao fundo do bloco */
+    right: 10px; /* Alinhado à direita da imagem */
+}
+
+.box_Aluno button:hover {
+    background-color: #ffd700; /* Cor de fundo mais clara ao passar o mouse */
+    color: #244aa5;
+}
+
+.container_fundo_editar_perfil {
+    display: flex;
+    width: 100%;
+    height: 70vh;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10vh;
+}
+
+.container_editar_perfil {
+    display: flex;
+    width: 70%;
+    background-color: #244aa5;
+    height: 100%;
+    border-radius: 20px;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid #002d95;
+}
+
+.container_editar {
+    width: 100%;
+    height: 10vh;
+    color: white;
+    margin-left: 5%;
+    font-size: 20px;
+}
+
+.container_inputs {
+    display: flex; /* Ativa o flexbox */
+    flex-direction: column; /* Alinha os itens em coluna */
+    width: 50%; /* Largura do contêiner */
+    margin: 20px auto; /* Centraliza horizontalmente */
+    padding: 20px; /* Espaçamento interno */
+    border: 1px solid #ddd; /* Borda sutil */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    background-color: #f9f9f9; /* Cor de fundo */
+    border: 3px solid #ffd700;
+}
+
+.container_inputs span {
+    margin-top: 10px; /* Espaçamento superior */
+    margin-bottom: 5px; /* Espaçamento inferior */
+    font-weight: bold; /* Texto em negrito */
+    color: #333; /* Cor do texto */
+}
+
+.container_inputs input {
+    padding: 10px; /* Espaçamento interno */
+    margin-bottom: 15px; /* Espaçamento inferior */
+    border: 1px solid #ccc; /* Borda dos inputs */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 16px; /* Tamanho da fonte */
+    width: 100%; /* Largura total do contêiner */
+    box-sizing: border-box; /* Inclui a borda e o padding na largura total */
+}
+
+.container_inputs button {
+    padding: 10px 15px; /* Espaçamento interno */
+    background-color: #ffd700; /* Cor de fundo */
+    color: #ffffff; /* Cor do texto */
+    border: none; /* Sem borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 20px; /* Tamanho da fonte */
+    cursor: pointer; /* Cursor de mãozinha */
+    transition: background-color 0.3s; /* Transição suave */
+}
+
+.container_inputs button:hover {
+    background-color: #d0b100; /* Cor de fundo ao passar o mouse */
+}
+
+.container_fundo_exclusao {
+    width: 100%;
+    height: 40vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.container_exclusao {
+    display: flex; /* Ativa o flexbox */
+    flex-direction: column; /* Organiza itens em coluna */
+    gap: 15px; /* Espaçamento entre os itens */
+    width: 100%; /* Largura total */
+    margin: 20px auto; /* Centraliza horizontalmente */
+    padding: 20px; /* Espaçamento interno */
+    align-items: center;
+    height: 20vh;
+    justify-content: space-around;
+}
+
+.exclusao_item {
+    display: flex; /* Ativa o flexbox */
+    align-items: center; /* Centraliza verticalmente */
+    gap: 10px; /* Espaçamento entre o botão e o ícone */
+}
+
+.container_exclusao button {
+    width: 35vh;
+    height: 5vh;
+    background-color: #ed1b24; /* Cor de fundo */
+    color: #ffffff; /* Cor do texto */
+    border: none; /* Sem borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 20px; /* Tamanho da fonte */
+    cursor: pointer; /* Cursor de mãozinha */
+    transition: background-color 0.3s; /* Transição suave */
+}
+
+.container_exclusao button:hover {
+    background-color: #c3000a; /* Cor de fundo ao passar o mouse */
+}
+
+.info_icon {
+    display: flex; /* Ativa o flexbox */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    width: 3vh; /* Largura do ícone */
+    height: 3vh; /* Altura do ícone */
+    border-radius: 50%; /* Bordas arredondadas (círculo) */
+    background-color: #1a3678; /* Cor de fundo do ícone */
+    color: #ffffff; /* Cor do texto do ícone */
+    font-weight: bold; /* Negrito */
+    font-size: 20px; /* Tamanho da fonte */
+    cursor: pointer; /* Cursor de mãozinha */
+    transition: background-color 0.3s; /* Transição suave */
+}
+
+.info_icon:hover {
+    background-color: #b89a00; /* Cor de fundo ao passar o mouse */
+}
+
+footer {
+    background-color: #fff;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.footer-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 20px;
+}
+
+
+.logo-footer img {
+    width: 255px;
+    height: 100px;
+}
+
+.contact, .social-media {
+    text-align: left;
+}
+
+.contact h3, .social-media h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.contact p, .social-media a {
+    color: #555;
+    text-decoration: none;
+    margin: 5px 0;
+    display: block;
+}
+
+.social-media .social-icons {
+    display: flex;
+    align-items: center;
+}
+
+.social-media a {
+    margin-right: 10px;
+}
+
+.contact a:hover, .social-media a:hover {
+    color: #3498db;
+}
+
+.footer-note {
+    color: #aaa;
+    margin-top: 20px;
+}
+
+#titulo-contact{
+    color: #ED1B24;
+    font-size: 40px;
+    text-align: center;
+    font-family: Share tech,
+}

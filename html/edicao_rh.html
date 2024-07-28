@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/edicao_rh.css">
+
+</head>
+<script src="../js/drop_down.js"></script>
+<script src="../js/tela_rh_ver_mais.js"></script>
+<script src="../js/localiza_usuario_tela_rh_header.js"></script>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
+            <div class="barra_de_pesquisa">
+                <input class="barra_pesquisar" type="text" placeholder="Buscar por uma pessoa...">
+                <img class="lupa_de_pesquisa" src="/imgs/lupa_de_pesquisa.png" alt="Lupa pesquisar">
+            </div>
+
+            <div class="drop_down" onclick="toggleDropdown()">
+                <div class="container_nome_usuario">
+                    <h1 id="id_nome_usuario">Nome do Usuário</h1>
+                    <img class="tracos_drop" src="/imgs/tracos_drop.png" alt="Traços drop down">
+                </div>
+                <div id="dropdown-content" class="dropdown_content">
+                    <a href="tela_rh_vagas.html">Vagas</a>
+                    <a href="#">Classificação</a>
+                    <a href="#">Editar Perfil</a>
+                    <a href="home.html">Sair da Conta</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container_perfil">
+        <div class="container_interno_perfil">
+            <h1>Seu Perfil</h1>
+            <div class="linha">
+            </div>
+        </div>
+    </div>
+
+    <div class="container_separacao">
+        <div class="container_interno_separacao">
+            <h1>Pessoas que você teve interesse</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_aluno">
+        <div class="bloco_alunos">
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container_separacao">
+        <div class="container_interno_separacao">
+            <h1>Pessoas Favoritadas</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_aluno">
+        <div class="bloco_alunos">
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <button onclick="desfavoritar()">Desfavoritar</button>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <button onclick="desfavoritar()">Desfavoritar</button>
+            </div>
+
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="/imgs/gold medal.png" alt="medalha">
+                <button onclick="desfavoritar()">Desfavoritar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container_separacao">
+        <div class="container_interno_separacao">
+            <h1>Configurações</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_editar_perfil">
+        <div class="container_editar_perfil">
+            <div class="container_editar">
+                <h1>Editar Perfil</h1>
+            </div>
+
+            <div class="container_inputs">
+                <span class="">Novo E-mail</span>
+                <input type="text" id="novo_email">
+                <span class="">Novo Telefone</span>
+                <input type="text" id="novo_telefone">
+                <span class="">Nova Senha</span>
+                <input type="text" id="novo_email">
+                <span class="">Confirmação da Senha</span>
+                <input type="text" id="novo_email">
+                <button onclick="salvarMudancar()">Salvar Mudanças</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container_separacao">
+        <div class="container_interno_separacao">
+            <h1>Exclusão da Conta</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_exclusao">
+        <div class="container_exclusao">
+            <div class="exclusao_item">
+                <button>Excluir conta parcialmente</button>
+                <div class="info_icon">?</div>
+            </div>
+            <div class="exclusao_item">
+                <button>Excluir conta permanentemente</button>
+                <div class="info_icon">?</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo-footer">
+                <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs">
+            </div>
+            <div class="contact">
+                <h3 id="titulo-contact">Contato</h3>
+                <p>Email: <a href="mailto:tech.for.all.0824@gmail.com">tech.for.all.0824@gmail.com</a></p>
+                <p>Email: <a href="mailto:arrastao@arrastao.org.br">arrastao@arrastao.org.br</a></p>
+                <p>Telefone: <a href="tel:+551158433366">(11) 5843-3366</a></p>
+            </div>
+            <div class="social-media">
+                <h3>Redes Sociais</h3>
+                <div class="social-icons">
+                    <a href="#"><img src="../imgs/linkedin.svg" alt="LinkedIn"></a>
+                    <a href="#"><img src="../imgs/zap.svg" alt="WhatsApp"></a>
+                    <a href="#"><img src="../imgs/insta.svg" alt="Instagram"></a>
+                    <a href="#"><img src="../imgs/email.svg" alt="Email"></a>
+                    <a href="#"><img src="../imgs/face.svg" alt="Facebook"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-note">© 2024 Todos os direitos reservados</p>
+    </footer>
+
+
+</body>
+</html>
