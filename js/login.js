@@ -14,12 +14,26 @@ async function realizarLogin() {
         }
 
         const data = await response.json();
+        console.log(data);
 
         if (data.idUsuario) {
             sessionStorage.setItem('user', JSON.stringify(data));
             console.log('Login bem sucedido');
             
-            window.location.href = '/html/dash_aluno.html';
+            switch (data.tipoUsuario) {
+                case 1 :
+                    window.location.href = '/html/dash_aluno.html';
+                    break
+                
+                case 2 : 
+                    window.location.href = '/html/dash_aluno.html';
+                    break
+
+                case 3 :
+                    window.location.href = '/html/tela_rh_vagas.html';
+                    break
+            }
+            
         } else {
             console.log('Email ou senha incorretos');
             alert('Email ou senha incorretos');

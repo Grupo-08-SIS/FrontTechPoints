@@ -11,7 +11,7 @@
 
 <script src="../js/drop_down.js"></script>
 <script src="../js/tela_rh_ver_mais.js"></script>
-
+<script src="../js/localiza_usuario_tela_rh_header.js"></script>
 <body>
     <header>
         <div class="header-content">
@@ -23,20 +23,20 @@
 
             <div class="drop_down" onclick="toggleDropdown()">
                 <div class="container_nome_usuario">
-                    <h1>Nome do Usuário</h1>
+                    <h1 id="id_nome_usuario">Nome do Usuário</h1>
                     <img class="tracos_drop" src="/imgs/tracos_drop.png" alt="Traços drop down">
                 </div>
                 <div id="dropdown-content" class="dropdown_content">
                     <a href="#">Vagas</a>
                     <a href="#">Classificação</a>
                     <a href="#">Editar Perfil</a>
-                    <a href="#">Sair da Conta</a>
+                    <a href="home.html">Sair da Conta</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="container_interesse">
+    <div style="display: none;" class="container_interesse">
         <div class="bloco_interesse">
             <div class="container_notificacao">
                 <span class="notificacao">Notificação Enviada</span>
