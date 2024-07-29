@@ -10,6 +10,9 @@
 <script src="../js/drop_down.js"></script>
 <script src="../js/tela_rh_ver_mais.js"></script>
 <script src="../js/localiza_usuario_tela_rh_header.js"></script>
+<script src="../js/rh_editar_perfil_inputs.js"></script>
+<script src="../js/rh_exclusao_perfil.js"></script>
+
 <body>
     <header>
         <div class="header-content">
@@ -33,6 +36,26 @@
             </div>
         </div>
     </header>
+
+    <div style="display: none;" class="container_notificacao_exclusao">
+        <div class="bloco_notificacao_exclusao">
+            <div class="container_notificacao">
+                <span class="notificacao">Exclusão parcial do perfil</span>
+                <div class="imagem_wrapper2">
+                    <img onclick="fecharNotificacao()" src="/imgs/x_de_fechamento.png" alt="fechar aba de ver mais sobre o aluno">
+                </div>
+            </div>
+            <div class="container_mensagem_notificacao">
+                <span>
+                    Você tem certeza de que deseja excluir sua conta parcialmente?
+                </span>
+            </div>
+            <div class="container_fechamento">
+                <button class="botao_cancelar" onclick="fecharNotificacao()">Cancelar</button>
+                <button class="botao_ok" onclick="excluirParcialmente()">Sim</button>
+            </div>
+        </div>
+    </div>
 
     <div class="container_perfil">
         <div class="container_interno_perfil">
@@ -154,13 +177,13 @@
 
             <div class="container_inputs">
                 <span class="">Novo E-mail</span>
-                <input type="text" id="novo_email">
+                <input type="text" id="novo_email" placeholder="novo.email@email.com">
                 <span class="">Novo Telefone</span>
-                <input type="text" id="novo_telefone">
+                <input type="text" id="novo_telefone" placeholder="(00) 00000-0000" maxlength="15">
                 <span class="">Nova Senha</span>
-                <input type="text" id="novo_email">
+                <input type="password" id="novo_email" placeholder="•••••••••">
                 <span class="">Confirmação da Senha</span>
-                <input type="text" id="novo_email">
+                <input type="password" id="novo_email" placeholder="•••••••••">
                 <button onclick="salvarMudancar()">Salvar Mudanças</button>
             </div>
         </div>
@@ -175,11 +198,11 @@
     <div class="container_fundo_exclusao">
         <div class="container_exclusao">
             <div class="exclusao_item">
-                <button>Excluir conta parcialmente</button>
+                <button onclick="abrirNotificacaoParcial()">Excluir conta parcialmente</button>
                 <div class="info_icon">?</div>
             </div>
             <div class="exclusao_item">
-                <button>Excluir conta permanentemente</button>
+                <button onclick="abrirNotificacaoPermanente()">Excluir conta permanentemente</button>
                 <div class="info_icon">?</div>
             </div>
         </div>

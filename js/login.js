@@ -17,6 +17,8 @@ async function realizarLogin() {
         console.log(data);
 
         if (data.idUsuario) {
+            // Adiciona a senha aos dados do usuário
+            data.senha = senha;
             sessionStorage.setItem('user', JSON.stringify(data));
             console.log('Login bem sucedido');
             

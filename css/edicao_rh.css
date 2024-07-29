@@ -451,3 +451,130 @@ footer {
     text-align: center;
     font-family: Share tech,
 }
+
+.container_notificacao_exclusao {
+    position: fixed; /* Mantém o contêiner fixo na tela */
+    background-color: rgba(44, 44, 44, 0.73); /* Cor com opacidade */
+    width: 100%;
+    height: 100%; /* Ocupa toda a altura da tela */
+    top: 0; /* Alinha ao topo da tela */
+    left: 0; /* Alinha à esquerda da tela */
+    z-index: 9999; /* Garante que o contêiner esteja acima de outros elementos */
+    display: flex; /* Para centralizar o conteúdo, se necessário */
+    align-items: center; /* Centraliza verticalmente o conteúdo */
+    justify-content: center; /* Centraliza horizontalmente o conteúdo */
+    backdrop-filter: blur(10px); /* Adiciona o efeito de desfoque */
+}
+
+.bloco_notificacao_exclusao {
+    background-color: #ffffff;
+    width: 30%;
+    height: 30vh;
+    border-radius: 20px;
+    border: 3px solid #ED1B24; /* Adiciona a borda azul de 3px */
+}
+
+.container_notificacao {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza o conteúdo principal */
+    position: relative; /* Posicionamento relativo para permitir a posição absoluta da imagem */
+    font-size: 30px;
+    color: #ED1B24;
+    font-weight: 700;
+}
+
+.notificacao {
+    flex: 1; /* Permite que o span ocupe o espaço disponível */
+    text-align: center; /* Centraliza o texto */
+}
+
+.imagem_wrapper2 {
+    position: absolute;
+    right: 20px; /* Posiciona a imagem à direita */
+    display: flex;
+    align-items: center; /* Centraliza a imagem verticalmente */
+    border-radius: 5px; /* Arredonda os cantos */
+    transition: background-color 0.3s ease; /* Transição suave para o fundo */
+}
+
+.imagem_wrapper2:hover {
+    background-color: rgba(255, 0, 0, 0.3); /* Fundo vermelho suave ao passar o mouse */
+}
+
+.container_notificacao img {
+    height: 30%; /* Ajusta a altura da imagem conforme necessário */
+    cursor: pointer; /* Adiciona um cursor de pointer para indicar que a imagem é clicável */
+}
+
+
+.container_mensagem_notificacao {
+    width: 70%;
+    height: 12vh;
+    display: flex; /* Ativa o flexbox */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    text-align: justify; /* Justifica o texto dentro do span */
+    font-size: 18px;
+    margin: 0 auto; /* Centraliza a div horizontalmente */
+    font-weight: 600;
+}
+
+.container_mensagem_notificacao span {
+    width: 100%; /* Garante que o span ocupe toda a largura disponível */
+}
+
+.container_fechamento {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os botões */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    margin-top: 20px; /* Espaçamento superior */
+}
+
+.botao_cancelar {
+    width: 25%;
+    background-color: #a9a9a9; /* Fundo cinza */
+    color: #fff; /* Texto branco */
+    border: none; /* Remove a borda padrão */
+    border-radius: 5px; /* Bordas arredondadas */
+    padding: 10px 20px; /* Espaçamento interno */
+    font-size: 1rem; /* Tamanho da fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    cursor: pointer; /* Muda o cursor para pointer ao passar sobre o botão */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave para a cor de fundo e transformação */
+}
+
+.botao_cancelar:hover {
+    background-color: #06e612; /* Fundo cinza mais claro ao passar o mouse */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+}
+
+.botao_cancelar:active {
+    background-color: #666666; /* Fundo cinza escuro ao clicar */
+    transform: scale(0.95); /* Diminui ligeiramente o tamanho ao clicar */
+}
+
+.botao_ok {
+    width: 25%;
+    background-color: #ED1B24; /* Fundo amarelo */
+    color: #fff; /* Texto branco */
+    border: none; /* Remove a borda padrão */
+    border-radius: 5px; /* Bordas arredondadas */
+    padding: 10px 20px; /* Espaçamento interno */
+    font-size: 1rem; /* Tamanho da fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    cursor: pointer; /* Muda o cursor para pointer ao passar sobre o botão */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave para a cor de fundo e transformação */
+}
+
+.botao_ok:hover {
+    background-color: #990000; /* Fundo amarelo mais claro ao passar o mouse */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+}
+
+.botao_ok:active {
+    background-color: #FFB300; /* Fundo amarelo escuro ao clicar */
+    transform: scale(0.95); /* Diminui ligeiramente o tamanho ao clicar */
+}
