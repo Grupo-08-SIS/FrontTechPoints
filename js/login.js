@@ -22,19 +22,24 @@ async function realizarLogin() {
             sessionStorage.setItem('user', JSON.stringify(data));
             console.log('Login bem sucedido');
             
-            switch (data.tipoUsuario) {
-                case 1 :
-                    window.location.href = '/html/dash_aluno.html';
-                    break
-                
-                case 2 : 
-                    window.location.href = '/html/dash_aluno.html';
-                    break
-
-                case 3 :
-                    window.location.href = '/html/tela_rh_vagas.html';
-                    break
+            if(data.deletado == false){
+                switch (data.tipoUsuario) {
+                    case 1 :
+                        window.location.href = '/html/dash_aluno.html';
+                        break
+                    
+                    case 2 : 
+                        window.location.href = '/html/dash_aluno.html';
+                        break
+    
+                    case 3 :
+                        window.location.href = '/html/tela_rh_vagas.html';
+                        break
+                }
+            } else {
+                console.log("Não foi possivel fazer login, conta deletada")
             }
+            
             
         } else {
             console.log('Email ou senha incorretos');
