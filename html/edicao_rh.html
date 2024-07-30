@@ -12,6 +12,7 @@
 <script src="../js/localiza_usuario_tela_rh_header.js"></script>
 <script src="../js/rh_editar_perfil_inputs.js"></script>
 <script src="../js/rh_exclusao_perfil.js"></script>
+<script src="../js/atualizar_rh.js"></script>
 
 <body>
     <header>
@@ -36,6 +37,11 @@
             </div>
         </div>
     </header>
+
+    <div id="alerta" class="container_alerta">
+        <span class="titulo_alerta">Alerta</span>
+        <span class="texto_alerta">Lorem ipsum dolor sit amet consectetur</span>
+    </div>
 
     <div style="display: none;" class="container_notificacao_exclusao">
         <div class="bloco_notificacao_exclusao">
@@ -181,10 +187,10 @@
                 <span class="">Novo Telefone</span>
                 <input type="text" id="novo_telefone" placeholder="(00) 00000-0000" maxlength="15">
                 <span class="">Nova Senha</span>
-                <input type="password" id="novo_email" placeholder="•••••••••">
+                <input type="password" id="nova_senha" placeholder="•••••••••">
                 <span class="">Confirmação da Senha</span>
-                <input type="password" id="novo_email" placeholder="•••••••••">
-                <button onclick="salvarMudancar()">Salvar Mudanças</button>
+                <input type="password" id="nova_senha_confirmacao" placeholder="•••••••••">
+                <button onclick="salvarMudancas()">Salvar Mudanças</button>
             </div>
         </div>
     </div>
