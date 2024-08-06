@@ -25,15 +25,15 @@ async function realizarLogin() {
             if(data.deletado == false){
                 switch (data.tipoUsuario) {
                     case 1 :
-                        window.location.href = '/html/dash_aluno.html';
+                        window.location.href = 'dash_aluno.html';
                         break
                     
                     case 2 : 
-                        window.location.href = '/html/dash_aluno.html';
+                        window.location.href = 'dash_aluno.html';
                         break
     
                     case 3 :
-                        window.location.href = '/html/tela_rh_vagas.html';
+                        window.location.href = 'tela_rh_vagas.html';
                         break
                 }
             } else {
