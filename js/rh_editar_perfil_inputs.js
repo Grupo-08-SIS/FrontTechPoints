@@ -10,3 +10,16 @@ function adicionarNovoNumero() {
 document.addEventListener('DOMContentLoaded', function() {
     adicionarNovoNumero();
 });
+
+function showTooltip(event, text) {
+    var tooltip = document.getElementById('tooltip');
+    tooltip.textContent = text;
+    tooltip.style.opacity = 1;
+    tooltip.style.left = event.pageX + 'px';
+    tooltip.style.top = (event.pageY + 20) + 'px';
+}
+
+function hideTooltip() {
+    var tooltip = document.getElementById('tooltip');
+    tooltip.style.opacity = 0;
+}

@@ -9,7 +9,7 @@
 </head>
 <script src="../js/drop_down.js"></script>
 <script src="../js/tela_rh_ver_mais.js"></script>
-<script src="../js/localiza_usuario_tela_rh_header.js"></script>
+<script src="../js/localiza_usuario_header.js"></script>
 <script src="../js/rh_editar_perfil_inputs.js"></script>
 <script src="../js/rh_exclusao_perfil.js"></script>
 <script src="../js/atualizar_rh.js"></script>
@@ -205,14 +205,15 @@
         <div class="container_exclusao">
             <div class="exclusao_item">
                 <button onclick="abrirNotificacaoParcial()">Excluir conta parcialmente</button>
-                <div class="info_icon">?</div>
+                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta parcialmente. Algumas informações do seu perfil ficará salva no nosso sistema.')" onmouseout="hideTooltip()">?</div>
             </div>
             <div class="exclusao_item">
                 <button onclick="abrirNotificacaoPermanente()">Excluir conta permanentemente</button>
-                <div class="info_icon">?</div>
+                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta permanentemente. Todas informações do seu perfil será excluído do nosso sistema.')" onmouseout="hideTooltip()">?</div>
             </div>
         </div>
-    </div>
+        <div id="tooltip" class="tooltip"></div>
+    </div>    
 
     <footer>
         <div class="footer-content">

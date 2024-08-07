@@ -477,7 +477,7 @@ a {
 
 .botao_cancelar {
     width: 25%;
-    background-color: #a9a9a9; /* Fundo cinza */
+    background-color: #f44336; /* Fundo cinza */
     color: #fff; /* Texto branco */
     border: none; /* Remove a borda padrão */
     border-radius: 5px; /* Bordas arredondadas */
@@ -489,7 +489,7 @@ a {
 }
 
 .botao_cancelar:hover {
-    background-color: #06e612; /* Fundo cinza mais claro ao passar o mouse */
+    background-color: #a3261d; /* Fundo cinza mais claro ao passar o mouse */
     transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
 }
 
@@ -500,7 +500,7 @@ a {
 
 .botao_ok {
     width: 25%;
-    background-color: #ED1B24; /* Fundo amarelo */
+    background-color: #4CAF50; /* Fundo amarelo */
     color: #fff; /* Texto branco */
     border: none; /* Remove a borda padrão */
     border-radius: 5px; /* Bordas arredondadas */
@@ -512,7 +512,7 @@ a {
 }
 
 .botao_ok:hover {
-    background-color: #990000; /* Fundo amarelo mais claro ao passar o mouse */
+    background-color: #409543; /* Fundo amarelo mais claro ao passar o mouse */
     transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
 }
 
@@ -680,4 +680,29 @@ footer {
     bottom: 10px;
     position: relative;
     font-size: 30px;
+}
+.info_icon {
+    background-color: #244aa5;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 10;
 }
