@@ -14,9 +14,10 @@
 </head>
 
 <body>
+    <!-- Header -->
     <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
         <div class="logo">
-            <img src="../imgs/logo-tech-jobs.JPG" alt="Logo" class="img-fluid" style="width: 30%; margin-left: 40px;">
+            <img src="../imgs/logo-techJobs.JPG" alt="Logo" class="img-fluid" style="width: 30%; margin-left: 40px;">
         </div>
         <div class="d-flex align-items-center">
             <div class="notifications position-relative mr-3">
@@ -24,7 +25,14 @@
                 <div class="notifications-dropdown position-absolute bg-white shadow p-3 rounded" style="display: none;">
                     <p>Você não tem novas notificações.</p>
                 </div>
+                <!-- <div id="notification" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+                    Alguém favoritou seu perfil!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> -->
             </div>
+
             <div class="user-profile d-flex align-items-center position-relative">
                 <img class="perfil-imagem" id="perfil-imagem-header" src="../imgs/perfil_vazio.jpg" alt="Sua foto de perfil" class="rounded-circle" width="40" height="40">
                 <span class="ml-2" id="nomeUsuario"></span>
@@ -32,9 +40,20 @@
                     <div class="text-center">
                         <img class="perfil-imagem" id="perfil-imagem-modal" src="../imgs/perfil_vazio.jpg" alt="Sua foto de perfil" class="rounded-circle" width="60" height="60">
                         <p class="mt-2 mb-0" id="nomeUsuario"></p>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">Editar Perfil</button>
-                        <button onclick="fazerLogout()" id = "logout"type="button" class="btn btn-danger" data-toggle="modal">Sair</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
+                            Editar Perfil
+                        </button>                        
+                        <button onclick="fazerLogout()" id="logout" type="button" class="btn btn-danger" data-toggle="modal">Sair</button>
                     </div>
+                </div>
+            </div>
+            <div class="menu ml-3">
+                <i class="bi bi-list"></i>
+                <div class="menu-dropdown">
+                    <a href="../html/dash_aluno.html">Dashboard</a>
+                    <a href="../html/classificação_aluno.html">Classificação</a>
+                    <a href="#" data-toggle="modal" data-target="#editProfileModal">Editar Perfil</a>
+                    <a href="#" onclick="fazerLogout()">Sair</a>
                 </div>
             </div>
             <div id="editProfileModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
@@ -104,11 +123,9 @@
                     </div>
                 </div>
             </div>
-            <div class="menu ml-3">
-                <i class="bi bi-list"></i>
-            </div>
         </div>
     </header>
+    
     <div class="total-container">
         <div class="geral-container">
             <div class="total-left">
@@ -227,30 +244,32 @@
             <div class="dash-habilidades"></div>
         </div> -->
 
-        <footer>
-            <div class="footer-content">
-                <div class="logo-footer">
-                    <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs">
-                </div>
-                <div class="contact">
-                    <h3 id="titulo-contact">Contato</h3>
-                    <p>Email: <a href="mailto:tech.for.all.0824@gmail.com">tech.for.all.0824@gmail.com</a></p>
-                    <p>Email: <a href="mailto:arrastao@arrastao.org.br">arrastao@arrastao.org.br</a></p>
-                    <p>Telefone: <a href="tel:+551158433366">(11) 5843-3366</a></p>
-                </div>
-                <div class="social-media">
-                    <h3>Redes Sociais</h3>
-                    <div class="social-icons">
-                        <a href="#"><img src="../imgs/linkedin.svg" alt="LinkedIn"></a>
-                        <a href="#"><img src="../imgs/zap.svg" alt="WhatsApp"></a>
-                        <a href="#"><img src="../imgs/insta.svg" alt="Instagram"></a>
-                        <a href="#"><img src="../imgs/email.svg" alt="Email"></a>
-                        <a href="#"><img src="../imgs/face.svg" alt="Facebook"></a>
-                    </div>
+        <!-- Contact & Social Media -->
+    <footer>
+        <div class="footer-content">
+            <div class="logo-footer">
+                <img src="../imgs/logo-techJobs.JPG" alt="logo arrastão com o nome tech jobs">
+            </div>
+            <div class="contact">
+                <h3 id="titulo-contact">Contato</h3>
+                <p>Email: <a href="mailto:tech.for.all.0824@gmail.com">tech.for.all.0824@gmail.com</a></p>
+                <p>Email: <a href="mailto:arrastao@arrastao.org.br">arrastao@arrastao.org.br</a></p>
+                <p>Telefone: <a href="tel:+551158433366">(11) 5843-3366</a></p>
+            </div>
+            <div class="social-media">
+                <h3>Redes Sociais</h3>
+                <div class="social-icons">
+                    <a href="#"><img src="../imgs/linkedin.svg" alt="LinkedIn"></a>
+                    <a href="#"><img src="../imgs/zap.svg" alt="WhatsApp"></a>
+                    <a href="#"><img src="../imgs/insta.svg" alt="Instagram"></a>
+                    <a href="#"><img src="../imgs/email.svg" alt="Email"></a>
+                    <a href="#"><img src="../imgs/face.svg" alt="Facebook"></a>
                 </div>
             </div>
-            <p class="footer-note">© 2024 Todos os direitos reservados</p>
-        </footer>
+        </div>
+        <p class="footer-note">© 2024 Todos os direitos reservados</p>
+    </footer>
+    
     </div>
 
 
