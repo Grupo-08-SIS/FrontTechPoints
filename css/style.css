@@ -110,6 +110,11 @@ body {
         left: 20%;
     }
 
+    .custom-shape :hover{
+        transform: scale(1.05);
+    background-color: #5a71a4; 
+    }
+
     .inactive {
         background-color: #d3d3d3;
     }
@@ -445,11 +450,8 @@ body {
     .image img {
         max-width: 100%;
         height: auto;
-        margin-bottom: 15px;
         position: relative;
-        top: 80px;
-        right: 230px;
-        /* object-fit: cover; */
+        right: 30vh;
     }
 
     .image p {
@@ -459,6 +461,10 @@ body {
 
     .image.active {
         opacity: 1;
+    }
+
+    #Caminho-cadastro :hover{
+        width: 500px;
     }
 
     /* Switch Styles */
