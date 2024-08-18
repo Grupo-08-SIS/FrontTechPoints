@@ -41,11 +41,19 @@ a {
     padding: 10px 20px;
     margin: 0 10px;
     cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .register-btn {
     background-color: #f39c12;
     z-index: 5;
+}
+
+
+.login-buttons .login-btn:hover,
+.register-btn:hover {
+    transform: scale(1.05);
+    background-color: #e1b10d; 
 }
 
 .intro-container {
@@ -110,7 +118,7 @@ a {
     line-height: 0.5
 }
 
-.botao-cadastro-texto{
+.botao-cadastro-texto {
     width: 332px;
     height: 75px;
     font-size: 22px;
@@ -119,6 +127,12 @@ a {
     color: white;
     z-index: 5;
     font-family: Inter;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.botao-cadastro-texto:hover {
+    transform: scale(1.05); 
+    background-color: #e0ab08; 
 }
 
 .values {
@@ -135,7 +149,7 @@ a {
     border-radius: 30px;
     padding: 20px;
     width: 316px;
-    height: 362px;
+    height: 440px;
     text-align: center;
     box-shadow: -20px 20px 2px rgba(0,0,0,0.3);
     z-index: 2;
@@ -171,7 +185,6 @@ a {
 /* Footer */
 footer {
     background-color: #fff;
-    padding: 20px;
     border-top: 1px solid #ddd;
     text-align: center;
 }
@@ -209,6 +222,12 @@ footer {
     height: 80%;
     width: 3px;
     background-color: blue;
+}
+
+.social-icons {
+width: 500px;
+margin-left: 6vh;
+justify-content: space-between;
 }
 
 .logo-footer img {
