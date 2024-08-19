@@ -1,129 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Jobs - Classificação dos Alunos</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/edicao_perfil_aluno.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link rel="icon" type="image/x-icon" href="../imgs/logo-arrastao.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
+<script src="../js/drop_down.js"></script>
+<script src="../js/localiza_usuario_header.js"></script>
+
 <body>
     <!-- Header -->
-    <!-- Header -->
-    <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
-        <div class="logo">
-            <img src="../imgs/logo-techJobs.JPG" alt="Logo" class="img-fluid" style="width: 30%; margin-left: 40px;">
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="notifications position-relative mr-3">
-                <i class="bi bi-bell"></i>
-                <div class="notifications-dropdown position-absolute bg-white shadow p-3 rounded" style="display: none;">
-                    <p>Você não tem novas notificações.</p>
-                </div>
-                <!-- <div id="notification" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
-                    Alguém favoritou seu perfil!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div> -->
-            </div>
+    <header>
+        <div class="header-content">
+            <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
 
-            <div class="user-profile d-flex align-items-center position-relative">
-                <img class="perfil-imagem" id="perfil-imagem-header" src="../imgs/perfil_vazio.jpg" alt="Sua foto de perfil" class="rounded-circle" width="40" height="40">
-                <span class="ml-2" id="nomeUsuario">Nome Usuário</span>
-                <div class="user-details position-absolute bg-white shadow p-3 rounded" style="display: none;">
-                    <div class="text-center">
-                        <img class="perfil-imagem" id="perfil-imagem-modal" src="../imgs/perfil_vazio.jpg" alt="Sua foto de perfil" class="rounded-circle" width="60" height="60">
-                        <p class="mt-2 mb-0" id="nomeUsuario">Nome Usuário</p>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
-                            Editar Perfil
-                        </button>                        
-                        <button onclick="fazerLogout()" id="logout" type="button" class="btn btn-danger" data-toggle="modal">Sair</button>
-                    </div>
+            <div class="drop_down" onclick="toggleDropdown()">
+                <div class="container_nome_usuario">
+                    <h1 id="id_nome_usuario">Nome do Usuário</h1>
+                    <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
                 </div>
-            </div>
-            <div class="menu ml-3">
-                <i class="bi bi-list"></i>
-                <div class="menu-dropdown">
-                    <a href="../html/dash_aluno.html">Dashboard</a>
-                    <a href="../html/classificação_aluno.html">Classificação</a>
-                    <a href="#" data-toggle="modal" data-target="#editProfileModal">Editar Perfil</a>
+                <div id="dropdown-content" class="dropdown_content">
+                    <a href="dash_aluno.html">Dashboard</a>
+                    <a href="classificacao_aluno.html">Classificação</a>
+                    <a href="#">Editar Perfil</a>
                     <a href="#" onclick="fazerLogout()">Sair</a>
-                </div>
-            </div>
-            <div id="editProfileModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editProfileModalLabel">Editar Perfil</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="editProfileForm">
-                                <div class="form-group text-center">
-                                    <img class="perfil-imagem" id="perfil-imagem-form" src="../imgs/perfil_vazio.jpg" alt="Foto de Perfil" class="rounded-circle mb-3" width="100" height="100">
-                                    <input type="file" id="perfil-imagem-input" class="form-control-file">
-                                </div>
-                                <div class="form-group">
-                                    <label for="editPrimeiroNomeUsuario">Primeiro Nome:</label>
-                                    <input type="PrimeiroNome" class="form-control" id="editPrimeiroNomeUsuario" placeholder="Primeiro Nome">
-                                </div>
-                                <div class="form-group">
-                                    <label for="editSobrenomeUsuario">Sobrenome:</label>
-                                    <input type="Sobrenome" class="form-control" id="editSobrenomeUsuario" placeholder="Sobrenome">
-                                </div>
-                                <div class="form-group">
-                                    <label for="editNomeUsuario">Nome de Usuário</label>
-                                    <input type="text" class="form-control" id="editNomeUsuario" placeholder="Nome">
-                                </div>
-                                <div class="form-group">
-                                    <label for="editEmailUsuario">Email</label>
-                                    <input type="email" class="form-control" id="editEmailUsuario" placeholder="Email">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Atualizar Perfil</button>
-                                <button type="button" id="deleteProfileButton" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">Excluir Perfil</button>
-                                <!-- Modal de Confirmação de Exclusão -->
-                                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered custom-delete-modal-dialog" role="document">
-                                        <div class="modal-content custom-delete-modal-content">
-                                            <div class="modal-header custom-delete-modal-header">
-                                                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body custom-delete-modal-body">
-                                                <form>
-                                                    <div class="form-group">
-                                                        <label for="confirmEmail">Confirme seu Email:</label>
-                                                        <input type="email" class="form-control" id="confirmEmail" placeholder="Digite seu email">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="confirmPassword">Confirme sua Senha:</label>
-                                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Digite sua senha">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer custom-delete-modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir Perfil</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </header>
+
+    <div style="display: none;" class="container_notificacao_exclusao">
+        <div class="bloco_notificacao_exclusao">
+            <div class="container_notificacao">
+                <span class="notificacao">Exclusão parcial do perfil</span>
+                <div class="imagem_wrapper2">
+                    <img onclick="fecharNotificacao()" src="../imgs/x_de_fechamento.png" alt="fechar aba de ver mais sobre o aluno">
+                </div>
+            </div>
+            <div class="container_mensagem_notificacao">
+                <span>
+                    Você tem certeza de que deseja excluir sua conta <b><a>tipo exclusão</a></b>?
+                </span>
+            </div>
+            <div class="container_fechamento">
+                <button class="botao_cancelar" onclick="fecharNotificacao()">Cancelar</button>
+                <button class="botao_ok" id="confirmarExclusao">Sim</button>
+            </div>
+        </div>
+    </div>
 
     <div class="container_perfil">
         <div class="container_interno_perfil">
@@ -153,15 +86,77 @@
                 <button class="upload_button">Upload</button>
             </div>
             <div class="bloco_datas">
-                <span>Data de criação: <span>04/12/2023</span></span>
-                <span>Data da última atualização: <span>04/12/2023</span></span>
+                <span>Data de criação: <span id="span_data_criacao">04/12/2023</span></span>
+                <span>Data da última atualização: <span id="span_data_ultima_atualizacao">04/12/2023</span></span>
             </div>
         </div>
+    </div>    
+
+    <div class="container_texto_foto_e_data">
+        <div class="container_interno_texto_foto_e_data">
+            <h1>Informações Pessoais</h1>
+        </div>
     </div>
-    
+
+    <div class="container_fundo_editar_informacoes">
+        <div class="container_interno_editar_informacoes">
+            <h1>Editar Informações do Perfil</h1>
+            <form>
+                <label for="apelido">Apelido</label>
+                <input type="text" id="apelido" name="apelido" placeholder="Digite seu novo apelido...">
+
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" id="sobrenome" name="sobrenome" placeholder="Digite seu sobrenome...">
+
+                <label for="email">Novo E-mail</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu novo e-mail...">
+
+                <label for="senha">Nova Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua nova senha...">
+
+                <label for="conf_senha">Confirmação da Senha</label>
+                <input type="password" id="conf_senha" name="conf_senha" placeholder="Confirme sua nova senha...">
+
+                <label for="cep">Novo CEP</label>
+                <input type="text" id="cep" name="cep" placeholder="Digite seu novo CEP...">
+
+                <label for="estado">Novo Estado</label>
+                <input type="text" id="estado" name="estado" placeholder="Digite seu novo estado...">
+
+                <label for="cidade">Nova Cidade</label>
+                <input type="text" id="cidade" name="cidade" placeholder="Digite sua nova cidade...">
+
+                <label for="rua">Nova Rua</label>
+                <input type="text" id="rua" name="rua" placeholder="Digite sua nova rua...">
+
+                <button type="submit" class="btn">Salvar Mudanças</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container_texto_foto_e_data">
+        <div class="container_interno_texto_foto_e_data">
+            <h1>Exclusão de Conta</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_exclusao">
+        <div class="container_exclusao">
+            <div class="exclusao_item">
+                <button onclick="abrirNotificacaoParcial()">Excluir conta parcialmente</button>
+                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta parcialmente. Algumas informações do seu perfil ficará salva no nosso sistema.')" onmouseout="hideTooltip()">?</div>
+            </div>
+            <div class="exclusao_item">
+                <button onclick="abrirNotificacaoPermanente()">Excluir conta permanentemente</button>
+                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta permanentemente. Todas informações do seu perfil será excluído do nosso sistema.')" onmouseout="hideTooltip()">?</div>
+            </div>
+        </div>
+        <div id="tooltip" class="tooltip"></div>
+    </div>   
+
 
     <!-- Contact & Social Media -->
-    <!-- <footer>
+    <footer>
         <div class="footer-content">
             <div class="logo-footer">
                 <img src="../imgs/logo-techJobs.JPG" alt="logo arrastão com o nome tech jobs">
@@ -184,13 +179,17 @@
             </div>
         </div>
         <p class="footer-note">© 2024 Todos os direitos reservados</p>
-    </footer> -->
+    </footer>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/classificacao_aluno.js"></script>
     <script src="../js/localiza_usuario_header.js"></script>
-    
+    <script src="../js/rh_editar_perfil_inputs.js"></script>
+    <script src="../js/rh_exclusao_perfil.js"></script>
+    <script src="../js/editar_perfil_aluno.js"></script>
+
 </body>
+
 </html>
