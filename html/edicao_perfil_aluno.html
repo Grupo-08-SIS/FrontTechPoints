@@ -38,6 +38,11 @@
         </div>
     </header>
 
+    <div id="alerta" class="container_alerta">
+        <span class="titulo_alerta">Alerta</span>
+        <span class="texto_alerta">Lorem ipsum dolor sit amet consectetur</span>
+    </div>
+
     <div style="display: none;" class="container_notificacao_exclusao">
         <div class="bloco_notificacao_exclusao">
             <div class="container_notificacao">
@@ -104,35 +109,35 @@
             <form>
                 <label for="apelido">Apelido</label>
                 <input type="text" id="apelido" name="apelido" placeholder="Digite seu novo apelido...">
-
+    
                 <label for="sobrenome">Sobrenome</label>
                 <input type="text" id="sobrenome" name="sobrenome" placeholder="Digite seu sobrenome...">
-
+    
                 <label for="email">Novo E-mail</label>
                 <input type="email" id="email" name="email" placeholder="Digite seu novo e-mail...">
-
+    
                 <label for="senha">Nova Senha</label>
                 <input type="password" id="senha" name="senha" placeholder="Digite sua nova senha...">
-
+    
                 <label for="conf_senha">Confirmação da Senha</label>
                 <input type="password" id="conf_senha" name="conf_senha" placeholder="Confirme sua nova senha...">
-
+    
                 <label for="cep">Novo CEP</label>
                 <input type="text" id="cep" name="cep" placeholder="Digite seu novo CEP...">
-
+    
                 <label for="estado">Novo Estado</label>
                 <input type="text" id="estado" name="estado" placeholder="Digite seu novo estado...">
-
+    
                 <label for="cidade">Nova Cidade</label>
                 <input type="text" id="cidade" name="cidade" placeholder="Digite sua nova cidade...">
-
+    
                 <label for="rua">Nova Rua</label>
                 <input type="text" id="rua" name="rua" placeholder="Digite sua nova rua...">
-
-                <button type="submit" class="btn">Salvar Mudanças</button>
+    
+                <button type="submit" class="btn" onclick="salvarMudancas(event)">Salvar Mudanças</button>
             </form>
         </div>
-    </div>
+    </div>    
 
     <div class="container_texto_foto_e_data">
         <div class="container_interno_texto_foto_e_data">
@@ -184,9 +189,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../js/classificacao_aluno.js"></script>
     <script src="../js/localiza_usuario_header.js"></script>
-    <script src="../js/rh_editar_perfil_inputs.js"></script>
     <script src="../js/rh_exclusao_perfil.js"></script>
     <script src="../js/editar_perfil_aluno.js"></script>
 
