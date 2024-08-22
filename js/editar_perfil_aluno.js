@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async function() {
+document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(sessionStorage.getItem('user'));
 
     const span = document.getElementById('span_data_criacao');
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     if (uploadButton && fileInput && profileImage) {
         // Evento de mudança no input de arquivo
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', function () {
             const file = fileInput.files[0];
 
             if (file) {
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
                 // Cria uma URL de objeto para mostrar a imagem selecionada
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     profileImage.src = e.target.result;
                 }
                 reader.readAsDataURL(file);
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         });
 
         // Evento de clique no botão de upload
-        uploadButton.addEventListener('click', async function() {
+        uploadButton.addEventListener('click', async function () {
             const file = fileInput.files[0];
 
             if (file) {
@@ -142,7 +142,7 @@ function validarSenha(senhaInput, confirmacaoSenhaInput) {
 
 async function salvarMudancas(event) {
     event.preventDefault();
-    
+
     const apelidoInput = document.getElementById('apelido');
     const sobrenomeInput = document.getElementById('sobrenome');
     const emailInput = document.getElementById('email');
@@ -155,19 +155,21 @@ async function salvarMudancas(event) {
 
     const data = JSON.parse(sessionStorage.getItem('user'));
     const idUsuario = data.idUsuario;
+    const idEndereco = data.endereco.id;
 
     let updates = {};
     let erros = [];
+    let enderecoUpdates = {};
 
-     // Validação e atualização do apelido
-     const apelidoError = validarApelido(apelidoInput);
-     if (apelidoError !== true) {
-        erros.push(apelidoError);
-    } else {
-        const apelido = apelidoInput.value.trim();
-        if (apelido !== '') {
+    // Validação e atualização do apelido, se estiver preenchido
+    const apelido = apelidoInput.value.trim();
+    if (apelido !== '') {
+        const apelidoError = validarApelido(apelidoInput);
+        if (apelidoError !== true) {
+            erros.push(apelidoError);
+        } else {
             updates.primeiroNome = apelido;
-    
+
             const sobrenome = sobrenomeInput.value.trim();
             // Se o sobrenome for preenchido, concatenamos o apelido e o sobrenome
             if (sobrenome !== '') {
@@ -178,23 +180,22 @@ async function salvarMudancas(event) {
             }
         }
     }
-    
 
-    // Verifica e valida o campo de sobrenome
+    // Verifica e valida o campo de sobrenome, se estiver preenchido
     if (sobrenomeInput.value.trim() !== '') {
         const sobrenomeError = validarSobrenome(sobrenomeInput);
         if (sobrenomeError !== true) erros.push(sobrenomeError);
         else updates.sobrenome = sobrenomeInput.value.trim();
     }
 
-    // Verifica e valida o campo de e-mail
+    // Verifica e valida o campo de e-mail, se estiver preenchido
     if (emailInput.value.trim() !== '') {
         const emailError = validarEmail(emailInput);
         if (emailError !== true) erros.push(emailError);
         else updates.email = emailInput.value.trim();
     }
 
-    // Verifica e valida o campo de senha
+    // Verifica e valida o campo de senha, se estiver preenchido
     if (senhaInput.value.trim() !== '' || senhaConfirmacaoInput.value.trim() !== '') {
         const senhaError = validarSenha(senhaInput, senhaConfirmacaoInput);
         if (senhaError !== true) erros.push(senhaError);
@@ -206,10 +207,10 @@ async function salvarMudancas(event) {
         if (cepInput.value.trim() === '' || estadoInput.value.trim() === '' || cidadeInput.value.trim() === '' || ruaInput.value.trim() === '') {
             erros.push('Todos os campos de endereço (CEP, Estado, Cidade, Rua) devem estar preenchidos.');
         } else {
-            updates.cep = cepInput.value.trim();
-            updates.estado = estadoInput.value.trim();
-            updates.cidade = cidadeInput.value.trim();
-            updates.rua = ruaInput.value.trim();
+            enderecoUpdates.cep = cepInput.value.trim();
+            enderecoUpdates.estado = estadoInput.value.trim();
+            enderecoUpdates.cidade = cidadeInput.value.trim();
+            enderecoUpdates.rua = ruaInput.value.trim();
         }
     }
 
@@ -220,68 +221,77 @@ async function salvarMudancas(event) {
     }
 
     // Verifica se há algo a ser atualizado
-    if (Object.keys(updates).length === 0) {
+    if (Object.keys(updates).length === 0 && Object.keys(enderecoUpdates).length === 0) {
         showAlert('Nenhuma alteração detectada.', 'error');
         return;
     }
 
-    // Realiza a requisição para atualizar as informações
     try {
-        const response = await fetch(`http://localhost:8080/usuarios/atualizar/${idUsuario}`, {
-            method: 'PATCH',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updates)
-        });
+        // Atualiza as informações de usuário
+        if (Object.keys(updates).length > 0) {
+            const response = await fetch(`http://localhost:8080/usuarios/atualizar/${idUsuario}`, {
+                method: 'PATCH',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updates)
+            });
 
-        const responseText = await response.text();
-
-        if (response.ok) {
-            showAlert("Informações atualizadas com sucesso", 'success');
-
-            showAlert("Informações atualizadas com sucesso. Você será redirecionado para a tela de login.", 'success');
-
-            // Limpa todas as inputs
-            apelidoInput.value = '';
-            sobrenomeInput.value = '';
-            emailInput.value = '';
-            senhaInput.value = '';
-            senhaConfirmacaoInput.value = '';
-            cepInput.value = '';
-            estadoInput.value = '';
-            cidadeInput.value = '';
-            ruaInput.value = '';
-
-            // Redireciona o usuário após um tempo
-            setTimeout(() => {
-                window.location.href = '/html/login.html';
-            }, 3000); // 3 segundos para o redirecionamento
-
-            // Atualiza a senha, se necessário
-            if (updates.senha) {
-                try {
-                    const novaSenha = updates.senha;
-
-                    const senhaResponse = await fetch('http://localhost:8080/reset-senha/nova-senha', {
-                        method: 'PATCH',
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email: data.email, novaSenha })
-                    });
-
-                    if (senhaResponse.ok) {
-                        showAlert("Senha atualizada com sucesso", 'success');
-                    } else {
-                        showAlert('Erro ao atualizar a senha', 'error');
-                    }
-                } catch (error) {
-                    showAlert('Erro ao tentar atualizar a senha', 'error');
-                }
+            if (!response.ok) {
+                throw new Error('Erro ao tentar atualizar as informações do usuário');
             }
-
-        } else {
-            showAlert('Erro ao tentar atualizar as informações', 'error');
         }
+
+        // Atualiza o endereço se necessário
+        if (Object.keys(enderecoUpdates).length > 0) {
+            const enderecoResponse = await fetch(`http://localhost:8080/enderecos/atualizar/${idEndereco}`, {
+                method: 'PATCH',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(enderecoUpdates)
+            });
+
+            if (!enderecoResponse.ok) {
+                throw new Error('Erro ao tentar atualizar o endereço');
+            }
+        }
+
+        showAlert("Informações atualizadas com sucesso. Você será redirecionado para a tela de login.", 'success');
+
+        // Limpa todas as inputs
+        apelidoInput.value = '';
+        sobrenomeInput.value = '';
+        emailInput.value = '';
+        senhaInput.value = '';
+        senhaConfirmacaoInput.value = '';
+        cepInput.value = '';
+        estadoInput.value = '';
+        cidadeInput.value = '';
+        ruaInput.value = '';
+
+        // Redireciona o usuário após um tempo
+        setTimeout(() => {
+            window.location.href = '/html/login.html';
+        }, 3000);
+
+        // Atualiza a senha, se necessário
+        if (updates.senha) {
+            try {
+                const novaSenha = updates.senha;
+
+                const senhaResponse = await fetch('http://localhost:8080/reset-senha/nova-senha', {
+                    method: 'PATCH',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: data.email, novaSenha })
+                });
+
+                if (!senhaResponse.ok) {
+                    throw new Error('Erro ao atualizar a senha');
+                }
+            } catch (error) {
+                showAlert('Erro ao tentar atualizar a senha', 'error');
+            }
+        }
+
     } catch (error) {
-        showAlert('Erro ao tentar atualizar as informações', 'error');
+        showAlert(error.message, 'error');
     }
 }
 
@@ -312,12 +322,12 @@ async function fazerLogout() {
     const user = JSON.parse(sessionStorage.getItem('user'))
 
     try {
-    
+
         const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.idUsuario}`, {
             method: 'POST'
         })
 
-      
+
         if (!response.ok) {
             throw new Error('Erro ao fazer logoff')
         }
@@ -330,4 +340,39 @@ async function fazerLogout() {
         console.error('Erro ao fazer logoff:', error)
         alert('Erro ao fazer logoff. Por favor, tente novamente.')
     }
-} 
+}
+
+document.getElementById('cep').addEventListener('blur', buscarCep);
+
+function buscarCep() {
+    const cepInput = document.getElementById('cep');
+    const cep = cepInput.value.replace(/\D/g, ''); // Remove qualquer caractere que não seja dígito
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    if (cep.length === 8) {
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar o CEP');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.erro) {
+                    showAlert('CEP não encontrado.', 'error');
+                    return;
+                }
+
+                document.getElementById('rua').value = data.logradouro;
+                document.getElementById('estado').value = data.uf;
+                document.getElementById('cidade').value = data.localidade;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar CEP:', error);
+                showAlert('Erro ao buscar o CEP. Verifique sua conexão e tente novamente.', 'error');
+            });
+    } else {
+        showAlert('CEP inválido. O CEP deve conter 8 dígitos.', 'error');
+    }
+}
+
