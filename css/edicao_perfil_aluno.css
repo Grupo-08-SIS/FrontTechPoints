@@ -206,117 +206,95 @@ a {
 }
 
 .container_fundo_foto_e_data {
-    width: 100%;
-    height: 70vh;
-    margin-top: 5vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .container_interno_foto_e_data {
-    display: flex;
-    background-color: #244aa5;
-    width: 70%;
-    height: 100%;
-    border-radius: 20px;
-    color: #ffffff;
-    flex-direction: column;
-    align-items: center;
+    background-color: #1E3A8A;
     padding: 20px;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    width: 70%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.bloco_de_titulo_foto_e_data {
-    background-color: rgba(255, 255, 255, 0.318);
-    width: 100%;
-    padding: 15px;
-    border-radius: 15px 15px 0 0;
+.bloco_de_titulo_foto_e_data h1 {
     text-align: center;
+    color: #ffffff;
+    background-color: #4A5568;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
 }
 
-.container_interno_foto_e_data h1 {
-    font-size: 28px;
-    margin: 0;
+.container_foto_e_botoes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .container_foto {
-    background-color: #fabc09;
-    width: 20vh;
-    height: 20vh;
-    margin: 20px 0;
-    border-radius: 50%;
+    flex: 1;
     display: flex;
-    align-items: center;
     justify-content: center;
-    overflow: hidden;
 }
 
-.container_foto img {
-    width: 100%;
+.perfil-imagem-editar {
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #F6AD55;
 }
 
 .upload_buttons {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 15px 0;
-}
-
-.inputfile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
 }
 
 .upload_label {
-    font-size: 16px;
-    color: #fff;
-    background-color: #fabc09;
+    background-color: #F6AD55;
+    color: #ffffff;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     margin-bottom: 10px;
-    transition: background-color 0.3s ease;
+    text-align: center;
+    transition: background-color 0.3s;
 }
 
 .upload_label:hover {
-    background-color: #e0a807;
+    background-color: #DD6B20;
 }
 
 .upload_button {
-    font-size: 16px;
-    color: #fff;
-    background-color: #ed1b24;
+    background-color: #E53E3E;
+    color: #ffffff;
     padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
     border: none;
-    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .upload_button:hover {
-    background-color: #c51d1d;
+    background-color: #C53030;
 }
 
 .bloco_datas {
-    margin-top: auto;
+    margin-top: 20px;
+    color: #ffffff;
     text-align: center;
-    font-size: 14px;
 }
 
 .bloco_datas span {
     display: block;
-    margin: 5px 0;
+    margin-top: 5px;
 }
 
-.bloco_datas span span {
-    font-weight: bold;
-}
 
 .container_fundo_editar_informacoes {
     width: 100%;
