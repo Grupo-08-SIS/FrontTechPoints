@@ -48,7 +48,8 @@
             <div class="container_notificacao">
                 <span class="notificacao">Exclusão parcial do perfil</span>
                 <div class="imagem_wrapper2">
-                    <img onclick="fecharNotificacao()" src="../imgs/x_de_fechamento.png" alt="fechar aba de ver mais sobre o aluno">
+                    <img onclick="fecharNotificacao()" src="../imgs/x_de_fechamento.png"
+                        alt="fechar aba de ver mais sobre o aluno">
                 </div>
             </div>
             <div class="container_mensagem_notificacao">
@@ -79,25 +80,29 @@
 
     <div class="container_fundo_foto_e_data">
         <div class="container_interno_foto_e_data">
-            <div class="bloco_de_titulo_foto_e_data">
-                <h1>Editar Foto do Perfil</h1>
-            </div>
             <div class="container_foto_e_botoes">
                 <div class="container_foto">
                     <img class="perfil-imagem-editar" src="../imgs/perfil_vazio.jpg" alt="Sua foto de perfil">
                 </div>
-                <div class="upload_buttons">
+            </div>
+            <div class="container_span_e_botoes">
+                <div class="blco_span">
+                    <span>
+                        Nome do usuário: <span id="id_nome_usuario">nome</span>
+                        email do usuário: <span id="id_email_usuario">email</span>
+                        Data de Criação: <span id="span_data_criacao">data</span>
+                        Data da última atualização: <span id="span_data_ultima_atualizacao">data</span>
+                    </span>
+                </div>
+                <div class="bloco_botoes">
                     <input type="file" id="upload" class="inputfile" />
                     <label for="upload" class="upload_label">Escolher arquivo</label>
                     <button class="upload_button">Upload</button>
+                    <button class="upload_button" onclick="editarPerfil()">Editar Perfil</button>
                 </div>
             </div>
-            <div class="bloco_datas">
-                <span>Data de criação: <span id="span_data_criacao">20/08/2024</span></span>
-                <span>Data da última atualização: <span id="span_data_ultima_atualizacao">22/08/2024</span></span>
-            </div>
         </div>
-    </div>    
+    </div>
 
     <div class="container_texto_foto_e_data">
         <div class="container_interno_texto_foto_e_data">
@@ -111,35 +116,35 @@
             <form>
                 <label for="apelido">Apelido</label>
                 <input type="text" id="apelido" name="apelido" placeholder="Digite seu novo apelido...">
-    
+
                 <label for="sobrenome">Sobrenome</label>
                 <input type="text" id="sobrenome" name="sobrenome" placeholder="Digite seu sobrenome...">
-    
+
                 <label for="email">Novo E-mail</label>
                 <input type="email" id="email" name="email" placeholder="Digite seu novo e-mail...">
-    
+
                 <label for="senha">Nova Senha</label>
                 <input type="password" id="senha" name="senha" placeholder="Digite sua nova senha...">
-    
+
                 <label for="conf_senha">Confirmação da Senha</label>
                 <input type="password" id="conf_senha" name="conf_senha" placeholder="Confirme sua nova senha...">
-    
+
                 <label for="cep">Novo CEP</label>
                 <input type="text" id="cep" name="cep" placeholder="Digite seu novo CEP..." maxlength="8" min="8">
-    
+
                 <label for="estado">Novo Estado</label>
                 <input type="text" id="estado" name="estado" placeholder="Digite seu novo estado...">
-    
+
                 <label for="cidade">Nova Cidade</label>
                 <input type="text" id="cidade" name="cidade" placeholder="Digite sua nova cidade...">
-    
+
                 <label for="rua">Nova Rua</label>
                 <input type="text" id="rua" name="rua" placeholder="Digite sua nova rua...">
-    
+
                 <button type="submit" class="btn" onclick="salvarMudancas(event)">Salvar Mudanças</button>
             </form>
         </div>
-    </div>    
+    </div>
 
     <div class="container_texto_foto_e_data">
         <div class="container_interno_texto_foto_e_data">
@@ -151,15 +156,19 @@
         <div class="container_exclusao">
             <div class="exclusao_item">
                 <button onclick="abrirNotificacaoParcial()">Excluir conta parcialmente</button>
-                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta parcialmente. Algumas informações do seu perfil ficará salva no nosso sistema.')" onmouseout="hideTooltip()">?</div>
+                <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Esta ação excluirá sua conta parcialmente. Algumas informações do seu perfil ficará salva no nosso sistema.')"
+                    onmouseout="hideTooltip()">?</div>
             </div>
             <div class="exclusao_item">
                 <button onclick="abrirNotificacaoPermanente()">Excluir conta permanentemente</button>
-                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta permanentemente. Todas informações do seu perfil será excluído do nosso sistema.')" onmouseout="hideTooltip()">?</div>
+                <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Esta ação excluirá sua conta permanentemente. Todas informações do seu perfil será excluído do nosso sistema.')"
+                    onmouseout="hideTooltip()">?</div>
             </div>
         </div>
         <div id="tooltip" class="tooltip"></div>
-    </div>   
+    </div>
 
 
     <!-- Contact & Social Media -->

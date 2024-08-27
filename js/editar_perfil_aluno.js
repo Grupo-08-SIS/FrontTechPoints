@@ -1,11 +1,24 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(sessionStorage.getItem('user'));
 
-    const span = document.getElementById('span_data_criacao');
-    span.innerHTML = user.dataCriacao ? new Date(user.dataCriacao).toLocaleDateString() : 'Data não disponível';
+    if (user) {
+        // Confirma o conteúdo do objeto
+        console.log(user);
 
-    const span2 = document.getElementById("span_data_ultima_atualizacao")
-    span2.innerHTML = user.dataAtualizacao ? new Date(user.dataAtualizacao).toLocaleDateString() : 'Não houve nenhuma atualização';
+        // Preenche o nome e o email do usuário
+        document.getElementById('id_nome_usuario').innerText = user.nomeUsuario || 'Nome não disponível';
+        document.getElementById('id_email_usuario').innerText = user.email || 'Email não disponível';
+
+        // Preenche as datas
+        document.getElementById('span_data_criacao').innerText = user.dataCriacao ? new Date(user.dataCriacao).toLocaleDateString() : 'Data não disponível';
+        document.getElementById('span_data_ultima_atualizacao').innerText = user.dataAtualizacao ? new Date(user.dataAtualizacao).toLocaleDateString() : 'Não houve nenhuma atualização';
+    } else {
+        // Caso não haja dados no sessionStorage
+        document.getElementById('id_nome_usuario').innerText = 'Nome não disponível';
+        document.getElementById('id_email_usuario').innerText = 'Email não disponível';
+        document.getElementById('span_data_criacao').innerText = 'Data não disponível';
+        document.getElementById('span_data_ultima_atualizacao').innerText = 'Não houve nenhuma atualização';
+    }
 
     async function fetchProfileImage() {
         if (user && user.idUsuario) {

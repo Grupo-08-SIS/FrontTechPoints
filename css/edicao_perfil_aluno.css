@@ -39,34 +39,6 @@ a {
     max-width: 500px;
 }
 
-.barra_pesquisar {
-    width: 100%;
-    padding: 2vh;
-    border-radius: 10px;
-    font-size: 16px;
-    border: 4px solid #244aa5;
-}
-
-.barra_pesquisar::placeholder {
-    color: #999; /* Cor do texto placeholder */
-}
-
-.lupa_de_pesquisa {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-}
-
-.lupa_de_pesquisa img {
-    display: block;
-}
-
 .drop_down {
     position: relative; /* Define o contêiner pai para o posicionamento absoluto do dropdown */
     display: inline-block;
@@ -153,7 +125,7 @@ a {
 .container_perfil {
     width: 100%;
     height: 17vh;
-    margin-top: 10vh;
+    margin-top: 7vh;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -180,6 +152,7 @@ a {
     height: 3px;
 }
 
+/* Container principal que centraliza o conteúdo */
 .container_texto_foto_e_data {
     width: 100%;
     height: 10vh;
@@ -189,6 +162,7 @@ a {
     display: flex;
 }
 
+/* Container interno que contém o texto e a foto */
 .container_interno_texto_foto_e_data {
     display: flex;
     background-color: #fabc09;
@@ -199,19 +173,25 @@ a {
     align-items: center;
 }
 
+/* Estilo para o título dentro do container interno */
 .container_interno_texto_foto_e_data h1 {
     font-size: 20px;
     margin: 20px;
     font-weight: 800;
 }
 
+/* Container externo para a foto e os botões */
 .container_fundo_foto_e_data {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    width: 100%; /* Garante que o container ocupe toda a largura disponível */
 }
 
+/* Container interno para a foto e os botões */
 .container_interno_foto_e_data {
+    display: flex;
+    flex-direction: row; /* Garante que os itens fiquem lado a lado */
     background-color: #1E3A8A;
     padding: 20px;
     border-radius: 8px;
@@ -219,6 +199,27 @@ a {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Container para a foto e botões */
+.container_foto_e_botoes {
+    display: flex;
+    align-items: center;
+    width: 50vh;
+}
+
+/* Container específico para a foto */
+.container_foto {
+    flex: 1; /* Ocupa o espaço disponível, mantendo a proporção adequada */
+}
+
+/* Container para o texto e botões ao lado da foto */
+.container_span_e_botoes {
+    background-color: #409543;
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Organiza os itens verticalmente */
+}
+
+/* Estilo para o título e dados */
 .bloco_de_titulo_foto_e_data h1 {
     text-align: center;
     color: #ffffff;
@@ -228,72 +229,89 @@ a {
     margin-bottom: 20px;
 }
 
-.container_foto_e_botoes {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.container_foto {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
 .perfil-imagem-editar {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
+    width: 40vh;
+    height: 46vh;
+    border-radius: 20%;
     object-fit: cover;
     border: 3px solid #F6AD55;
 }
 
-.upload_buttons {
-    flex: 1;
+.blco_span {
+    width: 100%;
+    height: 30vh;
+}
+
+.bloco_botoes {
+    width: 100%;
+    height: 10vh;
+    justify-content: space-between;
+}
+
+/* Container para o texto e os botões ao lado da foto */
+.container_span_e_botoes {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: column; /* Organiza os itens verticalmente */
+    align-items: flex-start; /* Alinha os itens ao início do container */
+    background-color: #244aa5; /* Cor de fundo do container */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 8px; /* Bordas arredondadas */
+    flex: 1; /* Faz com que o container ocupe o espaço restante */
+    gap: 20px; /* Espaçamento entre os blocos internos */
 }
 
+/* Estilo para o bloco de texto com informações do usuário */
+.blco_span {
+    color: #ffffff; /* Cor do texto */
+    font-size: 16px; /* Tamanho da fonte */
+}
+
+/* Estilo para os spans dentro do bloco de texto */
+.blco_span span {
+    display: block; /* Exibe cada linha em um bloco separado */
+    margin-bottom: 10px; /* Espaçamento entre linhas */
+}
+
+/* Estilo para o bloco de botões */
+.bloco_botoes {
+    display: flex;
+    align-items: center; /* Centraliza os botões horizontalmente */
+    gap: 10px; /* Espaçamento entre os botões */
+}
+
+/* Estilo para o input file */
+.inputfile {
+    display: none; /* Oculta o input file, mostrado apenas pelo label */
+}
+
+/* Estilo para o label do input file */
 .upload_label {
-    background-color: #F6AD55;
-    color: #ffffff;
+    display: inline-block;
     padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    text-align: center;
-    transition: background-color 0.3s;
+    background-color: #ffffff; /* Cor de fundo do label */
+    color: #409543; /* Cor do texto do label */
+    border: 2px solid #409543; /* Borda do label */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Aponta que é clicável */
 }
 
-.upload_label:hover {
-    background-color: #DD6B20;
-}
-
+/* Estilo para o botão de upload */
 .upload_button {
-    background-color: #E53E3E;
-    color: #ffffff;
     padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    background-color: #ffffff; /* Cor de fundo do botão */
+    color: #409543; /* Cor do texto do botão */
+    border: 2px solid #409543; /* Borda do botão */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Aponta que é clicável */
+    font-size: 16px; /* Tamanho da fonte do botão */
 }
 
-.upload_button:hover {
-    background-color: #C53030;
+/* Efeito de foco para o botão de upload */
+.upload_button:hover,
+.upload_label:hover {
+    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
 }
 
-.bloco_datas {
-    margin-top: 20px;
-    color: #ffffff;
-    text-align: center;
-}
-
-.bloco_datas span {
-    display: block;
-    margin-top: 5px;
-}
 
 
 .container_fundo_editar_informacoes {
