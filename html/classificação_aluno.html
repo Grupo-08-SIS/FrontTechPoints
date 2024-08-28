@@ -12,8 +12,28 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <header>
+        <div class="header-content">
+            <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
+           
+
+            <div class="drop_down" onclick="toggleDropdown()">
+                <div class="container_nome_usuario">
+                    <h1 id="id_nome_usuario">Nome do Usuário</h1>
+                    <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
+                </div>
+                <div id="dropdown-content" class="dropdown_content">
+                    <a href="tela_rh_vagas.html">Vagas</a>
+                    <a href="#">Classificação</a>
+                    <a href="edicao_rh.html">Editar Perfil</a>
+                    <a href="#" onclick="fazerLogout()">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <!-- Header -->
-    <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
+    <!-- <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
         <div class="logo">
             <img src="../imgs/logo-techJobs.JPG" alt="Logo" class="img-fluid" style="width: 30%; margin-left: 40px;">
         </div>
@@ -22,14 +42,14 @@
                 <i class="bi bi-bell"></i>
                 <div class="notifications-dropdown position-absolute bg-white shadow p-3 rounded" style="display: none;">
                     <p>Você não tem novas notificações.</p>
-                </div>
+                </div> -->
                 <!-- <div id="notification" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
                     Alguém favoritou seu perfil!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div> -->
-            </div>
+            <!-- </div>
 
             <div class="user-profile d-flex align-items-center position-relative">
                 <img class="perfil-imagem" id="perfil-imagem-header" src="../imgs/perfil_vazio.jpg" alt="Sua foto de perfil" class="rounded-circle" width="40" height="40">
@@ -86,9 +106,9 @@
                                     <input type="email" class="form-control" id="editEmailUsuario" placeholder="Email">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Atualizar Perfil</button>
-                                <button type="button" id="deleteProfileButton" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">Excluir Perfil</button>
+                                <button type="button" id="deleteProfileButton" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">Excluir Perfil</button> -->
                                 <!-- Modal de Confirmação de Exclusão -->
-                                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                <!-- <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered custom-delete-modal-dialog" role="document">
                                         <div class="modal-content custom-delete-modal-content">
                                             <div class="modal-header custom-delete-modal-header">
@@ -122,7 +142,7 @@
                 </div>
             </div>
         </div>
-    </header>
+    </header> -->
 
     <!-- Main Content -->
     <div class="container mt-4">
@@ -182,5 +202,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/classificacao_aluno.js"></script>
+    <script src="../js/drop_down.js"></script>
+    <script src="../js/localiza_usuario_header.js"></script>
 </body>
 </html>
