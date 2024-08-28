@@ -331,62 +331,60 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(alunos => {
                 const rankingTable = document.getElementById("rankingTable");
 
-                // Limpa as linhas anteriores
+                
                 rankingTable.innerHTML = '';
 
-                // Preenche a tabela com os dados retornados
+               
                 alunos.forEach((aluno, index) => {
                     const row = document.createElement("tr");
 
                     const positionCell = document.createElement("td");
-                    positionCell.textContent = index + 1; // Posição na tabela (começa em 1)
+                    positionCell.textContent = index + 1; 
                     row.appendChild(positionCell);
 
                     const userCell = document.createElement("td");
 
-                    // Cria um contêiner para a imagem e os textos
                     const userContainer = document.createElement("div");
-                    userContainer.style.display = 'flex'; // Usa flexbox para alinhar horizontalmente
-                    userContainer.style.alignItems = 'center'; // Alinha verticalmente
-                    userContainer.style.justifyContent = 'center'; // A UNICA COISA Q EU BOTEI A MÃO
+                    userContainer.style.display = 'flex'; 
+                    userContainer.style.alignItems = 'center'; 
+                    userContainer.style.justifyContent = 'center'; 
 
-                    // Cria o elemento da imagem
+                    
                     const userImage = document.createElement("img");
-                    userImage.src = '../imgs/perfil_vazio.jpg'; // Substitua pelo caminho real da imagem
-                    userImage.alt = 'Imagem do usuário'; // Texto alternativo
-                    userImage.style.width = '40px'; // Ajuste o tamanho conforme necessário
-                    userImage.style.height = '40px'; // Ajuste o tamanho conforme necessário
-                    userImage.style.marginRight = '10px'; // Espaçamento entre a imagem e o texto
-                    userImage.style.borderRadius = '50%'; // Torna a borda arredondada (círculo)
+                    userImage.src = '../imgs/perfil_vazio.jpg'; 
+                    userImage.alt = 'Imagem do usuário'; 
+                    userImage.style.width = '40px'; 
+                    userImage.style.height = '40px'; 
+                    userImage.style.marginRight = '10px'; 
+                    userImage.style.borderRadius = '50%'; 
 
-                    // Cria um contêiner para o nome e email
+                    
                     const textContainer = document.createElement("div");
 
-                    // Cria um elemento para o nome do usuário
+                    
                     const nomeDiv = document.createElement("div");
                     nomeDiv.textContent = aluno.nomeUsuario;
-                    nomeDiv.style.fontWeight = 'bold'; // Pode ajustar conforme desejado
+                    nomeDiv.style.fontWeight = 'bold'; 
 
-                    // Cria um elemento para o email
+                    
                     const emailDiv = document.createElement("div");
                     emailDiv.textContent = aluno.email;
-                    emailDiv.style.fontSize = 'smaller'; // Ajusta o tamanho da fonte
+                    emailDiv.style.fontSize = 'smaller'; 
 
-                    // Adiciona o nome e o email ao contêiner de texto
+                    
                     textContainer.appendChild(nomeDiv);
                     textContainer.appendChild(emailDiv);
 
-                    // Adiciona a imagem e o contêiner de texto ao contêiner do usuário
+                    
                     userContainer.appendChild(userImage);
                     userContainer.appendChild(textContainer);
 
-                    // Adiciona o contêiner do usuário à célula
                     userCell.appendChild(userContainer);
 
                     row.appendChild(userCell);
 
                     const pointsCell = document.createElement("td");
-                    pointsCell.textContent = aluno.totalPontos; // Pontos do usuário
+                    pointsCell.textContent = aluno.totalPontos; 
                     row.appendChild(pointsCell);
 
                     rankingTable.appendChild(row);
