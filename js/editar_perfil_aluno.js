@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log(user);
 
         // Preenche o nome e o email do usuário
-        document.getElementById('id_nome_usuario').innerText = user.nomeUsuario || 'Nome não disponível';
+        document.getElementById('id_nome').innerText = `${user.primeiroNome} ${user.sobrenome}`|| 'Nome não disponível';
         document.getElementById('id_email_usuario').innerText = user.email || 'Email não disponível';
 
         // Preenche as datas
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById('span_data_ultima_atualizacao').innerText = user.dataAtualizacao ? new Date(user.dataAtualizacao).toLocaleDateString() : 'Não houve nenhuma atualização';
     } else {
         // Caso não haja dados no sessionStorage
-        document.getElementById('id_nome_usuario').innerText = 'Nome não disponível';
+        document.getElementById('id_nome').innerText = 'Nome não disponível';
         document.getElementById('id_email_usuario').innerText = 'Email não disponível';
         document.getElementById('span_data_criacao').innerText = 'Data não disponível';
         document.getElementById('span_data_ultima_atualizacao').innerText = 'Não houve nenhuma atualização';
@@ -266,6 +266,9 @@ async function salvarMudancas(event) {
             }
         }
 
+        // Esconde o formulário após a atualização bem-sucedida
+        document.querySelector('.container_fundo_editar_informacoes').style.display = 'none';
+
         showAlert("Informações atualizadas com sucesso. Você será redirecionado para a tela de login.", 'success');
 
         // Limpa todas as inputs
@@ -388,4 +391,26 @@ function buscarCep() {
         showAlert('CEP inválido. O CEP deve conter 8 dígitos.', 'error');
     }
 }
+
+function editarPerfil() {
+    document.querySelector('.container_fundo_editar_informacoes').style.display = 'flex';
+}
+
+function showTooltip(event, text) {
+    var tooltip = document.getElementById('tooltip');
+    tooltip.textContent = text;
+    tooltip.style.opacity = 1;
+    tooltip.style.left = event.pageX + 'px';
+    tooltip.style.top = (event.pageY + 20) + 'px';
+}
+
+function hideTooltip() {
+    var tooltip = document.getElementById('tooltip');
+    tooltip.style.opacity = 0;
+}
+
+function fecharFormulario() {
+    document.querySelector('.container_fundo_editar_informacoes').style.display = 'none';
+}
+
 

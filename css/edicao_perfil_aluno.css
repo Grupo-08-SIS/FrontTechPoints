@@ -289,38 +289,54 @@ a {
     display: inline-block;
     padding: 10px 20px;
     background-color: #ffffff; /* Cor de fundo do label */
-    color: #409543; /* Cor do texto do label */
-    border: 2px solid #409543; /* Borda do label */
+    color: #244AA5; /* Cor do texto do label */
+    border: 2px solid #fabc09; /* Borda do label */
     border-radius: 4px; /* Bordas arredondadas */
     cursor: pointer; /* Aponta que é clicável */
+    font-size: 16px; /* Tamanho da fonte do label */
+    font-weight: 600; /* Peso da fonte do label */
+    text-align: center; /* Centraliza o texto */
+    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
 }
 
 /* Estilo para o botão de upload */
 .upload_button {
     padding: 10px 20px;
     background-color: #ffffff; /* Cor de fundo do botão */
-    color: #409543; /* Cor do texto do botão */
-    border: 2px solid #409543; /* Borda do botão */
+    color: #244AA5; /* Cor do texto do botão */
+    border: 2px solid #fabc09; /* Borda do botão */
     border-radius: 4px; /* Bordas arredondadas */
     cursor: pointer; /* Aponta que é clicável */
     font-size: 16px; /* Tamanho da fonte do botão */
+    font-weight: 800; /* Peso da fonte do botão */
+    text-align: center; /* Centraliza o texto */
+    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
 }
 
-/* Efeito de foco para o botão de upload */
+/* Efeito de hover para o botão de upload e o label */
 .upload_button:hover,
 .upload_label:hover {
-    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
+    background-color: #fabc09; /* Cor de fundo ao passar o mouse */
+    color: #ffffff; /* Cor do texto ao passar o mouse */
+    border-color: #fabc09; /* Cor da borda ao passar o mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
+    transform: translateY(-3px); /* Levanta o botão ao passar o mouse */
 }
-
-
 
 .container_fundo_editar_informacoes {
     width: 100%;
-    height: 160vh;
-    margin-top: 5vh;
+    height: 100vh; /* Ocupar 100% da altura da viewport */
     display: flex;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    backdrop-filter: blur(8px); /* Adiciona o efeito de desfoque */
+    display: none; /* Inicialmente invisível */
+    overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a tela */
 }
 
 .container_interno_editar_informacoes h1 {
@@ -328,12 +344,32 @@ a {
 }
 
 .container_interno_editar_informacoes {
+    position: relative; /* Necessário para o posicionamento do botão de fechar */
     background-color: #2b5f9e;
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    width: 70%;
+    width: 50%;
     max-width: 800px;
+    max-height: 90vh; /* Limita a altura do contêiner interno */
+    overflow-y: auto; /* Permite rolagem dentro do contêiner interno se necessário */
+}
+
+.close_button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.close_button:hover {
+    color: #ff0000;
 }
 
 label {
@@ -712,6 +748,25 @@ footer {
 }
 
 /* Estilos para o texto do alerta */
+..container_alerta {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    z-index: 9999; /* Alta prioridade para sobrepor outros elementos */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+    width: 300px; /* Largura do alerta */
+    text-align: center; /* Centraliza o texto */
+    display: none; /* Inicialmente oculto */
+}
+
+/* Estilos para o texto do alerta */
 .texto_alerta {
     font-size: 16px;
 }
@@ -733,3 +788,15 @@ footer {
     background-color: #4CAF50; /* Cor de fundo para sucesso */
 }
 
+
+.tooltip {
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 10;
+}

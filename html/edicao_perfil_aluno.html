@@ -74,7 +74,7 @@
 
     <div class="container_texto_foto_e_data">
         <div class="container_interno_texto_foto_e_data">
-            <h1>Foto e Data de Criação</h1>
+            <h1>Informações do perfil</h1>
         </div>
     </div>
 
@@ -88,7 +88,7 @@
             <div class="container_span_e_botoes">
                 <div class="blco_span">
                     <span>
-                        Nome do usuário: <span id="id_nome_usuario">nome</span>
+                        Nome do usuário: <span id="id_nome">nome</span>
                         email do usuário: <span id="id_email_usuario">email</span>
                         Data de Criação: <span id="span_data_criacao">data</span>
                         Data da última atualização: <span id="span_data_ultima_atualizacao">data</span>
@@ -104,15 +104,10 @@
         </div>
     </div>
 
-    <div class="container_texto_foto_e_data">
-        <div class="container_interno_texto_foto_e_data">
-            <h1>Informações Pessoais</h1>
-        </div>
-    </div>
-
     <div class="container_fundo_editar_informacoes">
         <div class="container_interno_editar_informacoes">
             <h1>Editar Informações do Perfil</h1>
+            <span class="close_button" onclick="fecharFormulario()">×</span>
             <form>
                 <label for="apelido">Apelido</label>
                 <input type="text" id="apelido" name="apelido" placeholder="Digite seu novo apelido...">
