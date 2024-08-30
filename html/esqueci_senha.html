@@ -20,22 +20,27 @@
         </div>
     </header>
 
+    <div id="alerta" class="container_alerta">
+        <span class="titulo_alerta">Alerta</span>
+        <span class="texto_alerta">Lorem ipsum dolor sit amet consectetur</span>
+    </div>
+
     <div class="container-fundo">
         <div class="bloco-principal">
             <h1>Esqueci Minha Senha</h1>
             <p>Iremos enviar um código de recuperação para o seu e-mail.</p>
             <input type="email" id="emailInput" placeholder="Digite seu e-mail" required>
-            <button onclick="mostrarCampoCodigo()">Próximo</button>
+            <button onclick="verificaEmail()">Próximo</button>
             <div id="campoCodigo" style="display: none; margin-top: 20px;">
                 <p>Digite o código de recuperação que enviamos para o seu e-mail.</p>
                 <input type="text" id="codigoInput" placeholder="Digite o código" required>
-                <button onclick="mostrarCamposSenha()">Enviar</button>
+                <button onclick="verificaToken()">Enviar</button>
             </div>
             <div id="campoSenha" style="display: none; margin-top: 20px;">
                 <p>Crie uma nova senha.</p>
                 <input type="password" id="novaSenhaInput" placeholder="Digite sua nova senha" required>
                 <input type="password" id="confirmarSenhaInput" placeholder="Confirme sua nova senha" required>
-                <button onclick="finalizarRecuperacao()">Finalizar</button>
+                <button onclick="validarSenha()">Finalizar</button>
             </div>
         </div>
     </div>

@@ -138,3 +138,52 @@ button:hover {
     background-color: #3b60bd;
 }
 
+.container_alerta {
+    position: fixed; /* Garante que o alerta fique fixo em relação à janela de visualização */
+    top: 20px; /* Distância do topo da janela */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta a posição para centralizar */
+    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    z-index: 99999; /* Valor muito alto para garantir visibilidade */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+    width: 300px; /* Largura do alerta */
+    text-align: center; /* Centraliza o texto */
+    display: none; /* Inicialmente oculto */
+}
+
+/* Estilos para o título do alerta */
+.titulo_alerta {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Estilos para o texto do alerta */
+.texto_alerta {
+    font-size: 16px;
+}
+
+/* Estilos para o alerta quando exibido */
+.container_alerta.show {
+    display: block;
+    opacity: 1;
+    top: 40px; /* Movimenta o alerta um pouco para baixo */
+}
+
+/* Estilos para um alerta de erro */
+.container_alerta.error {
+    background-color: #f44336; /* Cor de fundo para erro */
+}
+
+/* Estilos para um alerta de sucesso */
+.container_alerta.success {
+    background-color: #4CAF50; /* Cor de fundo para sucesso */
+}
+
+
