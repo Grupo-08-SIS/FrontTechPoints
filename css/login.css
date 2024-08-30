@@ -240,6 +240,13 @@ a {
     background-color: #4CAF50; /* Cor de fundo para sucesso */
 }
 
+#esqueciSenha {
+    display: block; 
+    margin-bottom: 10px; 
+    text-decoration: underline;
+    color: #91a5d5;
+    cursor: pointer;
+}
     
     
 }

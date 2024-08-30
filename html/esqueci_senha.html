@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueci minha senha</title>
+    <link rel="stylesheet" href="../css/esqueci_senha.css">
+    <link rel="icon" type="image/x-icon" href="../imgs/logo-arrastao.png">
+</head>
+<script src="../js/esqueci_senha.js"></script>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
+            <div class="login-buttons">
+                <a href="login.html"><button class="login-btn">VOLTAR</button></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fundo">
+        <div class="bloco-principal">
+            <h1>Esqueci Minha Senha</h1>
+            <p>Iremos enviar um código de recuperação para o seu e-mail.</p>
+            <input type="email" id="emailInput" placeholder="Digite seu e-mail" required>
+            <button onclick="mostrarCampoCodigo()">Próximo</button>
+            <div id="campoCodigo" style="display: none; margin-top: 20px;">
+                <p>Digite o código de recuperação que enviamos para o seu e-mail.</p>
+                <input type="text" id="codigoInput" placeholder="Digite o código" required>
+                <button onclick="mostrarCamposSenha()">Enviar</button>
+            </div>
+            <div id="campoSenha" style="display: none; margin-top: 20px;">
+                <p>Crie uma nova senha.</p>
+                <input type="password" id="novaSenhaInput" placeholder="Digite sua nova senha" required>
+                <input type="password" id="confirmarSenhaInput" placeholder="Confirme sua nova senha" required>
+                <button onclick="finalizarRecuperacao()">Finalizar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
