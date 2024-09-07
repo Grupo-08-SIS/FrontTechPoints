@@ -52,7 +52,7 @@ a {
 
 .lupa_de_pesquisa {
     position: absolute;
-    right: 10px;
+    right: -3vh;
     top: 50%;
     transform: translateY(-50%);
     background: none;
@@ -133,7 +133,7 @@ a {
 .container_perfil {
     width: 100%;
     height: 17vh;
-    margin-top: 10vh;
+    margin-top: 5vh;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -141,16 +141,21 @@ a {
 
 .container_interno_perfil {
     display: flex;
+    flex-direction: column; /* Organiza os itens em coluna */
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    align-items: center; /* Centraliza o conteúdo horizontalmente */
     background-color: #244aa5;
     width: 70%;
-    height: 100%;
+    padding: 20px; /* Adiciona um espaçamento interno */
     border-radius: 20px;
     color: white;
-    align-items: center;
+    position: relative; /* Mantém o posicionamento relativo */
 }
 
 .container_interno_perfil h1 {
-    padding: 10px;
+    font-size: 24px; /* Ajusta o tamanho da fonte */
+    text-align: center; /* Centraliza o texto */
+    margin: 0; /* Remove margens para ajuste fino */
 }
 
 .linha {
@@ -162,7 +167,7 @@ a {
 .container_separacao {
     width: 100%;
     height: 10vh;
-    margin-top: 10vh;
+    margin-top: 6vh;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -170,49 +175,66 @@ a {
 
 .container_interno_separacao {
     display: flex;
-    background-color: #fabc09;
-    width: 70%;
-    height: 100%;
-    border-radius: 20px;
-    color: #244aa5;
+    justify-content: center; /* Centraliza o conteúdo */
     align-items: center;
+    background-color: #fabc09;
+    width: 90%; /* Aumenta a largura para melhor ocupar o espaço */
+    max-width: 1200px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin: 20px auto; /* Centraliza o container na tela */
+    margin-bottom: 6vh;
 }
 
 .container_interno_separacao h1 {
-    padding: 10px;
-    font-size: 25px;
+    .container_interno_separacao h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0; /* Remove margens para centralizar melhor */
+        text-align: center;
+    }
 }
 
 .container_fundo_aluno {
-    width: 100%;
-    height: 35vh;
+    width: 90%; /* Ajusta a largura para ser consistente com o título */
+    max-width: 1200px; /* Define uma largura máxima */
+    margin: 0 auto; /* Centraliza o container */
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px 0; /* Ajusta o padding para manter a proximidade */
 }
 
 .bloco_alunos {
-    width: 71%;
-    height: 100%;
-    display: flex; /* Ativa o flexbox */
-    flex-wrap: wrap; /* Permite que os itens quebrem linha se necessário */
-    justify-content: center; /* Centraliza os itens horizontalmente */
-    align-items: center; /* Centraliza os itens verticalmente */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centraliza os cards */
+    gap: 20px; /* Adiciona espaçamento uniforme entre os cards */
 }
 
 .box_Aluno {
-    background-color: #244aa5; /* Fundo do bloco */
-    border: 3px solid #ddd; /* Borda sutil */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267); /* Sombra */
-    width: 250px; /* Largura do bloco */
-    padding: 20px; /* Espaçamento interno */
-    margin: 10px; /* Espaçamento entre blocos */
+    background-color: #244aa5;
+    border: 3px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
+    width: calc(33% - 40px); /* Ajusta a largura para se adaptar ao espaço disponível */
+    flex: 1 1 250px;
+    height: auto;
+    min-width: 200px; /* Largura mínima para manter a legibilidade */
+    max-width: 250px; /* Largura máxima */
+    padding: 20px;
+    margin: 10px;
     display: flex;
-    flex-direction: column; /* Colocar elementos em coluna */
-    align-items: center; /* Centralizar itens horizontalmente */
-    position: relative; /* Necessário para posicionamento absoluto */
+    flex-direction: column;
+    align-items: center;
+    position: relative;
     color: #ffffff;
+    transition: transform 0.3s; /* Adiciona uma pequena animação */
+}
+
+.box_Aluno:hover {
+    transform: scale(1.05); /* Leve aumento ao passar o mouse */
 }
 
 .box_Aluno span:first-child {
@@ -235,11 +257,12 @@ a {
 }
 
 .box_Aluno .solicitacao {
+    margin-top: 5px; /* Opcional: adicionar um pouco de margem acima do texto */
+    font-size: 12px;
+    color: #ffffff;
     position: absolute;
     bottom: 10px;
     right: 10px;
-    font-size: 12px;
-    color: #ffffff;
 }
 
 .box_Aluno button {
@@ -263,21 +286,24 @@ a {
 .container_fundo_editar_perfil {
     display: flex;
     width: 100%;
-    height: 70vh;
+    max-width: 1200px; /* Define uma largura máxima */
     align-items: center;
     justify-content: center;
-    margin-top: 10vh;
+    margin: 20px auto; /* Centraliza o container */
+    padding: 20px;
 }
 
 .container_editar_perfil {
-    display: flex;
-    width: 70%;
+    width: 80%;
+    max-width: 600px; /* Define uma largura máxima */
     background-color: #244aa5;
-    height: 100%;
+    padding: 20px;
     border-radius: 20px;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    border: 3px solid #002d95;
+    border: 2px solid #002d95;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
 }
 
 .container_editar {
@@ -289,16 +315,14 @@ a {
 }
 
 .container_inputs {
-    display: flex; /* Ativa o flexbox */
-    flex-direction: column; /* Alinha os itens em coluna */
-    width: 50%; /* Largura do contêiner */
-    margin: 20px auto; /* Centraliza horizontalmente */
-    padding: 20px; /* Espaçamento interno */
-    border: 1px solid #ddd; /* Borda sutil */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-    background-color: #f9f9f9; /* Cor de fundo */
+    width: 90%; /* Ajusta a largura do formulário */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
     border: 3px solid #ffd700;
+    margin: 0 auto; /* Centraliza o formulário dentro do container */
 }
 
 .container_inputs span {
@@ -316,17 +340,18 @@ a {
     font-size: 16px; /* Tamanho da fonte */
     width: 100%; /* Largura total do contêiner */
     box-sizing: border-box; /* Inclui a borda e o padding na largura total */
-}
+ }
 
 .container_inputs button {
-    padding: 10px 15px; /* Espaçamento interno */
-    background-color: #ffd700; /* Cor de fundo */
-    color: #ffffff; /* Cor do texto */
-    border: none; /* Sem borda */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-size: 20px; /* Tamanho da fonte */
-    cursor: pointer; /* Cursor de mãozinha */
-    transition: background-color 0.3s; /* Transição suave */
+    background-color: #ffd700;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px; /* Adiciona espaçamento superior */
 }
 
 .container_inputs button:hover {
@@ -351,6 +376,7 @@ a {
     align-items: center;
     height: 20vh;
     justify-content: space-around;
+    margin-bottom: 8vh;
 }
 
 .exclusao_item {
@@ -361,7 +387,7 @@ a {
 
 .container_exclusao button {
     width: 35vh;
-    height: 5vh;
+    height: 8vh;
     background-color: #ed1b24; /* Cor de fundo */
     color: #ffffff; /* Cor do texto */
     border: none; /* Sem borda */
