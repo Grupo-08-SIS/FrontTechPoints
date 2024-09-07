@@ -280,7 +280,7 @@ main {
     border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
-    color: white;
+    color: rgb(0, 0, 0);
     width: 300px;
     z-index: 99;
 }
