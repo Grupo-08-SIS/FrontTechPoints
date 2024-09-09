@@ -6,7 +6,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: auto;
     margin: 0;
     background-color: #f0f0f0;
     flex-direction: column;
@@ -401,7 +401,6 @@ body {
         width: 15px;
         height: 15px;
         background-color: #FFD700;
-        /* Cor dourada */
         border-radius: 50%;
     }
 
@@ -415,7 +414,6 @@ body {
         width: 50px;
         height: 50px;
         background-color: #FFD700;
-        /* Cor dourada */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -423,6 +421,7 @@ body {
         transform: translateY(-50%);
         border-radius: 8px;
         color: white;
+        top: 80vh;
 
     }
 
@@ -431,7 +430,9 @@ body {
 
     }
 
-    .arrow-right1 {}
+    .arrow-right1 {
+
+    }
 
 
 
@@ -447,9 +448,8 @@ body {
         height: auto;
         margin-bottom: 15px;
         position: relative;
-        top: 80px;
         right: 230px;
-        /* object-fit: cover; */
+        object-fit: cover;
     }
 
     .image p {

@@ -33,7 +33,7 @@ a {
         top: 4%;
         left: 50%;
         transform: translateX(-50%);
-        width: 273px;
+        width: 400px;
         height: 50px;
         background-color: #ffffff;
         border-top: 2px solid black;
@@ -85,10 +85,10 @@ a {
 
     .titulo-esquerda,
     .titulo-direita {
-        margin-bottom: 15px;
-        text-align: center;
-        margin-top: 50px;
-    }
+    text-align: center;
+    margin: 20px auto;
+    font-size: clamp(1.2rem, 2vw, 2.5rem); /* Ajuste responsivo de tamanho de fonte */
+    }  
 
     .container-esquerda button {
         width: 200px;
@@ -254,44 +254,50 @@ a {
     .login-container {
         background-color: #ffffff;
         border-radius: 20px;
-        width: 90%; 
-        height: auto; 
+        width: 80%; /* Reduza a largura fixa */
+        max-width: 1240px; /* Adicione um limite máximo para grandes telas */
+        height: auto;
         display: flex;
-        flex-direction: column; 
         justify-content: center;
         align-items: center;
         border: 2px solid black;
-        padding: 20px; 
+        padding: 20px;
+        margin: 0 auto; /* Centraliza horizontalmente */ 
     }
 
     .logo {
         display: flex;
-        position: static; 
-        margin-bottom: 20px; 
-        width: 200px; 
-        height: auto; 
-        background-color: #ffffff;
-        border: 2px solid black;
-        border-radius: 20px;
-        justify-content: center;
+    position: relative; /* Mude de absolute para relative */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    margin-bottom: 10px;
+    width: 200px;
+    height: auto;
+    background-color: #ffffff;
+    border: 2px solid black;
+    border-radius: 20px;
+    justify-content: center;
     }
 
     .container-meio {
         background-color: #244AA5;
         display: flex;
-        flex-direction: column; 
-        width: 100%; 
-        height: auto; 
-        border-radius: 20px;
-        margin-bottom: 20px; 
+        flex-wrap: wrap; /* Permite que os itens quebrem linha quando necessário */
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1000px; /* Adicione um limite máximo */
+        border-radius: 40px;
+        margin: 0 auto; /* Centraliza o contêiner */
     }
 
-    .container-esquerda {
-        width: 100%;
-        height: auto; 
-        border-radius: 20px;
-        padding: 20px;
-    }
+    
+.container-esquerda,
+.container-direita {
+    width: calc(50% - 20px); /* Ajusta para metade do contêiner com espaço */
+    min-width: 300px; /* Define um limite mínimo de largura */
+    padding: 20px;
+    border-radius: 20px;
+    margin: 10px 0; /* Adiciona margem para evitar que fiquem colados */
+}
 
     .container-esquerda {
         background-color: #244AA5;
@@ -360,12 +366,11 @@ a {
     #btn-login {
         flex-grow: 2; 
     }
-    #btn-voltar {
-        display: none;
-    }
-
-    #btn-cadastrar{
-        display: none;
+    
+    #btn-cadastrar, #btn-voltar {
+        width: 45%; /* Ajuste para ocupar metade do espaço disponível */
+        padding: 10px 20px;
+        border-radius: 10px;
     }
 
     #btn-login:hover,
@@ -374,11 +379,11 @@ a {
     }
 
     .container-btn-direita {
-        width: 100%; /* Garante que o container ocupe toda a largura disponível */
         display: flex;
-        justify-content: center; /* Centraliza os botões horizontalmente */
-        margin-bottom: 10px; /* Espaçamento entre cada container de botão */
-    }
+        justify-content: center; /* Centraliza os botões */
+        gap: 10px; /* Espaço entre os botões */
+        margin-top: 20px; /* Adiciona espaçamento superior */
+    }   
 
     #titulo2-esquerda:first-of-type {
         margin-bottom: 0;

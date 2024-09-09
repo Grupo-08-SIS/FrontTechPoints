@@ -51,7 +51,7 @@ a {
 
 .lupa_de_pesquisa {
     position: absolute;
-    right: 10px;
+    left: 65vh;
     top: 50%;
     transform: translateY(-50%);
     background: none;
