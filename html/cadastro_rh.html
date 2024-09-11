@@ -16,6 +16,11 @@
         <button onclick="window.location.href = 'home.html'" type="button" class="back-btn-top">Voltar</button>
     </header>
 
+    <div id="alertDiv" class="container_alerta d-none">
+        <span class="titulo_alerta">Alerta</span>
+        <span class="texto_alerta">Mensagem de alerta aqui!</span>
+    </div>  
+
     <main class="container">
         <section class="form-container">
             <nav class="custom-shape-all">
@@ -93,17 +98,12 @@
                 <form class="form" id="empresa-form" onsubmit="return submitForm(event);">
                     <h2>Cadastre-se</h2>
                     <p>Comece moldando o seu amanhã agora mesmo: crie sua conta</p>
-                    <label for="company-name">Nome da Empresa</label>
-                    <input type="text" id="company-name" name="nome_empresa" required>
-
-                    <label for="industry-sector">Setor da Indústria</label>
-                    <input type="text" id="industry-sector" name="setor_industria" required>
+                    
+                    <label for="cnpj">CNPJ da Empresa</label>
+                    <input type="text" id="cnpj" name="cnpj" required onkeyup="formatarCnpj()" maxlength="18">
 
                     <label for="user-role">Cargo do Usuário</label>
                     <input type="text" id="user-role" name="cargo_usuario" required>
-
-                    <label for="cnpj">CNPJ</label>
-                    <input type="text" id="cnpj" name="cnpj" required onkeyup="formatarCnpj()" maxlength="18">
 
                     <label for="corporate-phone">Telefone Corporativo</label>
                     <input type="text" id="corporate-phone" name="telefone_contato_corporativo" required onkeyup="formatarTelefone()" maxlength="15">

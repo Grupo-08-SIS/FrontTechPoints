@@ -138,14 +138,15 @@ body {
         color: #333;
     }
 
-    .form-container input {
+    .form-container input,
+    .form-container select {
+        /* Inclui o select junto com o input */
         width: 100%;
         padding: 10px;
         margin-bottom: 15px;
         border: 1px solid #333;
         /* Borda mais escura */
         border-radius: 5px;
-        /* box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);  */
     }
 
     .form-group {
@@ -518,7 +519,6 @@ body {
         position: absolute;
         top: 18px;
         left: 215px;
-        /* Adjust position according to the shape */
         border: 2px solid #fff;
         z-index: 1;
     }
@@ -543,6 +543,51 @@ body {
         left: 25px;
         position: relative;
     }
+
+    /* Estilos para o contêiner do alerta */
+    .container_alerta {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+        color: white;
+        padding: 15px 30px;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+        width: 300px; /* Largura do alerta */
+        text-align: center; /* Centraliza o texto */
+        display: none; /* Inicialmente oculto */
+    }
+
+    .container_alerta.show {
+        display: block;
+        opacity: 1;
+        top: 40px; /* Movimenta o alerta um pouco para baixo */
+    }
+
+    .container_alerta.error {
+        background-color: #f44336; /* Cor de fundo para erro */
+    }
+
+    .container_alerta.success {
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+    }
+
+    .titulo_alerta {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .texto_alerta {
+        font-size: 16px;
+    }
+    
 }
 
 @media (max-width: 767px) {
@@ -950,4 +995,49 @@ body {
         text-align: center;
         width: 100%;
     }
+
+    /* Estilos para o contêiner do alerta */
+    .container_alerta {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+        color: white;
+        padding: 15px 30px;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+        width: 300px; /* Largura do alerta */
+        text-align: center; /* Centraliza o texto */
+        display: none; /* Inicialmente oculto */
+    }
+
+    .container_alerta.show {
+        display: block;
+        opacity: 1;
+        top: 40px; /* Movimenta o alerta um pouco para baixo */
+    }
+
+    .container_alerta.error {
+        background-color: #f44336; /* Cor de fundo para erro */
+    }
+
+    .container_alerta.success {
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+    }
+
+    .titulo_alerta {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .texto_alerta {
+        font-size: 16px;
+    }
+    
 }

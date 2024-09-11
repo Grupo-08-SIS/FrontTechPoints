@@ -590,6 +590,50 @@ body {
             transform: translateX(0);
         }
     }
+
+    /* Estilos para o contêiner do alerta */
+    .container_alerta {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+        color: white;
+        padding: 15px 30px;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+        width: 300px; /* Largura do alerta */
+        text-align: center; /* Centraliza o texto */
+        display: none; /* Inicialmente oculto */
+    }
+
+    .container_alerta.show {
+        display: block;
+        opacity: 1;
+        top: 40px; /* Movimenta o alerta um pouco para baixo */
+    }
+
+    .container_alerta.error {
+        background-color: #f44336; /* Cor de fundo para erro */
+    }
+
+    .container_alerta.success {
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+    }
+
+    .titulo_alerta {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .texto_alerta {
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -996,5 +1040,49 @@ body {
     .form-container label#lastname {
         text-align: center;
         width: 100%;
+    }
+
+    /* Estilos para o contêiner do alerta */
+    .container_alerta {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+        color: white;
+        padding: 15px 30px;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+        width: 300px; /* Largura do alerta */
+        text-align: center; /* Centraliza o texto */
+        display: none; /* Inicialmente oculto */
+    }
+
+    .container_alerta.show {
+        display: block;
+        opacity: 1;
+        top: 40px; /* Movimenta o alerta um pouco para baixo */
+    }
+
+    .container_alerta.error {
+        background-color: #f44336; /* Cor de fundo para erro */
+    }
+
+    .container_alerta.success {
+        background-color: #4CAF50; /* Cor de fundo para sucesso */
+    }
+
+    .titulo_alerta {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .texto_alerta {
+        font-size: 16px;
     }
 }

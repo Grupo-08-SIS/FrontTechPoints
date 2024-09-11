@@ -15,10 +15,82 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeInfoModal = document.querySelector('#info-modal .close');
     const isRHCheckbox = document.getElementById('is-rh');
 
+    // Funções de validação
+    function validarEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+    function validarSenha(senha) {
+        return senha.length >= 6;
+    }
+
+    function validarApelido(apelido) {
+        const regex = /^\D+$/; // Apenas letras permitidas
+        return regex.test(apelido);
+    }
+
+    function validarCampos(username, email, password) {
+        if (!username || !email || !password){
+            showAlert('error', 'Todos os campos devem ser preenchidos.');
+            return false;
+        }
+
+        if (!validarApelido(username)) {
+            showAlert('error', 'O apelido não pode conter números.');
+            return false;
+        }
+
+        if (!validarEmail(email)) {
+            showAlert('error', 'O email deve ser válido (ex: exemplo@dominio.com).');
+            return false;
+        }
+
+        if (!validarSenha(password)) {
+            showAlert('error', 'A senha deve ter pelo menos 6 dígitos.');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validarCamposEndereco(cep, rua, numero, cidade, bairro) {
+        if (!cep || !rua || !numero || !cidade || !bairro) {
+            showAlert('error', 'Todos os campos de endereço devem ser preenchidos.');
+            return false;
+        }
+        return true;
+    }
+
+    function showAlert(type, message) {
+        const alertContainer = document.createElement('div');
+        alertContainer.className = `container_alerta ${type} show`;
+
+        const alertTitle = document.createElement('span');
+        alertTitle.className = 'titulo_alerta';
+        alertTitle.textContent = type === 'error' ? 'Erro!' : 'Sucesso!';
+
+        const alertText = document.createElement('span');
+        alertText.className = 'texto_alerta';
+        alertText.textContent = message;
+
+        alertContainer.appendChild(alertTitle);
+        alertContainer.appendChild(alertText);
+
+        document.body.appendChild(alertContainer);
+
+        setTimeout(() => {
+            alertContainer.classList.remove('show');
+            setTimeout(() => {
+                alertContainer.remove();
+            }, 500); // Tempo para garantir que a animação de saída aconteça
+        }, 3000); // Tempo para o alerta permanecer visível
+    }
+
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
             if (tab.id === 'shape2' && profileCheck.style.display !== 'flex') {
-                alert('Preencha os dados do perfil antes de continuar.');
+                showAlert('error', 'Preencha os dados do perfil antes de continuar.');
                 return;
             }
             tabs.forEach(t => t.classList.remove('active'));
@@ -33,14 +105,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        if (username && email && password) {
+        if (validarCampos(username, email, password)) {
             profileTab.classList.remove('active');
             personalTab.classList.add('active');
             profileData.style.display = 'none';
             personalData.style.display = 'block';
             profileCheck.style.display = 'flex';
         } else {
-            alert('Preencha todos os campos antes de continuar.');
+            console.log('Continuando bloqueado: Informações de perfil ausentes ou inválidas.');
         }
     });
 
@@ -84,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     isRHCheckbox.addEventListener('change', function () {
         if (this.checked) {
-            // Redirecionar para a tela de cadastro do RH
             window.location = '/html/cadastro_rh.html';
         }
     });
@@ -115,19 +186,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkScreenSize() {
         if (window.innerWidth < 768) {
-            slides.forEach(slide => {
-                slide.style.display = 'none';
-            });
-            dots.forEach(dot => {
-                dot.style.display = 'none';
-            });
+            slides.forEach(slide => slide.style.display = 'none');
+            dots.forEach(dot => dot.style.display = 'none');
             leftArrow.style.display = 'none';
             rightArrow.style.display = 'none';
         } else {
             showSlide(slideIndex); // Restores the current slide display
-            dots.forEach(dot => {
-                dot.style.display = 'block';
-            });
+            dots.forEach(dot => dot.style.display = 'block');
             leftArrow.style.display = 'block';
             rightArrow.style.display = 'block';
         }
@@ -141,17 +206,17 @@ document.addEventListener('DOMContentLoaded', function () {
     rightArrow.addEventListener('click', nextSlide);
 
     showSlide(slideIndex);
-    checkScreenSize(); // Verifica o tamanho da tela ao carregar a página
+    checkScreenSize();
 
     setInterval(() => {
         nextSlide();
-        checkScreenSize(); // Certifica-se de verificar o tamanho da tela em cada mudança de slide
+        checkScreenSize();
     }, 3000);
 
-    window.addEventListener('resize', checkScreenSize); // Adiciona um listener para verificar o tamanho da tela quando a janela é redimensionada
+    window.addEventListener('resize', checkScreenSize);
 
-
-
-    
+    function formatarDataNascimento(data) {
+        const opcoes = { year: 'numeric', month: 'long', day: 'numeric' };
+        return data.toLocaleDateString('pt-BR', opcoes);
+    }
 });
-
