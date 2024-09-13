@@ -20,16 +20,6 @@ async function realizarCadastro() {
     if (id === null) {
         return; // Se houve erro no cadastro do usuário, não prossegue
     }
-
-    // Cadastra dados da empresa se o usuário for do tipo RH
-    if (tipoUsuario === 3) {
-        await cadastrarDadosEmpresa(id);
-    } else {
-        showAlert('success', 'Cadastro realizado com sucesso!');
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 3000);
-    }
 }
 
 function validarCampos() {
@@ -398,6 +388,81 @@ function buscarCep() {
                 showAlert('error', 'Erro ao buscar CEP');
             });
     }
+}
+
+function formatarCnpj(event) {
+    const cnpjInput = event.target;
+    let cnpjFormatado = cnpjInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+    // Adiciona a máscara de CNPJ
+    if (cnpjFormatado.length <= 2) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{1,2})/, '$1');
+    } else if (cnpjFormatado.length <= 5) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{1,3})/, '$1.$2');
+    } else if (cnpjFormatado.length <= 8) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    } else if (cnpjFormatado.length <= 12) {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{3})(\d{3})(\d{1,4})/, '$1.$2.$3/$4');
+    } else {
+        cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})/, '$1.$2.$3/$4-$5');
+    }
+
+    // Atualiza o valor do input com a formatação aplicada
+    cnpjInput.value = cnpjFormatado;
+
+    // Limita o comprimento do campo
+    if (cnpjInput.value.length > 18) {
+        cnpjInput.value = cnpjInput.value.slice(0, 18);
+    }
+
+    // Valida o CNPJ formatado
+    if (!validarCNPJ(cnpjInput.value)) {
+        showAlert('error', 'CNPJ inválido. Por favor, insira um CNPJ válido.');
+    }
+}
+
+function validarCNPJ(cnpj) {
+    // Remove caracteres não numéricos
+    const cnpjNumeros = cnpj.replace(/\D/g, '');
+
+    // Verifica se tem 14 dígitos
+    if (cnpjNumeros.length !== 14) {
+        return false;
+    }
+
+    // Validação do CNPJ
+    let tamanho = cnpjNumeros.length - 2;
+    let numeros = cnpjNumeros.substring(0, tamanho);
+    let digitos = cnpjNumeros.substring(tamanho);
+    let soma = 0;
+    let pos = tamanho - 7;
+
+    for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+
+    let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+    if (resultado !== parseInt(digitos.charAt(0))) {
+        return false;
+    }
+
+    tamanho = tamanho + 1;
+    numeros = cnpjNumeros.substring(0, tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+
+    for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+
+    resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+    if (resultado !== parseInt(digitos.charAt(1))) {
+        return false;
+    }
+
+    return true;
 }
 
 

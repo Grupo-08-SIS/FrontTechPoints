@@ -19,7 +19,7 @@ async function realizarLogin() {
         const data = await response.json();
         console.log('Resposta do login:', data);
 
-        if (data.idUsuario) {
+        if (data.id) {
             // Sucesso no login
             data.senha = senha;
             sessionStorage.setItem('user', JSON.stringify(data));
@@ -28,12 +28,11 @@ async function realizarLogin() {
             if (!data.deletado) {
                 // Redirecionamento conforme o tipo de usuário
                 switch (data.tipoUsuario) {
-                    case 1:
-                    case 2:
+                    case "Aluno":
                         console.log('Redirecionando para dash_aluno.html');
                         window.location.href = 'dash_aluno.html';
                         break;
-                    case 3:
+                    case 2:
                         console.log('Redirecionando para tela_rh_vagas.html');
                         window.location.href = 'tela_rh_vagas.html';
                         break;
@@ -62,11 +61,10 @@ async function realizarLogin() {
                         // Redirecionamento após reativação
                         switch (data.tipoUsuario) {
                             case 1:
-                            case 2:
                                 console.log('Redirecionando para dash_aluno.html após reativação');
                                 window.location.href = 'dash_aluno.html';
                                 break;
-                            case 3:
+                            case 2:
                                 console.log('Redirecionando para tela_rh_vagas.html após reativação');
                                 window.location.href = 'tela_rh_vagas.html';
                                 break;
@@ -96,7 +94,7 @@ async function realizarLogin() {
 function showAlert(type, message) {
     const alertDiv = document.getElementById('alertDiv');
     console.log(`Exibindo alerta: Tipo - ${type}, Mensagem - ${message}`);
-    
+
     // Limpa qualquer alerta existente
     alertDiv.classList.remove('d-none', 'alert-success', 'alert-error', 'fade-in', 'fade-out');
     alertDiv.classList.add(`alert-${type}`, 'fade-in');
@@ -108,11 +106,7 @@ function showAlert(type, message) {
         setTimeout(() => {
             alertDiv.classList.remove('fade-in', 'fade-out');
             alertDiv.classList.add('d-none');
-            alertDiv.style.display = 'none'; // Esconde o alerta completamente
-        }, 500); // Tempo para completar a transição de fade-out
-    }, 3000); // Tempo para manter o alerta visível
-}
-
-function esqueciSenha() {
-    // Implementar funcionalidade de recuperação de senha aqui
+            alertDiv.style.display = 'none'; 
+        }, 500);
+    }, 3000); 
 }
