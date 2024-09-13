@@ -32,7 +32,7 @@ async function realizarLogin() {
                         console.log('Redirecionando para dash_aluno.html');
                         window.location.href = 'dash_aluno.html';
                         break;
-                    case 2:
+                    case "Recrutador":
                         console.log('Redirecionando para tela_rh_vagas.html');
                         window.location.href = 'tela_rh_vagas.html';
                         break;
