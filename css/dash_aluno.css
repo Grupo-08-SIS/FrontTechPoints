@@ -52,6 +52,7 @@ a {
     display: flex;
     align-items: center; /* Alinha o texto verticalmente ao centro */
     pointer-events: none;
+    gap: 10px;
 }
 
 .container_nome_usuario h1 {

@@ -1,167 +1,60 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Recupera o item 'user' do sessionStorage
-    const data = JSON.parse(sessionStorage.getItem('user'));
+async function salvarMudancas(event) {
+    event.preventDefault(); // Evita o envio padrão do formulário
 
-    // Obtém o elemento input pelo ID
-    const emailInput = document.getElementById('novo_email');
-    const telefoneInput = document.getElementById('novo_telefone');
-    const idUsuario = data.id;
+    // Obtém os valores do formulário
+    const novoPrimeiroNome = document.getElementById('novo_apelido').value;
+    const novoSobrenome = document.getElementById('novo_sobrenome').value;
+    const telefone = document.getElementById('novo_telefone').value;
+    const email = document.getElementById('email').value;
+    const novaSenha = document.getElementById('nova_senha').value;
+    const confirmacaoSenha = document.getElementById('nova_senha_confirmacao').value;
 
-    // Configura os placeholders com os dados do usuário
-    emailInput.placeholder = data.email || 'novo.email@email.com';
-    telefoneInput.placeholder = data.telefone
-});
-
-function validarEmail(emailInput) {
-    const emailValue = emailInput.value.trim();
-    if (emailValue === '') {
-        return true;
-    }
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!regex.test(emailValue)) {
-        return 'O formato do e-mail é inválido.';
-    }
-    return true;
-}
-
-function validarTelefone(telefoneInput) {
-    const telefoneValue = telefoneInput.value.trim();
-    if (telefoneValue === '') {
-        return true;
-    }
-    const regex = /^(?:\(?\d{2}\)?\s?)?\d{4,5}-?\d{4}$/;
-    if (!regex.test(telefoneValue)) {
-        return 'O formato do telefone é inválido.';
-    }
-    return true;
-}
-
-function validarSenha(senhaInput, confirmacaoSenhaInput) {
-    const senhaValue = senhaInput.value.trim();
-    const confirmacaoSenhaValue = confirmacaoSenhaInput.value.trim();
-    if (senhaValue === '') {
-        return true;
-    }
-    if (senhaValue.length < 6) {
-        return 'A senha deve ter no mínimo 6 caracteres.';
-    }
-    if (senhaValue !== confirmacaoSenhaValue) {
-        return 'As senhas não coincidem.';
-    }
-    return true;
-}
-
-async function salvarMudancas() {
-    const emailInput = document.getElementById('novo_email');
-    const telefoneInput = document.getElementById('novo_telefone');
-    const senhaInput = document.getElementById('nova_senha');
-    const senhaConfirmacaoInput = document.getElementById('nova_senha_confirmacao');
-
-    const data = JSON.parse(sessionStorage.getItem('user'));
-    const idUsuario = data.id;
-
-    let updates = {};
-    let erros = [];
-
-    // Validação do e-mail
-    const emailError = validarEmail(emailInput);
-    if (emailError !== true) {
-        erros.push(emailError);
-    } else {
-        const email = emailInput.value.trim();
-        if (email !== '') {
-            updates.email = email;
-        }
-    }
-
-    // Validação do telefone
-    const telefoneError = validarTelefone(telefoneInput);
-    if (telefoneError !== true) {
-        erros.push(telefoneError);
-    } else {
-        const telefone = telefoneInput.value.trim();
-        if (telefone !== '') {
-            updates.telefone = telefone;
-        }
-    }
-
-    // Validação da senha
-    const senhaError = validarSenha(senhaInput, senhaConfirmacaoInput);
-    if (senhaError !== true) {
-        erros.push(senhaError);
-    } else {
-        const senha = senhaInput.value.trim();
-        if (senha !== '') {
-            updates.senha = senha;
-        }
-    }
-
-    if (erros.length > 0) {
-        console.log('Erros de validação:', erros);
-        showAlert(erros.join('\n'), 'error');
+    // Verifica se as senhas coincidem
+    if (novaSenha && novaSenha !== confirmacaoSenha) {
+        alert('As senhas não coincidem.');
         return;
     }
 
-    if (Object.keys(updates).length === 0) {
-        console.log('Nenhuma alteração detectada.');
-        showAlert('Nenhuma alteração detectada.', 'error');
-        return;
-    }
+    // Construa o objeto de dados
+    const dados = {};
 
-    console.log('Atualizações:', updates);
+    // Atualiza o nome de usuário com base nas mudanças
+    dados.nomeUsuario = `${novoPrimeiroNome || dadosUsuarioAtual.primeiroNome} ${novoSobrenome || dadosUsuarioAtual.sobrenome}`.trim();
+
+    if (novoPrimeiroNome) dados.primeiroNome = novoPrimeiroNome;
+    if (novoSobrenome) dados.sobrenome = novoSobrenome;
+    if (telefone) dados.telefone = telefone;
+    if (email) dados.email = email;
+    if (novaSenha) dados.senha = novaSenha;
+
+    // Substitua `{id}` pelo ID real do usuário
+    const userId = 3; // Substitua pelo ID do usuário
+    const endpoint = `http://localhost:8080/usuarios/atualizar/${userId}`;
 
     try {
-        // Atualização das informações do usuário
-        const response = await fetch(`http://localhost:8080/usuarios/atualizar/${idUsuario}`, {
+        // Envia a requisição PATCH para o endpoint
+        const response = await fetch(endpoint, {
             method: 'PATCH',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updates)
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dados),
         });
 
-        const responseText = await response.text();
-
         if (response.ok) {
-            console.log('Resposta do servidor:', responseText);
-            showAlert("Informações atualizadas com sucesso", 'success');
-            showAlert("Informações atualizadas com sucesso. Você será redirecionado para a tela de login.", 'success');
-                        setTimeout(() => {
-                            window.location.href = '/html/home.html';
-                        }, 3500);
-
-            // Se a senha foi modificada, realiza a atualização da senha
-            if (updates.senha) {
-                try {
-                    const email = data.email;
-                    const novaSenha = updates.senha;
-
-                    const senhaResponse = await fetch('http://localhost:8080/reset-senha/nova-senha', {
-                        method: 'PATCH',
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email, novaSenha })
-                    });
-
-                    const senhaResponseText = await senhaResponse.text(); // Captura o texto da resposta
-
-                    if (senhaResponse.ok) {
-                        console.log('Senha atualizada com sucesso.', senhaResponseText);
-                        showAlert("Senha atualizada com sucesso", 'success');
-                    } else {
-                        console.error('Erro ao atualizar a senha:', senhaResponseText);
-                        showAlert('Erro ao atualizar a senha', 'error');
-                    }
-                } catch (error) {
-                    console.error('Erro ao tentar atualizar a senha:', error);
-                    showAlert('Erro ao tentar atualizar a senha', 'error');
-                }
-            }
-
+            // Atualização bem-sucedida
+            showAlert('Informações atualizadas com sucesso! Você será redirecionado para a tela de login.', 'success');
+            setTimeout(() => {
+                window.location.href = 'login.html'; // Redireciona para a página de login
+            }, 3000); // Aguarda 3 segundos antes de redirecionar
         } else {
-            console.error('Erro no servidor:', responseText);
-            showAlert('Erro ao tentar atualizar as informações', 'error');
+            // Se a resposta não for OK, exibe uma mensagem de erro
+            const error = await response.json();
+            showAlert(`Erro: ${error.message || 'Não foi possível atualizar as informações.'}`, 'error');
         }
     } catch (error) {
-        console.error('Erro:', error);
-        showAlert('Erro ao tentar atualizar as informações', 'error');
+        // Lida com erros de rede ou outros erros
+        showAlert(`Erro: ${error.message}`, 'error');
     }
 }
 
@@ -212,3 +105,139 @@ async function fazerLogout() {
         alert('Erro ao fazer logoff. Por favor, tente novamente.')
     }
 } 
+
+document.addEventListener("DOMContentLoaded", async function () {
+    // Recupera o item 'user' do sessionStorage
+    const user = JSON.parse(sessionStorage.getItem('user'));
+
+    if (!user || !user.id) {
+        console.error('ID do usuário não encontrado no sessionStorage.');
+        return;
+    }
+
+    const idUsuario = user.id;
+
+    // Função para listar favoritos
+    async function listarFavoritos() {
+        try {
+            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
+            const data = await response.json();
+
+            const container = document.querySelector(".bloco_alunos_favoritos");
+            container.innerHTML = ""; // Limpa o conteúdo existente
+
+            if (data.length === 0) {
+                const noFavoritesMessage = document.createElement("p");
+                noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
+                noFavoritesMessage.className = "no-alunos-message";
+                container.appendChild(noFavoritesMessage);
+            } else {
+                data.forEach(aluno => {
+                    const alunoDiv = document.createElement("div");
+                    alunoDiv.className = "box_Aluno_favoritos";
+                    
+                    alunoDiv.innerHTML = `
+                        <span>${aluno.nomeUsuario}</span>
+                        <span>Aluno do projeto arrastão, finalizou curso <a>${aluno.nomeCurso}</a> com</span>
+                        <img src="../imgs/gold medal.png" alt="medalha">
+                        <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
+                    `;
+                    
+                    container.appendChild(alunoDiv);
+                });
+            }
+        } catch (error) {
+            console.error("Erro ao buscar alunos favoritos:", error);
+        }
+    }
+
+    // Função para listar interessados
+    async function listarInteressados() {
+        try {
+            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
+            const data = await response.json();
+
+            const container = document.querySelector(".bloco_alunos");
+            container.innerHTML = ""; // Limpa o conteúdo existente
+
+            if (data.length === 0) {
+                const noInterestedMessage = document.createElement("p");
+                noInterestedMessage.textContent = "Não há alunos interessados no momento.";
+                noInterestedMessage.className = "no-alunos-message";
+                container.appendChild(noInterestedMessage);
+            } else {
+                data.forEach(aluno => {
+                    const alunoDiv = document.createElement("div");
+                    alunoDiv.className = "box_Aluno";
+                    
+                    alunoDiv.innerHTML = `
+                        <span>${aluno.nomeUsuario}</span>
+                        <span>Aluno do projeto arrastão, finalizou curso <a>${aluno.nomeCurso}</a> com</span>
+                        <img src="../imgs/gold medal.png" alt="medalha">
+                    `;
+                    
+                    container.appendChild(alunoDiv);
+                });
+            }
+        } catch (error) {
+            console.error("Erro ao buscar interessados:", error);
+        }
+    }
+
+    window.desfavoritar = async function(idAluno) {
+        try {
+            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/favoritos/${idAluno}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log(`Aluno com ID ${idAluno} desfavoritado.`);
+                listarFavoritos(); // Atualiza a lista de favoritos
+            } else {
+                console.error('Erro ao desfavoritar o aluno.');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    }
+
+    // Função para formatar a data
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('pt-BR', options);
+    }
+
+    // Chama as funções para listar favoritos e interessados
+    listarFavoritos();
+    listarInteressados();
+});
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+
+    if (user) {
+        document.getElementById('id_nome').innerText = `${user.primeiroNome} ${user.sobrenome}` || 'Nome não disponível';
+        document.getElementById('id_email_usuario').innerText = user.email || 'Email não disponível';
+        document.getElementById('span_data_criacao').innerText = user.dataCriacao ? new Date(user.dataCriacao).toLocaleDateString() : 'Data não disponível';
+        document.getElementById('span_data_ultima_atualizacao').innerText = user.dataAtualizacao ? new Date(user.dataAtualizacao).toLocaleDateString() : 'Não houve nenhuma atualização';
+        document.getElementById('span_empresa').innerText = user.empresa.nome || 'Nome da empresa não disponível';
+        document.getElementById('span_setor').innerText = user.empresa.setorIndustria || 'Setor não disponível';
+        document.getElementById('span_cargo').innerText = user.cargoUsuario || 'Email não disponível';
+        document.getElementById('span_email_empresa').innerText = user.empresa.emailCorporativo || 'Email não disponível';
+
+    } else {
+        document.getElementById('id_nome').innerText = 'Nome não disponível';
+        document.getElementById('id_email_usuario').innerText = 'Email não disponível';
+        document.getElementById('span_data_criacao').innerText = 'Data não disponível';
+        document.getElementById('span_data_ultima_atualizacao').innerText = 'Não houve nenhuma atualização';
+    }
+});
+
+function editarPerfil() {
+    document.querySelector('.container_fundo_editar_informacoes').style.display = 'flex';
+}
+
+function fecharFormulario() {
+    document.querySelector('.container_fundo_editar_informacoes').style.display = 'none';
+}

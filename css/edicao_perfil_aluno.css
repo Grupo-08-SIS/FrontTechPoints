@@ -55,6 +55,7 @@ a {
     display: flex;
     align-items: center; /* Alinha o texto verticalmente ao centro */
     pointer-events: none;
+    gap: 10px;
 }
 
 .container_nome_usuario h1 {
@@ -217,8 +218,8 @@ a {
 .container_foto img {
     max-width: 100%; /* Garante que a imagem não exceda o container */
     width: 40vh;
-    height: auto; /* Mantém a proporção original da imagem */
-    border-radius: 20px;
+    height: 40vh; /* Mantém a proporção original da imagem */
+    border-radius: 100%;
 }
 
 /* Container para o texto e botões ao lado da foto */
@@ -335,7 +336,6 @@ a {
 
 .container_fundo_editar_informacoes {
     width: 100%;
-    height: 100vh; /* Ocupar 100% da altura da viewport */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -347,6 +347,11 @@ a {
     backdrop-filter: blur(8px); /* Adiciona o efeito de desfoque */
     display: none; /* Inicialmente invisível */
     overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a tela */
+}
+
+.span_texto_recebido {
+    font-weight: 800;
+    color: #ffffff59;
 }
 
 .container_interno_editar_informacoes h1 {
@@ -507,8 +512,8 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
 
 .bloco_notificacao_exclusao {
     background-color: #ffffff;
-    width: 30%;
-    height: 30vh;
+    width: 33%;
+    height: 32vh;
     border-radius: 20px;
     border: 3px solid #ED1B24; /* Adiciona a borda azul de 3px */
 }
@@ -809,4 +814,9 @@ footer {
     transition: opacity 0.3s;
     pointer-events: none;
     z-index: 10;
+}
+
+.header_img_usuario {
+    width: 5vh;
+    border-radius: 100%;
 }

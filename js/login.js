@@ -26,21 +26,10 @@ async function realizarLogin() {
 
             if (!data.deletado) {
                 // Redirecionamento conforme o tipo de usuário
-                switch (data.tipoUsuario) {
-                    case "Aluno":
-                        console.log('Redirecionando para dash_aluno.html');
-                        window.location.href = 'dash_aluno.html';
-                        break;
-                    case "Recrutador":
-                        console.log('Redirecionando para tela_rh_vagas.html');
-                        window.location.href = 'tela_rh_vagas.html';
-                        break;
-                    default:
-                        showAlert('error', 'Erro: Tipo de usuário desconhecido');
-                        console.error('Tipo de usuário desconhecido');
-                }
+                redirectToDashboard(data.tipoUsuario);
             } else {
-                showAlert('success', 'Sua conta está sendo reativada!'); // Exibir alerta antes de tentar reativar
+                // Exibir alerta de reativação e tentar reativar a conta
+                showAlert('success', 'Sua conta está sendo reativada!');
                 console.log('Conta está deletada, tentando reativar...');
 
                 setTimeout(async () => {
@@ -55,23 +44,22 @@ async function realizarLogin() {
                             throw new Error('Erro ao tentar reativar a conta');
                         }
 
-                        console.log('Conta reativada com sucesso');
+                        const reativarData = await reativarResponse.json();
+                        console.log('Dados após reativação:', reativarData);
+
+                        // Buscar informações do usuário após reativação
+                        const userId = data.id; // Use o ID do usuário armazenado no sessionStorage
+                        const userResponse = await fetch(`http://localhost:8080/usuarios/buscar/${userId}`);
+                        
+                        if (!userResponse.ok) {
+                            throw new Error('Erro ao buscar informações do usuário');
+                        }
+
+                        const userData = await userResponse.json();
+                        console.log('Informações do usuário após reativação:', userData);
 
                         // Redirecionamento após reativação
-                        const reativarData = await reativarResponse.json(); // Certifique-se de obter a resposta após reativar
-                        switch (reativarData.tipoUsuario) {
-                            case "Aluno":
-                                console.log('Redirecionando para dash_aluno.html após reativação');
-                                window.location.href = 'dash_aluno.html';
-                                break;
-                            case "Recrutador":
-                                console.log('Redirecionando para tela_rh_vagas.html após reativação');
-                                window.location.href = 'tela_rh_vagas.html';
-                                break;
-                            default:
-                                showAlert('error', 'Erro: Tipo de usuário desconhecido após reativação');
-                                console.error('Tipo de usuário desconhecido após reativação');
-                        }
+                        redirectToDashboard(userData.tipoUsuario);
 
                     } catch (reativarError) {
                         showAlert('error', 'Erro ao tentar reativar a conta');
@@ -88,6 +76,22 @@ async function realizarLogin() {
     } catch (error) {
         showAlert('error', 'Erro ao tentar fazer login');
         console.error('Erro ao tentar fazer login:', error);
+    }
+}
+
+function redirectToDashboard(tipoUsuario) {
+    switch (tipoUsuario) {
+        case "Aluno":
+            console.log('Redirecionando para dash_aluno.html');
+            window.location.href = 'dash_aluno.html';
+            break;
+        case "Recrutador":
+            console.log('Redirecionando para tela_rh_vagas.html');
+            window.location.href = 'tela_rh_vagas.html';
+            break;
+        default:
+            showAlert('error', 'Erro: Tipo de usuário desconhecido');
+            console.error('Tipo de usuário desconhecido');
     }
 }
 

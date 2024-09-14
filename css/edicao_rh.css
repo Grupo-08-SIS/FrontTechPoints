@@ -133,7 +133,6 @@ a {
 .container_perfil {
     width: 100%;
     height: 17vh;
-    margin-top: 5vh;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -141,7 +140,6 @@ a {
 
 .container_interno_perfil {
     display: flex;
-    flex-direction: column; /* Organiza os itens em coluna */
     justify-content: center; /* Centraliza o conteúdo verticalmente */
     align-items: center; /* Centraliza o conteúdo horizontalmente */
     background-color: #244aa5;
@@ -153,9 +151,10 @@ a {
 }
 
 .container_interno_perfil h1 {
-    font-size: 24px; /* Ajusta o tamanho da fonte */
+    font-size: 20px; /* Ajusta o tamanho da fonte */
     text-align: center; /* Centraliza o texto */
     margin: 0; /* Remove margens para ajuste fino */
+    padding: 10px;
 }
 
 .linha {
@@ -175,25 +174,15 @@ a {
 
 .container_interno_separacao {
     display: flex;
-    justify-content: center; /* Centraliza o conteúdo */
     align-items: center;
     background-color: #fabc09;
-    width: 90%; /* Aumenta a largura para melhor ocupar o espaço */
-    max-width: 1200px;
+    width: 70%; /* Aumenta a largura para melhor ocupar o espaço */
     padding: 10px 20px;
     border-radius: 10px;
-    box-sizing: border-box;
-    margin: 20px auto; /* Centraliza o container na tela */
     margin-bottom: 6vh;
-}
-
-.container_interno_separacao h1 {
-    .container_interno_separacao h1 {
-        font-size: 24px;
-        font-weight: bold;
-        margin: 0; /* Remove margens para centralizar melhor */
-        text-align: center;
-    }
+    color: white;
+    text-shadow: 2px 2px 4px #0000007c; /* Adiciona sombra ao texto */
+    font-size: 10px;
 }
 
 .container_fundo_aluno {
@@ -283,79 +272,307 @@ a {
     color: #244aa5;
 }
 
-.container_fundo_editar_perfil {
-    display: flex;
-    width: 100%;
+.container_fundo_aluno_favoritos {
+    width: 90%; /* Ajusta a largura para ser consistente com o título */
     max-width: 1200px; /* Define uma largura máxima */
+    margin: 0 auto; /* Centraliza o container */
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px auto; /* Centraliza o container */
-    padding: 20px;
+    padding: 10px 0; /* Ajusta o padding para manter a proximidade */
 }
 
-.container_editar_perfil {
-    width: 80%;
-    max-width: 600px; /* Define uma largura máxima */
+.bloco_alunos_favoritos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centraliza os cards */
+    gap: 20px; /* Adiciona espaçamento uniforme entre os cards */
+}
+
+.box_Aluno_favoritos {
     background-color: #244aa5;
+    border: 3px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
+    width: calc(33% - 40px); /* Ajusta a largura para se adaptar ao espaço disponível */
+    flex: 1 1 250px;
+    height: auto;
+    min-width: 200px; /* Largura mínima para manter a legibilidade */
+    max-width: 250px; /* Largura máxima */
     padding: 20px;
-    border-radius: 20px;
+    margin: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 2px solid #002d95;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+    position: relative;
+    color: #ffffff;
+    transition: transform 0.3s; /* Adiciona uma pequena animação */
 }
 
-.container_editar {
-    width: 100%;
-    height: 10vh;
-    color: white;
-    margin-left: 5%;
-    font-size: 20px;
+.box_Aluno_favoritos:hover {
+    transform: scale(1.05); /* Leve aumento ao passar o mouse */
 }
 
-.container_inputs {
-    width: 90%; /* Ajusta a largura do formulário */
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
-    border: 3px solid #ffd700;
-    margin: 0 auto; /* Centraliza o formulário dentro do container */
+.box_Aluno_favoritos span:first-child {
+    font-weight: bold; /* Negrito para o nome do aluno */
+    font-size: 1.2rem; /* Tamanho da fonte para o nome do aluno */
+    margin-bottom: 10px; /* Espaçamento abaixo do nome do aluno */
+    text-align: center; /* Centraliza o texto */
 }
 
-.container_inputs span {
-    margin-top: 10px; /* Espaçamento superior */
-    margin-bottom: 5px; /* Espaçamento inferior */
-    font-weight: bold; /* Texto em negrito */
-    color: #333; /* Cor do texto */
+.box_Aluno_favoritos span:nth-child(2) {
+    font-size: 0.9rem; /* Tamanho da fonte para o texto */
+    margin-bottom: 10px; /* Espaçamento abaixo do texto */
+    text-align: center; /* Centraliza o texto */
 }
 
-.container_inputs input {
-    padding: 10px; /* Espaçamento interno */
-    margin-bottom: 15px; /* Espaçamento inferior */
-    border: 1px solid #ccc; /* Borda dos inputs */
+.box_Aluno_favoritos img {
+    width: 50px; /* Largura da imagem */
+    height: auto; /* Manter a proporção da imagem */
+    margin-top: 10px; /* Espaçamento acima da imagem */
+}
+
+.box_Aluno_favoritos .solicitacao {
+    margin-top: 5px; /* Opcional: adicionar um pouco de margem acima do texto */
+    font-size: 12px;
+    color: #ffffff;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.box_Aluno_favoritos button {
+    background-color: #ed1b24; /* Cor de fundo */
+    border: none; /* Sem borda */
+    color: #ffffff; /* Cor do texto */
+    padding: 5px 10px; /* Espaçamento interno reduzido */
+    font-size: 0.75rem; /* Tamanho da fonte reduzido */
     border-radius: 5px; /* Bordas arredondadas */
-    font-size: 16px; /* Tamanho da fonte */
-    width: 100%; /* Largura total do contêiner */
-    box-sizing: border-box; /* Inclui a borda e o padding na largura total */
- }
+    cursor: pointer; /* Cursor de mãozinha */
+    position: absolute; /* Posição absoluta */
+    bottom: 10px; /* Alinhado ao fundo do bloco */
+    right: 10px; /* Alinhado à direita da imagem */
+}
 
-.container_inputs button {
-    background-color: #ffd700;
-    color: #000000;
+.box_Aluno_favoritos button:hover {
+    background-color: #ffd700; /* Cor de fundo mais clara ao passar o mouse */
+    color: #244aa5;
+}
+
+
+/* Container principal que centraliza o conteúdo */
+.container_texto_foto_e_data {
+    width: 100%;
+    height: 7vh;
+    margin-top: 3vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+/* Container interno que contém o texto e a foto */
+.container_interno_texto_foto_e_data {
+    display: flex;
+    background-color: #fabc09;
+    width: 70%;
+    height: 100%;
+    border-radius: 15px;
+    color: #244aa5;
+    align-items: center;
+}
+
+/* Estilo para o título dentro do container interno */
+.container_interno_texto_foto_e_data h1 {
+    font-size: 20px;
+    margin: 20px;
+    font-weight: 800;
+}
+
+.container_fundo_foto_e_data {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%; /* Garante que o container ocupe toda a largura disponível */
+}
+
+.container_interno_foto_e_data {
+    display: flex;
+    flex-direction: row; /* Garante que os itens fiquem lado a lado */
+    background-color: #1E3A8A;
+    padding: 20px;
+    border-radius: 8px;
+    width: 70%;
+    height: 40vh;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.container_foto_e_botoes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40%; /* Reduzido para dar mais espaço para os spans */
+}
+
+.container_foto img {
+    max-width: 100%;
+    width: 40vh;
+    height: 40vh;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+}
+
+.container_span_e_botoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 45%; /* O restante do espaço */
+    padding-left: 20px;
+}
+
+.blco_span {
+    display: flex;
+    justify-content: space-between; /* Espaço entre as colunas */
+    width: 100%;
+    gap: 10vh; /* Espaçamento entre as colunas */
+}
+
+.coluna_esquerda, .coluna_direita {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    font-size: 16px;
+    gap: 10px; /* Espaçamento entre os spans */
+}
+
+.bloco_botoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload_button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px; /* Adiciona espaçamento superior */
 }
 
-.container_inputs button:hover {
-    background-color: #d0b100; /* Cor de fundo ao passar o mouse */
+.upload_button:hover {
+    background-color: #45a049;
+}
+
+.upload_label {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload_label:hover {
+    background-color: #1976D2;
+}
+
+.inputfile {
+    display: none;
+}
+
+
+/* Estilo para o label do input file */
+.upload_label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ffffff; /* Cor de fundo do label */
+    color: #244AA5; /* Cor do texto do label */
+    border: 2px solid #fabc09; /* Borda do label */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Aponta que é clicável */
+    font-size: 16px; /* Tamanho da fonte do label */
+    font-weight: 500; /* Peso da fonte do label */
+    text-align: center; /* Centraliza o texto */
+    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
+}
+
+/* Estilo para o botão de upload */
+.upload_button {
+    padding: 10px 20px;
+    background-color: #ffffff; /* Cor de fundo do botão */
+    color: #244AA5; /* Cor do texto do botão */
+    border: 2px solid #fabc09; /* Borda do botão */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Aponta que é clicável */
+    font-size: 16px; /* Tamanho da fonte do botão */
+    font-weight: 500; /* Peso da fonte do botão */
+    text-align: center; /* Centraliza o texto */
+    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
+}
+
+/* Efeito de hover para o botão de upload e o label */
+.upload_button:hover,
+.upload_label:hover {
+    background-color: #fabc09; /* Cor de fundo ao passar o mouse */
+    color: #ffffff; /* Cor do texto ao passar o mouse */
+    border-color: #fabc09; /* Cor da borda ao passar o mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
+    transform: translateY(-3px); /* Levanta o botão ao passar o mouse */
+}
+
+/* Estilo para o container do formulário de edição */
+.container_fundo_editar_perfil {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com transparência */
+}
+
+/* Estilo para o container interno do formulário de edição */
+.container_editar_perfil {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 600px;
+}
+
+/* Estilo para o formulário de edição */
+.container_inputs form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Estilo para os labels do formulário */
+.container_inputs label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Estilo para os inputs do formulário */
+.container_inputs input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilo para o botão de salvar mudanças */
+.container_inputs button {
+    background-color: #4CAF50; /* Cor de fundo verde */
+    color: #ffffff; /* Cor do texto */
+    padding: 10px;
+    border: none; /* Remove a borda padrão */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor em forma de mão */
+    font-size: 16px; /* Tamanho da fonte */
+}
+
+/* Estilo para o botão de salvar mudanças quando clicado */
+.container_inputs button:active {
+    background-color: #45a049; /* Cor de fundo verde mais escuro */
 }
 
 .container_fundo_exclusao {
@@ -386,8 +603,8 @@ a {
 }
 
 .container_exclusao button {
-    width: 35vh;
-    height: 8vh;
+    width: 50vh;
+    height: 6vh;
     background-color: #ed1b24; /* Cor de fundo */
     color: #ffffff; /* Cor do texto */
     border: none; /* Sem borda */
@@ -436,8 +653,8 @@ a {
 
 .bloco_notificacao_exclusao {
     background-color: #ffffff;
-    width: 30%;
-    height: 30vh;
+    width: 33%;
+    height: 32vh;
     border-radius: 20px;
     border: 3px solid #ED1B24; /* Adiciona a borda azul de 3px */
 }
@@ -731,4 +948,116 @@ footer {
     transition: opacity 0.3s;
     pointer-events: none;
     z-index: 10;
+}
+
+.no-alunos-message {
+    font-weight: 800; 
+    font-size: 20px;
+    color: gray;     
+    height: 10vh;
+    margin-top: 20%;
+}
+
+.container_fundo_editar_informacoes {
+    width: 100%;
+    height: 100%; /* Ocupar 100% da altura da viewport */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    backdrop-filter: blur(8px); /* Adiciona o efeito de desfoque */
+    display: none; /* Inicialmente invisível */
+    overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a tela */
+}
+
+.container_interno_editar_informacoes {
+    position: relative; /* Necessário para o posicionamento do botão de fechar */
+    background-color: #2b5f9e;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 45%; /* Largura menor para evitar encostar nas bordas */
+    max-width: 800px;
+    max-height: 80vh; /* Limita a altura do contêiner interno */
+    overflow-y: auto; /* Permite rolagem dentro do contêiner interno se necessário */
+    margin: 100 20px; /* Adiciona margem para não encostar nas bordas */
+    color: white;
+}
+
+.close_button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.close_button:hover {
+    color: #ff0000;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    color: #bfbfbf;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.container_interno_editar_informacoes input[type="text"],
+.container_interno_editar_informacoes input[type="email"],
+.container_interno_editar_informacoes input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+}
+
+.container_interno_editar_informacoes input[type="text"]:focus,
+.container_interno_editar_informacoes input[type="email"]:focus,
+.container_interno_editar_informacoes input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn {
+    width: 100%;
+    max-width: 200px;
+    background-color: #f4b400;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s, transform 0.3s;
+    display: block;
+    margin: 20px auto 0; /* Centraliza o botão */
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #d99400;
+    transform: scale(1.05); /* Efeito de "crescimento" ao passar o mouse */
+    color: white;
+}
+
+.span_texto_recebido {
+    font-weight: 800;
+    color: #ffffff59;
 }
