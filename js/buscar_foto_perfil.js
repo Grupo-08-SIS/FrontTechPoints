@@ -10,25 +10,40 @@ document.addEventListener("DOMContentLoaded", function () {
                 const response = await fetch(`http://localhost:8080/usuarios/imagem/${userId}`);
                 if (response.ok) {
                     const imageBlob = await response.blob();
-                    
-                    // Verifica se o Blob tem conteúdo (não é vazio)
+
                     if (imageBlob.size > 0) {
                         const imageUrl = URL.createObjectURL(imageBlob);
                         profileImageHeader.src = imageUrl;
 
-                        // Define o estilo diretamente no JavaScript
-                        profileImageHeader.style.width = '5vh'; // Define a largura da imagem como 5% da altura da viewport
-                        profileImageHeader.style.borderRadius = '100%'; // Torna a imagem circular
+                        profileImageHeader.style.width = '5vh';
+                        profileImageHeader.style.height = '5vh';
+                        profileImageHeader.style.borderRadius = '100%';
+                        profileImageHeader.style.objectFit = 'cover';
                     } else {
-                        profileImageHeader.src = '/imgs/foto_padrao.png'; // Imagem padrão se o blob estiver vazio
+                        profileImageHeader.src = '/imgs/foto_padrao.png';
+
+                        profileImageHeader.style.width = '5vh';
+                        profileImageHeader.style.height = '5vh';
+                        profileImageHeader.style.borderRadius = '100%';
+                        profileImageHeader.style.objectFit = 'cover';
                     }
                 } else {
                     console.error('Falha ao buscar a imagem.');
-                    profileImageHeader.src = '/imgs/foto_padrao.png'; // Imagem padrão em caso de falha
+                    profileImageHeader.src = '/imgs/foto_padrao.png';
+
+                    profileImageHeader.style.width = '5vh';
+                    profileImageHeader.style.height = '5vh';
+                    profileImageHeader.style.borderRadius = '100%';
+                    profileImageHeader.style.objectFit = 'cover';
                 }
             } catch (error) {
                 console.error('Erro ao buscar a imagem:', error);
-                profileImageHeader.src = '/imgs/foto_padrao.png'; // Imagem padrão em caso de erro
+                profileImageHeader.src = '/imgs/foto_padrao.png';
+
+                profileImageHeader.style.width = '5vh';
+                profileImageHeader.style.height = '5vh'; 
+                profileImageHeader.style.borderRadius = '100%';
+                profileImageHeader.style.objectFit = 'cover';
             }
         }
 
