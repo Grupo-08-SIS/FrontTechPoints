@@ -30,11 +30,7 @@
                 <div class="custom-shape inactive" id="shape2">
                     <span>Dados Pessoais</span>
                 </div>
-                <div class="custom-shape inactive" id="shape3">
-                    <span>Dados Empresariais</span>
-                </div>
             </nav>
-
             <article class="form-step" id="step1">
                 <form class="form" onsubmit="return false;">
                     <h2>Cadastre-se</h2>
@@ -72,26 +68,13 @@
                             <input type="text" id="lastname" name="lastname" required>
                         </div>
                     </div>
-
                     <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" name="cpf" required onkeyup="formatarCpf(event)" maxlength="14">
-
-                    <button type="button" class="back-btn"><span class="arrow-left"></span> Voltar</button>
-                    <button type="button" class="continue-btn">Continuar <span class="arrow-right"></span></button>
-                    <a href="login.html" class="login-link">Já possui uma conta? Faça Login!</a>
-                </form>
-            </article>
-
-            <article class="form-step" id="step3" style="display: none;">
-                <form class="form" id="empresa-form" onsubmit="return submitForm(event);">
-                    <h2>Cadastre-se</h2>
-                    <p>Comece a moldar o seu futuro hoje mesmo. Crie sua conta!</p>
-                    
+                    <input type="text" id="cpf" name="cpf" required onkeyup="formatarCPF(event)" maxlength="14">
                     <label for="cnpj">CNPJ da Empresa</label>
-                    <input type="text" id="cnpj" name="cnpj" required onkeyup="formatarCnpj(event)" maxlength="18">
+                    <input type="text" id="cnpj" name="cnpj" required onkeyup="formatarCNPJ(event)" maxlength="18">
 
-                    <label for="user-role">Cargo do Usuário</label>
-                    <input type="text" id="user-role" name="cargo_usuario" required>
+                    <label for="cargoUsuario">Cargo do Usuário</label>
+                    <input type="text" id="cargoUsuario" name="cargo_usuario" required>
 
                     <label for="telefone">Telefone</label>
                     <input type="text" id="telefone" name="telefone" required onkeyup="formatarTelefone(event)" maxlength="15">
@@ -108,6 +91,14 @@
                     </div>
                     <button type="button" class="back-btn"><span class="arrow-left"></span> Voltar</button>
                     <button type="button" class="submit-btn" onclick="realizarCadastro()">Cadastrar</button>
+                    <a href="login.html" class="login-link">Já possui uma conta? Faça Login!</a>
+                </form>
+            </article>
+
+            <article class="form-step" id="step3" style="display: none;">
+                <form class="form" id="empresa-form" onsubmit="return submitForm(event);">
+                    <h2>Cadastre-se</h2>
+                    <p>Comece a moldar o seu futuro hoje mesmo. Crie sua conta!</p>
                 </form>
             </article>
         </section>
@@ -166,8 +157,7 @@
     </main>
 
     <script src="/js/scriptRH.js"></script>
-    <script src="/js/script_api.js"></script>
-    <script src="/js/rh_script.js"></script>
+    <script src="/js/cadastro_recrutador.js"></script>
 
 </body>
 
