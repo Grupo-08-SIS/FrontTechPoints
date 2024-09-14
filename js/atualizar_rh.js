@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Obtém o elemento input pelo ID
     const emailInput = document.getElementById('novo_email');
     const telefoneInput = document.getElementById('novo_telefone');
-    const idUsuario = data.idUsuario;
+    const idUsuario = data.id;
 
     // Configura os placeholders com os dados do usuário
     emailInput.placeholder = data.email || 'novo.email@email.com';
@@ -58,7 +58,7 @@ async function salvarMudancas() {
     const senhaConfirmacaoInput = document.getElementById('nova_senha_confirmacao');
 
     const data = JSON.parse(sessionStorage.getItem('user'));
-    const idUsuario = data.idUsuario;
+    const idUsuario = data.id;
 
     let updates = {};
     let erros = [];
@@ -123,6 +123,10 @@ async function salvarMudancas() {
         if (response.ok) {
             console.log('Resposta do servidor:', responseText);
             showAlert("Informações atualizadas com sucesso", 'success');
+            showAlert("Informações atualizadas com sucesso. Você será redirecionado para a tela de login.", 'success');
+                        setTimeout(() => {
+                            window.location.href = '/html/home.html';
+                        }, 3500);
 
             // Se a senha foi modificada, realiza a atualização da senha
             if (updates.senha) {
@@ -190,7 +194,7 @@ async function fazerLogout() {
 
     try {
     
-        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.idUsuario}`, {
+        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
             method: 'POST'
         })
 

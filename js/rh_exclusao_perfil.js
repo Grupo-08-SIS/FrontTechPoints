@@ -9,7 +9,7 @@ async function excluirParcialmente() {
     const email = data.email;
     const senha = data.senha;
 
-    console.log(email, senha);
+    console.log('Excluindo parcialmente usuário com:', email);
 
     try {
         const response = await fetch('http://localhost:8080/usuarios/deletar', {
@@ -25,21 +25,18 @@ async function excluirParcialmente() {
             console.log('Resposta do servidor:', responseText);
             window.location.href = '/html/home.html';
         } else {
-            // Se a resposta não for OK, lança erro
+            // Se a resposta não for OK, lança erro com detalhes
             console.error('Erro no servidor:', responseText);
-            throw new Error('Erro ao tentar excluir a conta');
+            throw new Error(`Erro ao tentar excluir a conta: ${responseText}`);
         }
     } catch (error) {
         console.error('Erro:', error);
-        alert('Erro ao tentar excluir a conta');
+        alert(`Erro ao tentar excluir a conta: ${error.message}`);
     }
 }
 
-
-
-function fecharNotificacao(){
+function fecharNotificacao() {
     var container = document.querySelector('.container_notificacao_exclusao');
-
     container.style.display = 'none';
 }
 
@@ -55,7 +52,7 @@ function abrirNotificacaoParcial() {
     botaoConfirmar.onclick = excluirParcialmente;
 }
 
-function abrirNotificacaoPermanente(){
+function abrirNotificacaoPermanente() {
     var container = document.querySelector('.container_notificacao_exclusao');
     container.style.display = 'flex';
 
@@ -78,7 +75,7 @@ async function excluirPermanentemente() {
     const email = data.email;
     const senha = data.senha;
 
-    console.log(email, senha);
+    console.log('Excluindo permanentemente usuário com:', email);
 
     try {
         const response = await fetch('http://localhost:8080/usuarios/deletar', {
@@ -94,12 +91,12 @@ async function excluirPermanentemente() {
             console.log('Resposta do servidor:', responseText);
             window.location.href = '/html/home.html';
         } else {
-            // Se a resposta não for OK, lança erro
+            // Se a resposta não for OK, lança erro com detalhes
             console.error('Erro no servidor:', responseText);
-            throw new Error('Erro ao tentar excluir a conta');
+            throw new Error(`Erro ao tentar excluir a conta: ${responseText}`);
         }
     } catch (error) {
         console.error('Erro:', error);
-        alert('Erro ao tentar excluir a conta');
+        alert(`Erro ao tentar excluir a conta: ${error.message}`);
     }
 }

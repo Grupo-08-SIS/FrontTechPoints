@@ -203,12 +203,22 @@ a {
 .container_foto_e_botoes {
     display: flex;
     align-items: center;
-    width: 50vh;
+    width: 50vh; /* Certifique-se de que isso seja adequado */
 }
 
 /* Container específico para a foto */
 .container_foto {
-    flex: 1; /* Ocupa o espaço disponível, mantendo a proporção adequada */
+    flex: 1;
+    display: flex; /* Adiciona flexbox para centrar a imagem */
+    justify-content: center; /* Centraliza a imagem horizontalmente */
+    align-items: center; /* Centraliza a imagem verticalmente */
+}
+
+.container_foto img {
+    max-width: 100%; /* Garante que a imagem não exceda o container */
+    width: 40vh;
+    height: auto; /* Mantém a proporção original da imagem */
+    border-radius: 20px;
 }
 
 /* Container para o texto e botões ao lado da foto */

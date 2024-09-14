@@ -1,7 +1,6 @@
 async function realizarLogin() {
     const email = document.getElementById('inputEmail').value;
     const senha = document.getElementById('inputSenha').value;
-    const alertDiv = document.getElementById('alertDiv');
 
     try {
         console.log('Tentando fazer login com:', email);
@@ -41,7 +40,7 @@ async function realizarLogin() {
                         console.error('Tipo de usuário desconhecido');
                 }
             } else {
-                showAlert('success', 'Sua conta está sendo reativada!');
+                showAlert('success', 'Sua conta está sendo reativada!'); // Exibir alerta antes de tentar reativar
                 console.log('Conta está deletada, tentando reativar...');
 
                 setTimeout(async () => {
@@ -59,12 +58,13 @@ async function realizarLogin() {
                         console.log('Conta reativada com sucesso');
 
                         // Redirecionamento após reativação
-                        switch (data.tipoUsuario) {
-                            case 1:
+                        const reativarData = await reativarResponse.json(); // Certifique-se de obter a resposta após reativar
+                        switch (reativarData.tipoUsuario) {
+                            case "Aluno":
                                 console.log('Redirecionando para dash_aluno.html após reativação');
                                 window.location.href = 'dash_aluno.html';
                                 break;
-                            case 2:
+                            case "Recrutador":
                                 console.log('Redirecionando para tela_rh_vagas.html após reativação');
                                 window.location.href = 'tela_rh_vagas.html';
                                 break;

@@ -19,91 +19,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById('span_data_criacao').innerText = 'Data não disponível';
         document.getElementById('span_data_ultima_atualizacao').innerText = 'Não houve nenhuma atualização';
     }
-
-    async function fetchProfileImage() {
-        if (user && user.idUsuario) {
-            try {
-                const response = await fetch(`http://localhost:8080/usuarios/imagem/${user.idUsuario}`);
-                if (response.ok) {
-                    const imageData = await response.blob();
-                    const imageUrl = URL.createObjectURL(imageData);
-                    document.querySelector('.perfil-imagem-editar').src = imageUrl;
-                    document.querySelector
-                } else {
-                    document.querySelector('.perfil-imagem-editar').src = '../imgs/perfil_vazio.jpg';
-                }
-            } catch (error) {
-                console.error('Erro ao buscar imagem do perfil:', error);
-                document.querySelector('.perfil-imagem-editar').src = '../imgs/perfil_vazio.jpg';
-            }
-        } else {
-            document.querySelector('.perfil-imagem-editar').src = '../imgs/perfil_vazio.jpg';
-        }
-    }
-
-    // Carrega a imagem de perfil inicial
-    await fetchProfileImage();
-
-    // Seletores
-    const uploadButton = document.querySelector('.upload_button');
-    const fileInput = document.getElementById('upload');
-    const profileImage = document.querySelector('.perfil-imagem-editar');
-
-    if (uploadButton && fileInput && profileImage) {
-        // Evento de mudança no input de arquivo
-        fileInput.addEventListener('change', function () {
-            const file = fileInput.files[0];
-
-            if (file) {
-                console.log('Imagem selecionada:', file.name);
-
-                // Cria uma URL de objeto para mostrar a imagem selecionada
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    profileImage.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            } else {
-                console.error('Nenhum arquivo selecionado.');
-            }
-        });
-
-        // Evento de clique no botão de upload
-        uploadButton.addEventListener('click', async function () {
-            const file = fileInput.files[0];
-
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                try {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const byteArray = new Uint8Array(arrayBuffer);
-
-                    const response = await fetch(`http://localhost:8080/atualizar-imagem/${user.idUsuario}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': file.type
-                        },
-                        body: byteArray
-                    });
-
-                    if (response.ok) {
-                        console.log('Imagem enviada com sucesso!');
-                        await fetchProfileImage(); // Recarrega a imagem de perfil após o upload
-                    } else {
-                        console.error('Falha ao enviar a imagem.');
-                    }
-                } catch (error) {
-                    console.error('Erro ao enviar a imagem:', error);
-                }
-            } else {
-                console.error('Nenhum arquivo selecionado.');
-            }
-        });
-    } else {
-        console.error('Botão de upload, input de arquivo ou imagem de perfil não encontrado.');
-    }
 });
 
 function validarApelido(apelidoInput) {
@@ -167,7 +82,7 @@ async function salvarMudancas(event) {
     const ruaInput = document.getElementById('rua');
 
     const data = JSON.parse(sessionStorage.getItem('user'));
-    const idUsuario = data.idUsuario;
+    const idUsuario = data.id;
     const idEndereco = data.endereco.id;
 
     let updates = {};
@@ -284,7 +199,7 @@ async function salvarMudancas(event) {
 
         // Redireciona o usuário após um tempo
         setTimeout(() => {
-            window.location.href = '/html/login.html';
+            // window.location.href = '/html/login.html';           // TIRAR O COMENTARIO
         }, 3000);
 
         // Atualiza a senha, se necessário
@@ -335,28 +250,38 @@ function showAlert(message, type = 'success') {
 }
 
 async function fazerLogout() {
-    const user = JSON.parse(sessionStorage.getItem('user'))
+    // Obtém o objeto 'user' do sessionStorage
+    const user = JSON.parse(sessionStorage.getItem('user'));
+
+    // Verifica se o objeto user e seu id estão presentes
+    if (!user || !user.id) {
+        console.error('Usuário não encontrado ou ID do usuário ausente');
+        alert('Erro ao fazer logoff. Por favor, tente novamente.');
+        return;
+    }
 
     try {
-
-        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.idUsuario}`, {
+        // Envia uma requisição POST para fazer logoff
+        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
             method: 'POST'
-        })
+        });
 
-
+        // Verifica se a resposta da requisição foi bem-sucedida
         if (!response.ok) {
-            throw new Error('Erro ao fazer logoff')
+            throw new Error('Erro ao fazer logoff');
         }
 
-        sessionStorage.clear()
-
-        window.location.href = '/html/home.html'
+        // Limpa o sessionStorage e redireciona para a página inicial
+        sessionStorage.clear();
+        window.location.href = '/html/home.html';
 
     } catch (error) {
-        console.error('Erro ao fazer logoff:', error)
-        alert('Erro ao fazer logoff. Por favor, tente novamente.')
+        // Exibe um erro no console e no alerta
+        console.error('Erro ao fazer logoff:', error);
+        alert('Erro ao fazer logoff. Por favor, tente novamente.');
     }
 }
+
 
 document.getElementById('cep').addEventListener('blur', buscarCep);
 

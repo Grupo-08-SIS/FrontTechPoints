@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const user = JSON.parse(sessionStorage.getItem('user'));
 
         try {
-            const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.idUsuario}`, {
+            const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
                 method: 'POST'
             });
 

@@ -191,7 +191,7 @@ async function fazerLogout() {
 
     try {
     
-        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.idUsuario}`, {
+        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
             method: 'POST'
         })
 
