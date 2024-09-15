@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     const user = JSON.parse(sessionStorage.getItem('user'));
-    if (user && user.idUsuario) {
+    if (user && user.idUsuarioUsuario) {
         try {
-            const response = await fetch(`http://localhost:8080/usuarios/imagem/${user.idUsuario}`);
+            const response = await fetch(`http://localhost:8080/usuarios/imuser.idUsuariouser.idUsuario}`);
             if (response.ok) {
                 const imageData = await response.blob();
                 const imageUrl = URL.createObjectURL(imageData);
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/usuarios/buscar/${user.idUsuario}`);
+        const response = await fetch(`http://localhost:8080/usuauser.idUsuarioscar/${user.idUsuario}`);
         if (!response.ok) {
             throw new Error('Erro ao buscar os dados do usuário');
         }
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             formData.append('imagem', file);
 
             try {
-                const response = await fetch(`http://localhost:8080/usuarios/atualizar-imagem/${user.idUsuario}`, {
+                const response = await fetch(`http://localhost:8080/usuariouser.idUsuarioizar-imagem/${user.idUsuario}`, {
                     method: 'PATCH',
                     body: formData,
                 });
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const email = document.getElementById('editEmailUsuario').value;
 
         try {
-            const response = await fetch(`http://localhost:8080/usuarios/atualizar/${user.idUsuario}`, {
+            const response = await fetch(`http://localhosuser.idUsuariousuarios/atualizar/${user.idUsuario}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -486,10 +486,10 @@ document.addEventListener("DOMContentLoaded", function () {
 //         }
 //     })
 
-//     const user = JSON.parse(sessionStorage.getItem('user'))
+//     const user = JSON.parse(sessionStorage.geuser.idUsuariouser'))
 //     if (user && user.idUsuario) {
 //         try {
-//             const response = await fetch(`http://localhost:8080/usuarios/imagem/${user.idUsuario}`)
+//             const response = await fetchuser.idUsuario//localhost:8080/usuarios/imagem/${user.idUsuario}`)
 //             if (response.ok) {
 //                 const imageData = await response.blob()
 //                 const imageUrl = URL.createObjectURL(imageData)
@@ -515,7 +515,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //     }
 
 //     try {
-//         const response = await fetch(`http://localhost:8080/usuarios/buscar/${user.idUsuario}`)
+//         const response = awaiuser.idUsuario(`http://localhost:8080/usuarios/buscar/${user.idUsuario}`)
 //         if (!response.ok) {
 //             throw new Error('Erro ao buscar os dados do usuário')
 //         }
@@ -596,7 +596,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //         formData.append('imagem', file)
 
 //         try {
-//             const response = await fetch(`http://localhost:8080/usuarios/atualizar-imagem/${user.idUsuario}`, {
+//             const response = await fuser.idUsuariottp://localhost:8080/usuarios/atualizar-imagem/${user.idUsuario}`, {
 //                 method: 'PATCH',
 //                 body: file,
 //                 headers: {
@@ -629,7 +629,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //     const email = document.getElementById('editEmailUsuario').value
 
 //     try {
-//         const response = await fetch(`http://localhost:8080/usuarios/atualizar/${user.idUsuario}`, {
+//         const respuser.idUsuarioawait fetch(`http://localhost:8080/usuarios/atualizar/${user.idUsuario}`, {
 //             method: 'PATCH',
 //             headers: {
 //                 'Content-Type': 'application/json'
@@ -696,7 +696,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //     const user = JSON.parse(sessionStorage.getItem('user'))
 
 //     try {
-//         const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.idUsuario}`, {
+//         const respuser.idUsuarioawait fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.idUsuario}`, {
 //             method: 'POST'
 //         })
 

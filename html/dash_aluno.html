@@ -58,17 +58,19 @@
                         <div class="stat-item">
                             <p id="kpi-titulo">Medalhas do Curso</p>
                             <div class="course-select mt-3">
-                                <select id="course-select" class="custom-select"></select>
+                                <select id="course-select" class="custom-select" aria-placeholder="Selecione um curso">
+                                    <option value="" disabled selected>Selecione um curso</option>
+                                </select>
                             </div>
-                            <img id="medalha-curso" src="../imgs/Group 46.png" alt="Ouro">
+                            <img id="medalha-curso" src="../imgs/ouro_dash.png" alt="Medalha Padrão">
                         </div>
                         <div class="stat-item">
                             <p id="kpi-titulo">Pontos da Semana</p>
                             <p id="pontos-semana" class="stat-value">0 pts</p>
-                            <p id="pontos-semana-change" class="stat-change">— ⬇</p>
-                            <p class="last-week green">
+                            <p class="stat-change" id="pontos-semana-change">+ 0 pts (⬆ ou ⬇)</p>
+                            <p class="last-week">
                                 <span>Semana Passada</span>
-                                <span id="semana-passada-change" class="points-change">+ ⬆ 0 pts</span>
+                                <span id="semana-passada-pontos">0 pts</span>
                             </p>
                         </div>
                     </section>
@@ -80,10 +82,8 @@
                     </div>
                     <div class="cada-curso">
                         <h3>Pontos de Cada Curso ao Mês</h3>
-                        <label for="cursoSelect">Selecione o Curso:</label>
-                        <select id="cursoSelect"></select>
                         <div class="dash-pontosCadaCurso">
-                            <canvas id="pontosBarraChart" width="1500" height="510"></canvas>
+                            <canvas id="pontosBarraChart" width="1800" height="810"></canvas>
                         </div>
                     </div>
                 </div>
@@ -103,13 +103,13 @@
                 </div>
                 <div id="kpiClassificacao" class="dash-atual">
                     <section id="CardClassificacao" class="course-section">
-                        <h2>Classificação do seu melhor curso:</h2>
+                        <h2>Classificação do seu melhor curso</h2>
                         <hr>
                         <div class="course-info2">
-                            <p id="nomeCurso"></p>
+                            <p id="nomeCurso">Nome do Curso</p>
                             <p class="course-level" id="nivel">Nível: <span class="gold-text">Ouro</span></p>
                         </div>
-                        <img src="../imgs/Group 46.png" alt="Ouro">
+                        <img id="top-medalha" src="../imgs/ouro_dash.png" alt="Medalha">
                     </section>
                 </div>
                 <div class="dash-atual">

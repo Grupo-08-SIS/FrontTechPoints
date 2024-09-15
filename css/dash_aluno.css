@@ -337,8 +337,8 @@ main {
     background-color: #244AA5;
     border-radius: 20px;
     margin-top: 30px;
-    width: 70%;
-    margin-left: 45px;
+    width: 100%;
+    margin-left: 0px;
     height: 7vh;
     display: flex;
     align-items: center;
@@ -356,13 +356,27 @@ main {
     font-weight: bold;
 }
 
-
 .gold-text {
     background: linear-gradient(90deg, #FFD700, #FF8C00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: bold;
 }
+
+.silver-text {
+    background: linear-gradient(90deg, #C0C0C0, #A0A0A0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.bronze-text {
+    background: linear-gradient(90deg, #cd7f32, #b87333);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
 
 .stats-section {
     display: flex;
@@ -480,13 +494,12 @@ main {
 .dash-longoDoTempo{
     background-color: white;
     height: 46vh;
-    width: 90%;
-    border-radius: 30px;
+    width: 97%;
+    border-radius: 20px;
 }
 
 .cada-curso{
     background-color: #244AA5;
-    
     height: 69vh;
     border-radius: 30px;
     display: flex;
@@ -502,9 +515,9 @@ main {
 
 .dash-pontosCadaCurso{
     background-color: white;
-    height: 45vh;
-    width: 90%;
-    border-radius: 30px;
+    height: 58vh;
+    width: 97%;
+    border-radius: 20px;
 }
 
 
@@ -717,18 +730,18 @@ footer {
 }
 
 .gold-medal{
-    width: 35px; 
-    height: 35px; 
+    width: 40px; 
+    height: 40px; 
 }
 
 .silver-medal {
-    width: 35px; 
-    height: 35px; 
+    width: 40px; 
+    height: 40px; 
 }
 
 .bronze-medal {
-    width: 35px; 
-    height: 35px; 
+    width: 40px; 
+    height: 40px;  
 }
 
 /* Estilo dos títulos do footer */
