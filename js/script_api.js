@@ -17,9 +17,14 @@ async function realizarCadastro() {
 
     // Cadastra o usuário e aguarda a resposta
     const id = await cadastrarUsuario(enderecoId);
-    if (id === null) {
-        return; // Se houve erro no cadastro do usuário, não prossegue
+    if (id != null) {
+        showAlert('success', 'Cadastro realizado com sucesso!');
+
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('password').value;
+        await realizarLoginAutomatico(email, senha);
     }
+
 }
 
 function validarCampos() {
@@ -216,7 +221,7 @@ async function cadastrarUsuario(idEndereco) {
         if (response.ok) {
             const data = await response.json();
             showAlert('success', 'Cadastro realizado com sucesso!');
-            return data.idUsuario;
+            return data.id;
         } else {
             const errorData = await response.json();
             showAlert('error', errorData.message || 'Erro ao realizar cadastro');
@@ -225,6 +230,55 @@ async function cadastrarUsuario(idEndereco) {
     } catch (error) {
         showAlert('error', 'Erro ao tentar fazer cadastro');
         return null;
+    }
+}
+
+async function realizarLoginAutomatico(email, senha) {
+    try {
+        console.log('Tentando fazer login automaticamente com:', email);
+
+        const response = await fetch('http://localhost:8080/usuarios/login', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, senha })
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao tentar fazer login');
+        }
+
+        const data = await response.json();
+        console.log('Resposta do login:', data);
+
+        if (data.id) {
+            // Sucesso no login
+            data.senha = senha;
+            sessionStorage.setItem('user', JSON.stringify(data));
+            console.log('Login bem-sucedido, usuário armazenado no sessionStorage');
+
+            if (!data.deletado) {
+
+                switch (data.tipoUsuario) {
+                    case "Aluno":
+                        console.log('Redirecionando para dash_aluno.html');
+                        window.location.href = 'dash_aluno.html';
+                        break;
+                    case "Recrutador":
+                        console.log('Redirecionando para tela_rh_vagas.html');
+                        window.location.href = 'tela_rh_vagas.html';
+                        break;
+                    default:
+                        showAlert('error', 'Erro: Tipo de usuário desconhecido');
+                        console.error('Tipo de usuário desconhecido');
+                }
+            } else {
+                showAlert('success', 'Sua conta está sendo reativada!');
+            }
+        } else {
+            showAlert('error', 'Email ou senha incorretos');
+        }
+    } catch (error) {
+        showAlert('error', 'Erro ao tentar fazer login');
     }
 }
 
