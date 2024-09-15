@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', async function() {
 
+
     const user = JSON.parse(sessionStorage.getItem('user'));
+
 
     if (!user || !user.id) {
         console.error('Usuário não encontrado ou ID inválido.');
@@ -9,25 +11,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     try {
-        const atividadesData = await fetchData(`http://localhost:8080/grafico/atividadesDoUsuario/${user.idUsuario}`);
-        const { totalAtividades, atividadesFeitas, cursos } = processAtividadesData(atividadesData);
-        
-        sessionStorage.setItem('cursos', JSON.stringify(cursos));
 
-        const porcentagemFeitas = ((atividadesFeitas / totalAtividades) * 100).toFixed(2);
+        const atividadesData = await fetchData(`http://localhost:8080/pontuacoes/kpi-entregas/${user.id}`);
+        const { atividadesTotais, atividadesFeitas, porcentagemFeitas } = processAtividadesData(atividadesData);
         updateAtividadesDisplay(porcentagemFeitas);
 
-        const pontosSemanaData = await fetchData(`http://localhost:8080/grafico/pontosDaSemana/${user.idUsuario}`);
+        const pontosSemanaData = await fetchData(`http://localhost:8080/pontuacoes/kpi-semana/${user.id}`);
         updatePontosSemanaDisplay(pontosSemanaData);
 
-        const graficoLinhaData = await fetchData(`http://localhost:8080/grafico/pontosAoLongoDoTempo/${user.idUsuario}`);
+        const graficoLinhaData = await fetchData(`http://localhost:8080/pontuacoes/${user.id}`);
         const { labelsLinha, datasetsLinha } = processGraficoLinhaData(graficoLinhaData);
         renderLineChart(labelsLinha, datasetsLinha);
 
-        const pontosData = await fetchData(`http://localhost:8080/grafico/pontosPorCursoAoMes/${user.idUsuario}`);
+        const pontosData = await fetchData(`http://localhost:8080/grafico/pontosPorCursoAoMes/${user.id}`);
         initCursoSelect(cursos, pontosData);
 
-        const pontosPorCursoData = await fetchData(`http://localhost:8080/grafico/pontos-por-curso?idUsuario=${user.idUsuario}`);
+        const pontosPorCursoData = await fetchData(`http://localhost:8080/grafico/pontos-por-curso?idUsuario=${user.id}`);
         initMedalhaSelect(pontosPorCursoData);
 
         const topCurso = getTopCurso(pontosPorCursoData);
@@ -37,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Erro:', error);
     }
 
-    // Função para buscar dados com tratamento de erro
     async function fetchData(url) {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Erro ao buscar dados de ${url}`);
@@ -45,19 +43,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     function processAtividadesData(data) {
-        let totalAtividades = 0, atividadesFeitas = 0;
-        const cursos = [];
-        data.forEach(curso => {
-            totalAtividades += curso.totalQtdAtividades;
-            atividadesFeitas += curso.totalAtividadesUsuario;
-            cursos.push(curso.nomeCurso);
-        });
-        return { totalAtividades, atividadesFeitas, cursos };
+        const totalAtividades = data.atividadesTotais;
+        const atividadesFeitas = totalAtividades - data.atividadesNaoEntregues;
+    
+        const porcentagemFeitas = ((atividadesFeitas / totalAtividades) * 100).toFixed(2);
+        
+        return { totalAtividades, atividadesFeitas, porcentagemFeitas };
     }
 
     function updateAtividadesDisplay(porcentagemFeitas) {
         const atividadesChangeElement = document.getElementById('atividades-entregues-change');
         document.getElementById('atividades-entregues').innerText = `${porcentagemFeitas}%`;
+    
         if (porcentagemFeitas >= 50) {
             updateClass(atividadesChangeElement, 'green', 'red');
             atividadesChangeElement.innerText = '⬆';
@@ -68,31 +65,77 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     function updatePontosSemanaDisplay(data) {
-        const semanaPassadaChangeElement = document.getElementById('semana-passada-change');
-        document.getElementById('pontos-semana').innerText = `${data.pontosSemanaAtual} pts`;
-        const diferenca = data.diferencaPontos >= 0 ? '+' : '-';
-        semanaPassadaChangeElement.innerText = `${diferenca} ⬆ ${data.diferencaPontos} pts`;
-        updateClass(semanaPassadaChangeElement, data.diferencaPontos >= 0 ? 'green' : 'red');
+        const pontosSemanaElement = document.getElementById('pontos-semana');
+        if (!pontosSemanaElement) {
+            console.error('Elemento com ID "pontos-semana" não encontrado.');
+            return;
+        }
+    
+        const semanaPassadaPontosElement = document.getElementById('semana-passada-pontos');
+        if (!semanaPassadaPontosElement) {
+            console.error('Elemento com ID "semana-passada-pontos" não encontrado.');
+            return;
+        }
+    
+        const pontosSemanaChangeElement = document.getElementById('pontos-semana-change');
+        if (!pontosSemanaChangeElement) {
+            console.error('Elemento com ID "pontos-semana-change" não encontrado.');
+            return;
+        }
+    
+        const totalSemanaPassada = Object.values(data.semanaPassada).reduce((acc, pontos) => acc + pontos, 0);
+        const totalSemanaAtual = Object.values(data.semanaAtual).reduce((acc, pontos) => acc + pontos, 0);
+        const diferenca = totalSemanaAtual - totalSemanaPassada;
+        
+        pontosSemanaElement.innerText = `${totalSemanaAtual} pts`;
+        semanaPassadaPontosElement.innerText = `${totalSemanaPassada} pts`;
+    
+        const diferencaSimbolo = diferenca >= 0 ? '⬆' : '⬇';
+        const corClasse = diferenca >= 0 ? 'green' : 'red';
+        
+        pontosSemanaChangeElement.innerText = `${diferencaSimbolo} ${Math.abs(diferenca)} pts`;
+        updateClass(pontosSemanaChangeElement, corClasse);
     }
+    
+    
 
     function processGraficoLinhaData(data) {
         const cursosGraficoLinha = {};
-        data.forEach(entry => {
-            const date = new Date(entry.data_pontuacao).toLocaleDateString();
-            if (!cursosGraficoLinha[entry.nome]) cursosGraficoLinha[entry.nome] = {};
-            cursosGraficoLinha[entry.nome][date] = entry.pontos;
+    
+        // Agrupa os pontos de atividades por curso e data
+        for (const [cursoId, atividades] of Object.entries(data)) {
+            if (!cursosGraficoLinha[cursoId]) cursosGraficoLinha[cursoId] = {};
+    
+            atividades.forEach(atividade => {
+                const date = atividade.dataEntrega; // Usa o formato YYYY-MM-DD diretamente
+                if (!cursosGraficoLinha[cursoId][date]) cursosGraficoLinha[cursoId][date] = 0;
+                cursosGraficoLinha[cursoId][date] += atividade.pontosAtividade;
+            });
+        }
+    
+        // Ordena todas as datas
+        const allDates = new Set();
+        Object.values(cursosGraficoLinha).forEach(cursoData => {
+            Object.keys(cursoData).forEach(date => allDates.add(date));
         });
-
-        const labelsLinha = Array.from(new Set(data.map(entry => new Date(entry.data_pontuacao).toLocaleDateString()))).sort();
-        const datasetsLinha = Object.keys(cursosGraficoLinha).map(curso => ({
-            label: curso,
-            data: labelsLinha.map(label => cursosGraficoLinha[curso][label] || 0),
-            fill: false,
-            borderColor: getRandomColor(),
-            backgroundColor: getRandomColor()
-        }));
-        return { labelsLinha, datasetsLinha };
+        const sortedDates = Array.from(allDates).sort((a, b) => new Date(a) - new Date(b));
+    
+        // Cria os datasets para o gráfico
+        const datasetsLinha = Object.keys(cursosGraficoLinha).map(cursoId => {
+            const cursoNome = data[cursoId]?.[0]?.cursoNome || `Curso ${cursoId}`;
+            const corGrafico = getRandomColor();
+            return {
+                label: cursoNome,
+                data: sortedDates.map(date => cursosGraficoLinha[cursoId][date] || 0),
+                fill: false,
+                borderColor: corGrafico,
+                backgroundColor: corGrafico
+            };
+        });
+    
+        return { labelsLinha: sortedDates, datasetsLinha };
     }
+    
 
     function renderLineChart(labels, datasets) {
         const ctxLinha = document.getElementById('pontosLinhaChart').getContext('2d');
@@ -109,6 +152,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         });
     }
+    
 
     function initCursoSelect(cursos, pontosData) {
         const cursoSelect = document.getElementById('cursoSelect');
@@ -178,6 +222,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         return `hsl(${Math.floor(Math.random() * 360)}, 100%, 75%)`;
     }
 
+    // Função para atualizar as classes de elementos dinamicamente
     function updateClass(element, addClass, removeClass = '') {
         element.classList.add(addClass);
         if (removeClass) element.classList.remove(removeClass);

@@ -1,211 +1,211 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    const notificationsIcon = document.querySelector('.notifications')
-    const notificationsDropdown = document.querySelector('.notifications-dropdown')
-    const userProfile = document.querySelector('.user-profile')
-    const userDetails = document.querySelector('.user-details')
+// document.addEventListener('DOMContentLoaded', async function() {
+//     const notificationsIcon = document.querySelector('.notifications')
+//     const notificationsDropdown = document.querySelector('.notifications-dropdown')
+//     const userProfile = document.querySelector('.user-profile')
+//     const userDetails = document.querySelector('.user-details')
 
-    notificationsIcon.addEventListener('click', () => {
-        notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block'
-        userDetails.style.display = 'none'  // Close user details if open
-    })
+//     notificationsIcon.addEventListener('click', () => {
+//         notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block'
+//         userDetails.style.display = 'none'  // Close user details if open
+//     })
 
-    userProfile.addEventListener('click', () => {
-        userDetails.style.display = userDetails.style.display === 'block' ? 'none' : 'block'
-        notificationsDropdown.style.display = 'none'  // Close notifications if open
-    })
+//     userProfile.addEventListener('click', () => {
+//         userDetails.style.display = userDetails.style.display === 'block' ? 'none' : 'block'
+//         notificationsDropdown.style.display = 'none'  // Close notifications if open
+//     })
 
-    document.addEventListener('click', (event) => {
-        if (!notificationsIcon.contains(event.target) && !userProfile.contains(event.target)) {
-            notificationsDropdown.style.display = 'none'
-            userDetails.style.display = 'none'
-        }
-    })
+//     document.addEventListener('click', (event) => {
+//         if (!notificationsIcon.contains(event.target) && !userProfile.contains(event.target)) {
+//             notificationsDropdown.style.display = 'none'
+//             userDetails.style.display = 'none'
+//         }
+//     })
 
-    const user = JSON.parse(sessionStorage.getItem('user'))
-    if (user && user.idUsuario) {
-        try {
+//     const user = JSON.parse(sessionStorage.getItem('user'))
+//     if (user && user.idUsuario) {
+//         try {
 
-            const response = await fetch(`http://localhost:8080/usuarios/imagem/${user.idUsuario}`)
-                if (response.ok) { 
-                    const imageData = await response.blob()
-                    const imageUrl = URL.createObjectURL(imageData)
+//             const response = await fetch(`http://localhost:8080/usuarios/imagem/${user.idUsuario}`)
+//                 if (response.ok) { 
+//                     const imageData = await response.blob()
+//                     const imageUrl = URL.createObjectURL(imageData)
 
-        document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
-        imgElement.src = imageUrl
-        })
-        } else {
-        document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
-        imgElement.src = '../imgs/perfil_vazio.jpg'
-    })
-    }
+//         document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
+//         imgElement.src = imageUrl
+//         })
+//         } else {
+//         document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
+//         imgElement.src = '../imgs/perfil_vazio.jpg'
+//     })
+//     }
 
-        } catch (error) {
+//         } catch (error) {
 
-            console.error('Erro ao buscar imagem do perfil:', error)
-            document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
-                imgElement.src = '../imgs/perfil_vazio.jpg'
-            })
-        }
-    } else {
+//             console.error('Erro ao buscar imagem do perfil:', error)
+//             document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
+//                 imgElement.src = '../imgs/perfil_vazio.jpg'
+//             })
+//         }
+//     } else {
 
-        document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
-            imgElement.src = '../imgs/perfil_vazio.jpg'
-        })
-    }
+//         document.querySelectorAll('.perfil-imagem').forEach(imgElement => {
+//             imgElement.src = '../imgs/perfil_vazio.jpg'
+//         })
+//     }
 
-    try {
+//     try {
         
-        const response = await fetch(`http://localhost:8080/usuarios/buscar/${user.idUsuario}`)
-        if (!response.ok) {
-            throw new Error('Erro ao buscar os dados do usuário')
-        }
-        const userData = await response.json()
+//         const response = await fetch(`http://localhost:8080/usuarios/buscar/${user.idUsuario}`)
+//         if (!response.ok) {
+//             throw new Error('Erro ao buscar os dados do usuário')
+//         }
+//         const userData = await response.json()
 
-        document.getElementById('editPrimeiroNomeUsuario').value = userData.primeiroNome
-        document.getElementById('editSobrenomeUsuario').value = userData.sobrenome
-        document.getElementById('editNomeUsuario').value = userData.nomeUsuario
-        document.getElementById('editEmailUsuario').value = userData.email
-    } catch (error) {
-        console.error('Erro ao preencher os campos dos inputs:', error)
-    }
+//         document.getElementById('editPrimeiroNomeUsuario').value = userData.primeiroNome
+//         document.getElementById('editSobrenomeUsuario').value = userData.sobrenome
+//         document.getElementById('editNomeUsuario').value = userData.nomeUsuario
+//         document.getElementById('editEmailUsuario').value = userData.email
+//     } catch (error) {
+//         console.error('Erro ao preencher os campos dos inputs:', error)
+//     }
     
-})
+// })
 
-function toggleDay(element) {
-    element.classList.toggle('active')
-}
+// function toggleDay(element) {
+//     element.classList.toggle('active')
+// }
 
-document.getElementById('editProfileForm').addEventListener('submit', async function(event) {
-    event.preventDefault() // Evita o comportamento padrão de submissão do formulário
+// document.getElementById('editProfileForm').addEventListener('submit', async function(event) {
+//     event.preventDefault() // Evita o comportamento padrão de submissão do formulário
 
-    const user = JSON.parse(sessionStorage.getItem('user'))
+//     const user = JSON.parse(sessionStorage.getItem('user'))
 
-    const fileInput = document.getElementById('perfil-imagem-input')
-    const file = fileInput.files[0]
+//     const fileInput = document.getElementById('perfil-imagem-input')
+//     const file = fileInput.files[0]
 
-    if (file) {
-        const formData = new FormData()
-        formData.append('imagem', file)
+//     if (file) {
+//         const formData = new FormData()
+//         formData.append('imagem', file)
 
-        try {
-            const response = await fetch(`http://localhost:8080/usuarios/atualizar-imagem/${user.idUsuario}`, {
-                method: 'PATCH',
-                body: file, 
-                headers: {
-                    'Content-Type': 'image/jpeg'
-                },
-            })
+//         try {
+//             const response = await fetch(`http://localhost:8080/usuarios/atualizar-imagem/${user.id}`, {
+//                 method: 'PATCH',
+//                 body: file, 
+//                 headers: {
+//                     'Content-Type': 'image/jpeg'
+//                 },
+//             })
 
-            if (!response.ok) {
-                throw new Error('Erro ao atualizar a imagem do perfil')
-            }
+//             if (!response.ok) {
+//                 throw new Error('Erro ao atualizar a imagem do perfil')
+//             }
 
-            console.log('Imagem do perfil atualizada com sucesso')
-            window.location.reload()
-        } catch (error) {
-            console.error('Erro ao atualizar a imagem do perfil:', error)
-        }
-    } else {
-        console.error('Nenhuma nova imagem selecionada')
-    }
-})
+//             console.log('Imagem do perfil atualizada com sucesso')
+//             window.location.reload()
+//         } catch (error) {
+//             console.error('Erro ao atualizar a imagem do perfil:', error)
+//         }
+//     } else {
+//         console.error('Nenhuma nova imagem selecionada')
+//     }
+// })
 
-document.getElementById('editProfileForm').addEventListener('submit', async function(event) {
-    event.preventDefault() // Evita o comportamento padrão de submissão do formulário
+// document.getElementById('editProfileForm').addEventListener('submit', async function(event) {
+//     event.preventDefault() // Evita o comportamento padrão de submissão do formulário
 
-    const user = JSON.parse(sessionStorage.getItem('user'))
+//     const user = JSON.parse(sessionStorage.getItem('user'))
 
-    const primeiroNome = document.getElementById('editPrimeiroNomeUsuario').value
-    const sobrenome = document.getElementById('editSobrenomeUsuario').value
-    const nomeUsuario = document.getElementById('editNomeUsuario').value
-    const email = document.getElementById('editEmailUsuario').value
+//     const primeiroNome = document.getElementById('editPrimeiroNomeUsuario').value
+//     const sobrenome = document.getElementById('editSobrenomeUsuario').value
+//     const nomeUsuario = document.getElementById('editNomeUsuario').value
+//     const email = document.getElementById('editEmailUsuario').value
 
-    try {
-        const response = await fetch(`http://localhost:8080/usuarios/atualizar/${user.idUsuario}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                primeiroNome: primeiroNome,
-                sobrenome: sobrenome,
-                nomeUsuario: nomeUsuario,
-                email: email
-            })
-        })
+//     try {
+//         const response = await fetch(`http://localhost:8080/usuarios/atualizar/${user.id}`, {
+//             method: 'PATCH',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({
+//                 primeiroNome: primeiroNome,
+//                 sobrenome: sobrenome,
+//                 nomeUsuario: nomeUsuario,
+//                 email: email
+//             })
+//         })
 
-        if (!response.ok) {
-            throw new Error('Erro ao atualizar o perfil do usuário')
-        }
+//         if (!response.ok) {
+//             throw new Error('Erro ao atualizar o perfil do usuário')
+//         }
 
-        console.log('Perfil do usuário atualizado com sucesso')
+//         console.log('Perfil do usuário atualizado com sucesso')
 
-        user.nomeUsuario = nomeUsuario
-        sessionStorage.setItem('user', JSON.stringify(user))
+//         user.nomeUsuario = nomeUsuario
+//         sessionStorage.setItem('user', JSON.stringify(user))
 
-        window.alert('Informações atualizadas com sucesso')
+//         window.alert('Informações atualizadas com sucesso')
 
-        window.location.reload()
+//         window.location.reload()
 
-    } catch (error) {
-        window.alert('Erro ao atualizar o perfil do usuário:', error)
-    }
-})
-document.getElementById('confirmDeleteButton').addEventListener('click', async function() {
-    var email = document.getElementById('confirmEmail').value
-    var senha = document.getElementById('confirmPassword').value
+//     } catch (error) {
+//         window.alert('Erro ao atualizar o perfil do usuário:', error)
+//     }
+// })
+// document.getElementById('confirmDeleteButton').addEventListener('click', async function() {
+//     var email = document.getElementById('confirmEmail').value
+//     var senha = document.getElementById('confirmPassword').value
 
-    if (!email || !senha) {
-        alert('Por favor, preencha o email e a senha para confirmar a exclusão.')
-        return
-    }
-    try {
-        const response = await fetch('http://localhost:8080/usuarios/deletar', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                senha: senha
-            })
-        })
+//     if (!email || !senha) {
+//         alert('Por favor, preencha o email e a senha para confirmar a exclusão.')
+//         return
+//     }
+//     try {
+//         const response = await fetch('http://localhost:8080/usuarios/deletar', {
+//             method: 'DELETE',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({
+//                 email: email,
+//                 senha: senha
+//             })
+//         })
     
-        if (!response.ok) {
-            throw new Error('Erro ao excluir o perfil do usuário')
-        }
+//         if (!response.ok) {
+//             throw new Error('Erro ao excluir o perfil do usuário')
+//         }
     
-        console.log('Perfil do usuário excluído com sucesso')
+//         console.log('Perfil do usuário excluído com sucesso')
 
-        window.location.href = '/html/home.html'
+//         window.location.href = '/html/home.html'
     
-    } catch (error) {
-        console.error('Erro ao excluir o perfil do usuário:', error)
-        alert('Erro ao excluir o perfil do usuário. Por favor, tente novamente.')
-    }
+//     } catch (error) {
+//         console.error('Erro ao excluir o perfil do usuário:', error)
+//         alert('Erro ao excluir o perfil do usuário. Por favor, tente novamente.')
+//     }
     
-})
+// })
 
-async function fazerLogout() {
-    const user = JSON.parse(sessionStorage.getItem('user'))
+// async function fazerLogout() {
+//     const user = JSON.parse(sessionStorage.getItem('user'))
 
-    try {
+//     try {
     
-        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
-            method: 'POST'
-        })
+//         const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
+//             method: 'POST'
+//         })
 
       
-        if (!response.ok) {
-            throw new Error('Erro ao fazer logoff')
-        }
+//         if (!response.ok) {
+//             throw new Error('Erro ao fazer logoff')
+//         }
 
-        sessionStorage.clear()
+//         sessionStorage.clear()
 
-        window.location.href = '/html/home.html'
+//         window.location.href = '/html/home.html'
 
-    } catch (error) {
-        console.error('Erro ao fazer logoff:', error)
-        alert('Erro ao fazer logoff. Por favor, tente novamente.')
-    }
-} 
+//     } catch (error) {
+//         console.error('Erro ao fazer logoff:', error)
+//         alert('Erro ao fazer logoff. Por favor, tente novamente.')
+//     }
+// } 

@@ -755,3 +755,15 @@ footer {
     position: relative;
     font-size: 30px;
 }
+.stat-change {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.stat-change.up {
+    color: green;
+}
+
+.stat-change.down {
+    color: red;
+}
