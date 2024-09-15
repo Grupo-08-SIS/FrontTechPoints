@@ -199,7 +199,7 @@ async function salvarMudancas(event) {
 
         // Redireciona o usuário após um tempo
         setTimeout(() => {
-            // window.location.href = '/html/login.html';           // TIRAR O COMENTARIO
+            window.location.href = '/html/login.html';        
         }, 3000);
 
         // Atualiza a senha, se necessário

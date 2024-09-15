@@ -13,6 +13,8 @@
 <script src="../js/rh_editar_perfil_inputs.js"></script>
 <script src="../js/rh_exclusao_perfil.js"></script>
 <script src="../js/atualizar_rh.js"></script>
+<script src="../js/editar_foto.js"></script>
+<script src="../js/buscar_foto_perfil.js"></script>
 
 <body>
     <header>
@@ -25,6 +27,7 @@
 
             <div class="drop_down" onclick="toggleDropdown()">
                 <div class="container_nome_usuario">
+                    <img id="profileImageHeader" class="header_img_usuario" src="" alt="Imagem de perfil">
                     <h1 id="id_nome_usuario">Nome do Usuário</h1>
                     <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
                 </div>
@@ -73,6 +76,75 @@
 
     <div class="container_separacao">
         <div class="container_interno_separacao">
+            <h1>Configurações</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_foto_e_data">
+        <div class="container_interno_foto_e_data">
+            <div class="container_foto_e_botoes">
+                <div class="container_foto">
+                    <img id="profileImage" src="" alt="Imagem de perfil">
+                </div>
+            </div>
+            <div class="container_span_e_botoes">
+                <div class="blco_span">
+                    <div class="coluna_esquerda">
+                        <span>Nome do usuário: <span class="span_texto_recebido" id="id_nome">nome</span></span>
+                        <span>Email do usuário: <span class="span_texto_recebido" id="id_email_usuario">email</span></span>
+                        <span>Data de Criação: <span class="span_texto_recebido" id="span_data_criacao">data</span></span>
+                        <span>Data da última atualização: <span class="span_texto_recebido" id="span_data_ultima_atualizacao">data</span></span>
+                    </div>
+                    <div class="coluna_direita">
+                        <span>Empresa: <span class="span_texto_recebido" id="span_empresa">empresa</span></span>
+                        <span>Setor: <span class="span_texto_recebido" id="span_setor">setor</span></span>
+                        <span>Cargo: <span class="span_texto_recebido" id="span_cargo">cargo</span></span>
+                        <span>Email da Empresa: <span class="span_texto_recebido" id="span_email_empresa">email</span></span>
+
+                    </div>
+                </div>
+                <div class="bloco_botoes"> 
+                    <input type="file" id="fileInput" class="inputfile" />
+                    <label for="fileInput" class="upload_label">Escolher arquivo</label>
+                    <button class="upload_button" id="uploadButton">Atualizar Foto</button>
+                    <button class="upload_button" onclick="editarPerfil()">Editar Perfil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="container_fundo_editar_informacoes">
+        <div class="container_interno_editar_informacoes">
+            <h1>Editar Informações do Perfil</h1>
+            <span class="close_button" onclick="fecharFormulario()">×</span>
+            <form id="editarPerfilForm">
+                <label for="apelido">Apelido</label>
+                <input type="text" id="novo_apelido" name="apelido" placeholder="Digite seu novo apelido...">
+    
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" id="novo_sobrenome" name="sobrenome" placeholder="Digite seu sobrenome...">
+    
+                <label for="novo_telefone">Telefone</label>
+                <input type="text" id="novo_telefone" name="novo_telefone" placeholder="Digite seu novo telefone...">
+    
+                <label for="email">Novo E-mail</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu novo e-mail...">
+    
+                <label for="senha">Nova Senha</label>
+                <input type="password" id="nova_senha" name="senha" placeholder="Digite sua nova senha...">
+    
+                <label for="conf_senha">Confirmação da Senha</label>
+                <input type="password" id="nova_senha_confirmacao" name="conf_senha" placeholder="Confirme sua nova senha...">
+    
+                <button type="submit" class="btn" onclick="salvarMudancas(event)">Salvar Mudanças</button>
+            </form>
+        </div>
+    </div>
+       
+
+    <div class="container_separacao">
+        <div class="container_interno_separacao">
             <h1>Pessoas que você teve interesse</h1>
         </div>
     </div>
@@ -83,58 +155,7 @@
                 <span>Nome do Aluno</span>
                 <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
                 <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
             </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <span class="solicitacao">Solicitado: <a>28/07/2024</a></span>
-            </div>
-
         </div>
     </div>
 
@@ -144,53 +165,13 @@
         </div>
     </div>
 
-    <div class="container_fundo_aluno">
-        <div class="bloco_alunos">
-            <div class="box_Aluno">
+    <div class="container_fundo_aluno_favoritos">
+        <div class="bloco_alunos_favoritos">
+            <div class="box_Aluno_favoritos">
                 <span>Nome do Aluno</span>
                 <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
                 <img src="../imgs/gold medal.png" alt="medalha">
-                <button onclick="desfavoritar()">Desfavoritar</button>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <button onclick="desfavoritar()">Desfavoritar</button>
-            </div>
-
-            <div class="box_Aluno">
-                <span>Nome do Aluno</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
-                <img src="../imgs/gold medal.png" alt="medalha">
-                <button onclick="desfavoritar()">Desfavoritar</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="container_separacao">
-        <div class="container_interno_separacao">
-            <h1>Configurações</h1>
-        </div>
-    </div>
-
-    <div class="container_fundo_editar_perfil">
-        <div class="container_editar_perfil">
-            <div class="container_editar">
-                <h1>Editar Perfil</h1>
-            </div>
-
-            <div class="container_inputs">
-                <span class="">Novo E-mail</span>
-                <input type="text" id="novo_email" placeholder="novo.email@email.com">
-                <span class="">Novo Telefone</span>
-                <input type="text" id="novo_telefone" placeholder="(00) 00000-0000" maxlength="15">
-                <span class="">Nova Senha</span>
-                <input type="password" id="nova_senha" placeholder="•••••••••">
-                <span class="">Confirmação da Senha</span>
-                <input type="password" id="nova_senha_confirmacao" placeholder="•••••••••">
-                <button onclick="salvarMudancas()">Salvar Mudanças</button>
+                <button data-id="1" onclick="desfavoritar(this)">Desfavoritar</button>
             </div>
         </div>
     </div>

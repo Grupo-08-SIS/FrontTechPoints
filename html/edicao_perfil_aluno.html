@@ -25,6 +25,7 @@
 
             <div class="drop_down" onclick="toggleDropdown()">
                 <div class="container_nome_usuario">
+                    <img id="profileImageHeader" class="header_img_usuario" src="" alt="Imagem de perfil">
                     <h1 id="id_nome_usuario">Nome do Usuário</h1>
                     <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
                 </div>
@@ -88,10 +89,10 @@
             <div class="container_span_e_botoes">
                 <div class="blco_span">
                     <span>
-                        Nome do usuário: <span id="id_nome">nome</span>
-                        Email do usuário: <span id="id_email_usuario">email</span>
-                        Data de Criação: <span id="span_data_criacao">data</span>
-                        Data da última atualização: <span id="span_data_ultima_atualizacao">data</span>
+                        Nome do usuário: <span class="span_texto_recebido" id="id_nome">nome</span>
+                        Email do usuário: <span class="span_texto_recebido" id="id_email_usuario">email</span>
+                        Data de Criação: <span class="span_texto_recebido" id="span_data_criacao">data</span>
+                        Data da última atualização: <span class="span_texto_recebido" id="span_data_ultima_atualizacao">data</span>
                     </span>
                 </div>
                 <div class="bloco_botoes"> 
@@ -126,7 +127,7 @@
                 <input type="password" id="conf_senha" name="conf_senha" placeholder="Confirme sua nova senha...">
 
                 <label for="cep">Novo CEP</label>
-                <input type="text" id="cep" name="cep" placeholder="Digite seu novo CEP..." maxlength="8" min="8">
+                <input type="text" id="cep" name="cep" placeholder="Digite seu novo CEP..." maxlength="10" min="10">
 
                 <label for="estado">Novo Estado</label>
                 <input type="text" id="estado" name="estado" placeholder="Digite seu novo estado...">

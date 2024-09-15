@@ -1,29 +1,46 @@
 document.addEventListener("DOMContentLoaded", function () {
     const uploadButton = document.getElementById('uploadButton');
     const fileInput = document.getElementById('fileInput');
-    const profileImage = document.getElementById('profileImage');
+    const profileImageHeader = document.getElementById('profileImageHeader'); // Imagem do header
+    const profileImage = document.getElementById('profileImage'); // Imagem da seção
+    const defaultImageUrl = '/imgs/foto_padrao.png'; // Defina o caminho da imagem padrão
 
-    if (!uploadButton || !fileInput || !profileImage) {
+    // Verifica se os elementos estão presentes
+    if (!uploadButton || !fileInput || !profileImageHeader || !profileImage) {
         console.error('Um ou mais elementos não foram encontrados no DOM.');
         return;
     }
 
+    // Função para buscar e aplicar a imagem de perfil
     async function fetchProfileImage() {
         const userId = JSON.parse(sessionStorage.getItem('user')).id;
         try {
             const response = await fetch(`http://localhost:8080/usuarios/imagem/${userId}`);
             if (response.ok) {
                 const imageBlob = await response.blob();
-                const imageUrl = URL.createObjectURL(imageBlob);
-                profileImage.src = imageUrl;
+                
+                // Verifica se o Blob tem conteúdo (não é vazio)
+                if (imageBlob.size > 0) {
+                    const imageUrl = URL.createObjectURL(imageBlob);
+                    profileImageHeader.src = imageUrl; // Aplica no header
+                    profileImage.src = imageUrl; // Aplica na seção
+                } else {
+                    profileImageHeader.src = defaultImageUrl; // Imagem padrão no header
+                    profileImage.src = defaultImageUrl; // Imagem padrão na seção
+                }
             } else {
                 console.error('Falha ao buscar a imagem.');
+                profileImageHeader.src = defaultImageUrl; // Imagem padrão em caso de falha
+                profileImage.src = defaultImageUrl; // Imagem padrão em caso de falha
             }
         } catch (error) {
             console.error('Erro ao buscar a imagem:', error);
+            profileImageHeader.src = defaultImageUrl; // Imagem padrão em caso de erro
+            profileImage.src = defaultImageUrl; // Imagem padrão em caso de erro
         }
     }
 
+    // Lógica para o upload da nova imagem de perfil
     uploadButton.addEventListener('click', async function () {
         const file = fileInput.files[0];
         if (file) {
@@ -51,5 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Carrega a imagem de perfil ao carregar a página
     fetchProfileImage();
 });
