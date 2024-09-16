@@ -2,14 +2,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const filtroCursos = document.getElementById('courseFilter');
     const tabelaRanking = document.getElementById('rankingTable');
 
-    buscarEExibirRanking();
-    popularFiltroCursos();
-    
-    function buscarEExibirRanking() {
-        fetch('http://localhost:8080/pontuacoes/ranking')
-            .then(response => response.json())
-            .then(dados => {
+    if (filtroCursos && tabelaRanking) {
+        async function buscarEExibirRanking() {
+            try {
+                const response = await fetch('http://localhost:8080/pontuacoes/ranking');
+                if (!response.ok) throw new Error('Falha ao buscar o ranking.');
 
+                const dados = await response.json();
                 const pontosTotais = {};
 
                 Object.values(dados).forEach(dadosCurso => {
@@ -32,29 +31,71 @@ document.addEventListener('DOMContentLoaded', function () {
                 tabelaRanking.innerHTML = '';
 
                 arrayRanking.forEach((entrada, index) => {
+                    const medalha = index === 0 ? 'gold_medal.png' :
+                                    index === 1 ? 'silver_medal.png' :
+                                    index === 2 ? 'bronze_medal.png' : '';
+
+                    const numeroColuna = index < 3 ? '' : index + 1;
+
                     const linha = document.createElement('tr');
                     linha.innerHTML = `
-                        <td>${index + 1}</td>
                         <td>
-                            <img src="http://localhost:8080/usuarios/imagem/${entrada.id}" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;">
+                            ${medalha ? `<img src="/imgs/${medalha}" alt="${index + 1}º lugar" style="width: 40px; height: 40px;">` : numeroColuna}
+                        </td>
+                        <td>
+                            <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
                             ${entrada.nome}<br>
                             <small>${entrada.email}</small>
                         </td>
-                        <td>${entrada.pontosTotais}</td>
+                        <td>
+                            ${entrada.pontosTotais}
+                        </td>
                     `;
                     tabelaRanking.appendChild(linha);
+
+                    carregarImagemPerfil(entrada.id);
                 });
-            })
-            .catch(error => console.error('Erro ao buscar o ranking:', error));
-    }
+            } catch (error) {
+                console.error('Erro ao buscar o ranking:', error);
+            }
+        }
 
+        async function carregarImagemPerfil(id) {
+            const imgElement = document.getElementById(`img-${id}`);
+            if (!imgElement) return;
 
-    function popularFiltroCursos() {
-        fetch('http://localhost:8080/pontuacoes/ranking')
-            .then(response => response.json())
-            .then(dados => {
+            try {
+                const response = await fetch(`http://localhost:8080/usuarios/imagem/${id}`);
+                if (response.ok) {
+                    const imageBlob = await response.blob();
+                    if (imageBlob.size > 0) {
+                        const imageUrl = URL.createObjectURL(imageBlob);
+                        imgElement.src = imageUrl;
+                    } else {
+                        imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                    }
+                } else {
+                    imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                }
+            } catch (error) {
+                console.error('Erro ao buscar a imagem do perfil:', error);
+                imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+            }
+
+            imgElement.style.width = '50px';
+            imgElement.style.height = '50px';
+            imgElement.style.borderRadius = '100%';
+            imgElement.style.objectFit = 'cover';
+        }
+
+        async function popularFiltroCursos() {
+            try {
+                const response = await fetch('http://localhost:8080/pontuacoes/ranking');
+                if (!response.ok) throw new Error('Falha ao buscar os cursos.');
+
+                const dados = await response.json();
                 const cursos = Object.values(dados).map(curso => curso.nomeCurso);
-                const cursosUnicos = [...new Set(cursos)]; 
+                const cursosUnicos = [...new Set(cursos)];
 
                 filtroCursos.innerHTML = '<option value="all">Cursos</option>';
                 cursosUnicos.forEach(curso => {
@@ -63,63 +104,79 @@ document.addEventListener('DOMContentLoaded', function () {
                     opcao.textContent = curso;
                     filtroCursos.appendChild(opcao);
                 });
-            })
-            .catch(error => console.error('Erro ao buscar os cursos:', error));
-    }
+            } catch (error) {
+                console.error('Erro ao buscar os cursos:', error);
+            }
+        }
 
- 
-    filtroCursos.addEventListener('change', function () {
-        if (this.value === 'all') {
-            buscarEExibirRanking();
-        } else {
-            fetch('http://localhost:8080/pontuacoes/ranking')
-                .then(response => response.json())
-                .then(dados => {
+        filtroCursos.addEventListener('change', async function () {
+            try {
+                if (this.value === 'all') {
+                    await buscarEExibirRanking();
+                } else {
+                    const response = await fetch('http://localhost:8080/pontuacoes/ranking');
+                    if (!response.ok) throw new Error('Falha ao buscar o ranking por curso.');
+
+                    const dados = await response.json();
                     const dadosCurso = Object.values(dados).find(curso => curso.nomeCurso === this.value);
                     if (dadosCurso) {
                         const dadosRanking = dadosCurso.ranking || [];
                         tabelaRanking.innerHTML = '';
 
                         dadosRanking.forEach((entrada, index) => {
+                            const medalha = index === 0 ? 'gold_medal.png' :
+                                            index === 1 ? 'silver_medal.png' :
+                                            index === 2 ? 'bronze_medal.png' : '';
+
+                            const numeroColuna = index < 3 ? '' : index + 1;
+
                             const linha = document.createElement('tr');
                             linha.innerHTML = `
-                                <td>${index + 1}</td>
                                 <td>
-                                    <img src="http://localhost:8080/usuarios/imagem/${entrada.aluno.id}" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;">
+                                    ${medalha ? `<img src="/imgs/${medalha}" alt="${index + 1}º lugar" style="width: 40px; height: 40px;">` : numeroColuna}
+                                </td>
+                                <td>
+                                    <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
                                     ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}<br>
                                     <small>${entrada.aluno.email}</small>
                                 </td>
-                                <td>${entrada.pontosTotais}</td>
+                                <td>
+                                    ${entrada.pontosTotais}
+                                </td>
                             `;
                             tabelaRanking.appendChild(linha);
+
+                            carregarImagemPerfil(entrada.aluno.id);
                         });
                     }
-                })
-                .catch(error => console.error('Erro ao buscar o ranking por curso:', error));
-        }
-    });
+                }
+            } catch (error) {
+                console.error('Erro ao buscar o ranking por curso:', error);
+            }
+        });
+
+        // Chama as funções iniciais
+        buscarEExibirRanking();
+        popularFiltroCursos();
+    } else {
+        console.error('Elementos necessários não encontrados.');
+    }
 });
 
 async function fazerLogout() {
-    const user = JSON.parse(sessionStorage.getItem('user'))
+    const user = JSON.parse(sessionStorage.getItem('user'));
 
     try {
-    
         const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
             method: 'POST'
-        })
+        });
 
-      
-        if (!response.ok) {
-            throw new Error('Erro ao fazer logoff')
-        }
+        if (!response.ok) throw new Error('Erro ao fazer logoff.');
 
-        sessionStorage.clear()
-
-        window.location.href = '/html/home.html'
-
+        sessionStorage.clear();
+        window.location.href = '/html/home.html';
     } catch (error) {
-        console.error('Erro ao fazer logoff:', error)
-        alert('Erro ao fazer logoff. Por favor, tente novamente.')
+        console.error('Erro ao fazer logoff:', error);
+        alert('Erro ao fazer logoff. Por favor, tente novamente.');
     }
-} 
+}

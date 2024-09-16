@@ -211,10 +211,11 @@ header .search-container input#searchInput {
 #rankingTable td {
     padding: 10px;
     text-align: center;
-    border-top: 1px solid #FFFFFF; 
-    border-bottom: 1px solid #FFFFFF; 
-    border-left: none; 
-    border-right: none; 
+    border-top: 1px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
+    border-left: none;
+    border-right: none;
+    vertical-align: middle;
 }
 
 
@@ -226,8 +227,16 @@ header .search-container input#searchInput {
     position: relative;
 }
 .img-thumbnail {
-    border-radius: 60%; /* Faz a imagem redonda */
+    border-radius: 60%;
+    width: 6vh;
+    height: 6vh;
+    border: 2px solid rgb(255, 255, 255); /* Adiciona a borda vermelha */
+    object-fit: cover; /* Garante que a imagem preencha o contêiner corretamente */
+    box-shadow: none; /* Remove sombras adicionais, caso existam */
+    background-color: transparent; /* Remove qualquer fundo branco */
+    padding: 0; /* Remove qualquer espaçamento interno */
 }
+
 .user-details img {
     border-radius: 50%;
     width: 40px;
