@@ -109,7 +109,7 @@ a {
     border-radius: 20px; 
     padding: 5px 10px;
     font-size: 16px;
-    width: 191px; 
+    width: 291px; 
     height: 40px; 
     appearance: none; 
     -webkit-appearance: none;
@@ -217,6 +217,7 @@ header .search-container input#searchInput {
     border-right: none; 
 }
 
+
 /* Estilo dos detalhes do usuário */
 .user-details {
     display: flex;
@@ -224,7 +225,9 @@ header .search-container input#searchInput {
     left: 110px;
     position: relative;
 }
-
+.img-thumbnail {
+    border-radius: 60%; /* Faz a imagem redonda */
+}
 .user-details img {
     border-radius: 50%;
     width: 40px;
@@ -242,6 +245,7 @@ header .search-container input#searchInput {
 }
 
 .user-details .user-info .username {
+    
     font-weight: bold;
 }
 
@@ -384,3 +388,5 @@ footer {
     position: relative;
     font-size: 30px;
 }
+
+

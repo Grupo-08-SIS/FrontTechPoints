@@ -764,7 +764,7 @@ footer {
 }
 
 /* Estilos para o texto do alerta */
-..container_alerta {
+.container_alerta {
     position: fixed;
     top: 20px;
     left: 50%;
