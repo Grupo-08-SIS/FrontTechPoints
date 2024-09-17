@@ -208,11 +208,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                         let medalSrc = '../imgs/ouro_dash.png'; 
     
                         if (points >= 600) {
-                            medalSrc = '../imgs/gold medal.png'; 
+                            medalSrc = '../imgs/gold_medal.png'; 
                         } else if (points >= 500) {
-                            medalSrc = '../imgs/silver medal.png';
+                            medalSrc = '../imgs/silver_medal.png';
                         } else if (points >= 100) {
-                            medalSrc = '../imgs/bronze medal.png'; 
+                            medalSrc = '../imgs/bronze_medal.png'; 
                         }
     
                         medalhaCurso.src = medalSrc;
@@ -265,10 +265,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     function getMedalhaSrc(pontosTotais) {
-        if (pontosTotais >= 600) return '../imgs/gold medal.png';
-        if (pontosTotais >= 500) return '../imgs/silver medal.png';
-        if (pontosTotais >= 100) return '../imgs/bronze medal.png';
-        return '../imgs/no_medal_dash.png';
+        if (pontosTotais >= 600) return '../imgs/gold_medal.png';
+        if (pontosTotais >= 500) return '../imgs/silver_medal.png';
+        if (pontosTotais >= 100) return '../imgs/bronze_medal.png';
+        return '../imgs/ouro_dash.png.png';
     }
 
     function getRandomColor() {
