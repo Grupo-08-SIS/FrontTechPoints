@@ -49,7 +49,10 @@ function verificaToken() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ codigo, email })
+            body: JSON.stringify({
+                codigoRedefinicao: codigo,  
+                emailUser: email           
+            })
         })
             .then(response => {
                 if (response.ok) {
@@ -73,6 +76,7 @@ function validarSenha() {
     const novaSenha = document.getElementById('novaSenhaInput').value;
     const confirmarSenha = document.getElementById('confirmarSenhaInput').value;
     const email = sessionStorage.getItem('email'); 
+    const token  = document.getElementById('codigoInput').value;
 
     // Valida as entradas
     if (!novaSenha || !confirmarSenha) {
@@ -95,7 +99,11 @@ function validarSenha() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, novaSenha })
+        body: JSON.stringify({
+            email: email,
+            novaSenha: novaSenha,
+            token: token
+        })
     })
     .then(response => {
         if (response.ok) {
