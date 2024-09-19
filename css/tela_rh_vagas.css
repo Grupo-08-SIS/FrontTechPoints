@@ -755,7 +755,8 @@ a {
     height: 30vh;
     border-radius: 20px;
     border: 3px solid #244aa5;
-    /* Adiciona a borda azul de 3px */
+    margin-left: 70vh;
+    margin-top: 30vh;
 }
 
 .container_notificacao {

@@ -86,12 +86,12 @@ async function fazerLogout() {
     const user = JSON.parse(sessionStorage.getItem('user'))
 
     try {
-    
+
         const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
             method: 'POST'
         })
 
-      
+
         if (!response.ok) {
             throw new Error('Erro ao fazer logoff')
         }
@@ -104,7 +104,7 @@ async function fazerLogout() {
         console.error('Erro ao fazer logoff:', error)
         alert('Erro ao fazer logoff. Por favor, tente novamente.')
     }
-} 
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
     // Recupera o item 'user' do sessionStorage
@@ -122,34 +122,61 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
             const data = await response.json();
-
+    
             const container = document.querySelector(".bloco_alunos_favoritos");
             container.innerHTML = ""; // Limpa o conteúdo existente
-
+    
             if (data.length === 0) {
                 const noFavoritesMessage = document.createElement("p");
                 noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
                 noFavoritesMessage.className = "no-alunos-message";
                 container.appendChild(noFavoritesMessage);
             } else {
-                data.forEach(aluno => {
+                for (const aluno of data) {
+                    // Requisição para buscar todos os pontos totais do aluno
+                    const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
+                    const pontosData = await pontosResponse.json();
+    
+                    // Encontrar o curso com a maior pontuação
+                    let maxPontos = -1;
+                    let cursoComMaiorPontuacao = '';
+    
+                    for (const key in pontosData) {
+                        const curso = pontosData[key];
+                        if (curso.pontosTotais > maxPontos) {
+                            maxPontos = curso.pontosTotais;
+                            cursoComMaiorPontuacao = curso.nomeCurso;
+                        }
+                    }
+    
+                    let medalhaTipo = 'bronze_medal'; // Tipo padrão
+    
+                    if (maxPontos > 600) {
+                        medalhaTipo = 'gold_medal';
+                    } else if (maxPontos > 500) {
+                        medalhaTipo = 'silver_medal';
+                    }
+    
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno_favoritos";
-                    
+    
+                    // Agora exibe o nome do curso com a pontuação máxima e a pontuação correspondente
                     alunoDiv.innerHTML = `
-                        <span>${aluno.nomeUsuario}</span>
-                        <span>Aluno do projeto arrastão, finalizou curso <a>${aluno.nomeCurso}</a> com</span>
-                        <img src="../imgs/gold medal.png" alt="medalha">
+                        <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
+                        <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
+                        <img src="../imgs/${medalhaTipo}.png" alt="medalha">
                         <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
                     `;
-                    
+    
                     container.appendChild(alunoDiv);
-                });
+                }
             }
         } catch (error) {
             console.error("Erro ao buscar alunos favoritos:", error);
         }
     }
+    
+
 
     // Função para listar interessados
     async function listarInteressados() {
@@ -166,25 +193,95 @@ document.addEventListener("DOMContentLoaded", async function () {
                 noInterestedMessage.className = "no-alunos-message";
                 container.appendChild(noInterestedMessage);
             } else {
-                data.forEach(aluno => {
+                for (const aluno of data) {
+                    // Requisição para buscar os pontos totais do aluno
+                    const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
+                    const pontosData = await pontosResponse.json();
+
+                    let medalhaTipo = 'bronze_medal'; // Tipo padrão
+
+                    if (pontosData.pontosTotais > 600) {
+                        medalhaTipo = 'gold_medal';
+                    } else if (pontosData.pontosTotais > 500) {
+                        medalhaTipo = 'silver_medal';
+                    }
+
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno";
-                    
+
                     alunoDiv.innerHTML = `
-                        <span>${aluno.nomeUsuario}</span>
+                        <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${aluno.nomeCurso}</a> com</span>
-                        <img src="../imgs/gold medal.png" alt="medalha">
+                        <img src="../imgs/${medalhaTipo}.png" alt="medalha">
                     `;
-                    
+
                     container.appendChild(alunoDiv);
-                });
+                }
             }
         } catch (error) {
             console.error("Erro ao buscar interessados:", error);
         }
     }
 
-    window.desfavoritar = async function(idAluno) {
+    async function listarInteressados() {
+        try {
+            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
+            const data = await response.json();
+
+            const container = document.querySelector(".bloco_alunos");
+            container.innerHTML = ""; // Limpa o conteúdo existente
+
+            if (data.length === 0) {
+                const noInterestedMessage = document.createElement("p");
+                noInterestedMessage.textContent = "Não há alunos interessados no momento.";
+                noInterestedMessage.className = "no-alunos-message";
+                container.appendChild(noInterestedMessage);
+            } else {
+                for (const aluno of data) {
+                    // Requisição para buscar todos os pontos totais do aluno
+                    const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
+                    const pontosData = await pontosResponse.json();
+
+                    // Encontrar o curso com a maior pontuação
+                    let maxPontos = -1;
+                    let cursoComMaiorPontuacao = '';
+
+                    for (const key in pontosData) {
+                        const curso = pontosData[key];
+                        if (curso.pontosTotais > maxPontos) {
+                            maxPontos = curso.pontosTotais;
+                            cursoComMaiorPontuacao = curso.nomeCurso;
+                        }
+                    }
+
+                    let medalhaTipo = 'bronze_medal'; // Tipo padrão
+
+                    if (maxPontos > 600) {
+                        medalhaTipo = 'gold_medal';
+                    } else if (maxPontos > 500) {
+                        medalhaTipo = 'silver_medal';
+                    }
+
+                    const alunoDiv = document.createElement("div");
+                    alunoDiv.className = "box_Aluno";
+
+                    alunoDiv.innerHTML = `
+                        <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
+                        <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a></span>
+                        <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                    `;
+
+                    container.appendChild(alunoDiv);
+                }
+            }
+        } catch (error) {
+            console.error("Erro ao buscar interessados:", error);
+        }
+    }
+
+
+
+    window.desfavoritar = async function (idAluno) {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/favoritos/${idAluno}`, {
                 method: 'DELETE',

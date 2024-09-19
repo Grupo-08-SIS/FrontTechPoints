@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     try {
         const response = await fetch('http://localhost:8080/pontuacoes/alunos');
         const data = await response.json();
 
         const containerCursos = document.getElementById('cursos_container');
-        
+
         if (!containerCursos) {
             console.error('Contêiner de cursos não encontrado.');
             return;
@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 alunoDiv.className = 'box_Aluno';
 
                 const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                                aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                                'bronze_medal.png';
+                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
+                        'bronze_medal.png';
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
@@ -89,39 +89,41 @@ function shuffleArray(array) {
 
 async function verMais(alunoId) {
     try {
+        const idUsuarioLogado = getIdUsuarioLogado(); // Função que obtém o ID do usuário logado
+
+        // Requisição para buscar os detalhes do aluno
         const response = await fetch(`http://localhost:8080/usuarios/buscar/${alunoId}`);
         const aluno = await response.json();
 
-        document.getElementById('nome_do_aluno').innerText = `${aluno.primeiroNome} ${aluno.sobrenome}`;
+        // Defina o nome do aluno
+        const nomeAluno = `${aluno.primeiroNome} ${aluno.sobrenome}`;
 
+        // Atualize o conteúdo da página com as informações do aluno
+        document.getElementById('nome_do_aluno').innerText = nomeAluno;
         const idade = calcularIdade(aluno.dataNascimento);
         document.getElementById('idade_do_aluno').innerText = `${idade} anos`;
-
         document.getElementById('municipio_do_aluno').innerText = aluno.endereco.cidade;
         document.getElementById('escolaridade_do_aluno').innerText = aluno.escolaridade;
         document.getElementById('email_do_aluno').innerText = aluno.email;
         document.getElementById('descricao_do_aluno').innerText = aluno.descricao;
 
+        // Carregar a foto do aluno
         const imgElement = document.querySelector('.bloco_foto_aluno img');
-        try {
-            const fotoResponse = await fetch(`http://localhost:8080/usuarios/imagem/${alunoId}`);
-            if (fotoResponse.ok) {
-                const blob = await fotoResponse.blob();
-                const fotoUrl = URL.createObjectURL(blob);
-                imgElement.src = fotoUrl;
-            } else {
-                imgElement.src = '/imgs/foto_padrao.png';
-            }
-        } catch (error) {
-            console.error('Erro ao buscar a foto do aluno:', error);
+        const fotoResponse = await fetch(`http://localhost:8080/usuarios/imagem/${alunoId}`);
+        if (fotoResponse.ok) {
+            const blob = await fotoResponse.blob();
+            const fotoUrl = URL.createObjectURL(blob);
+            imgElement.src = fotoUrl;
+        } else {
             imgElement.src = '/imgs/foto_padrao.png';
         }
 
+        // Carregar os emblemas
         const emblemasResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${alunoId}`);
         const emblemasData = await emblemasResponse.json();
 
         const emblemasContainer = document.querySelector('.container_emblemas');
-        emblemasContainer.innerHTML = ''; 
+        emblemasContainer.innerHTML = '';
 
         const blocoEmblemas = document.createElement('div');
         blocoEmblemas.classList.add('bloco_emblemas');
@@ -129,7 +131,7 @@ async function verMais(alunoId) {
         for (const key in emblemasData) {
             const emblema = emblemasData[key];
             const pontos = emblema.pontosTotais;
-            let emblemaTipo = 'bronze_medal'; // Default
+            let emblemaTipo = 'bronze_medal';
 
             if (pontos > 600) {
                 emblemaTipo = 'gold_medal';
@@ -139,18 +141,98 @@ async function verMais(alunoId) {
 
             const emblemaElement = document.createElement('div');
             emblemaElement.classList.add('box_emblemas');
-            emblemaElement.innerHTML = `
-                <img src="/imgs/${emblemaTipo}.png" alt="${emblema.nomeCurso}">
-            `;
+            emblemaElement.innerHTML = `<img src="/imgs/${emblemaTipo}.png" alt="${emblema.nomeCurso}">`;
             blocoEmblemas.appendChild(emblemaElement);
         }
 
         emblemasContainer.appendChild(blocoEmblemas);
 
+        const blocoInfoAluno = document.querySelector('.bloco_info_aluno');
+        const containerBotaoInteresse = document.querySelector('.bloco_botao_interesse');
+
+        // Limpa os botões anteriores
+        blocoInfoAluno.innerHTML = `
+            <h1 id="nome_do_aluno">${nomeAluno}</h1>
+            <span>Idade: <span id="idade_do_aluno">${idade}</span> anos</span>
+            <span>Município: <span id="municipio_do_aluno">${aluno.endereco.cidade}</span></span>
+            <span>Escolaridade: <span id="escolaridade_do_aluno">${aluno.escolaridade}</span></span>
+            <span>Email: <span id="email_do_aluno">${aluno.email}</span></span>
+        `;
+
+        // Verifica se o aluno já está na lista de favoritos
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+
+        // Cria o botão "Favoritar" ou "Desfavoritar"
+        const favoritarButton = document.createElement('button');
+        favoritarButton.classList.add('favoritar-btn');
+
+        const alunoFavoritado = favoritosData.some(favorito => favorito.id === alunoId);
+
+        if (alunoFavoritado) {
+            favoritarButton.innerHTML = `Desfavoritar <img src="/imgs/coracao_favoritar.png" alt="Desfavoritar">`;
+            favoritarButton.style.backgroundColor = 'red';
+            favoritarButton.onclick = () => desfavoritar(alunoId, favoritarButton);
+        } else {
+            favoritarButton.innerHTML = `Favoritar <img src="../imgs/coracao_favoritar.png" alt="Favoritar">`;
+            favoritarButton.onclick = () => favoritar(alunoId, favoritarButton);
+        }
+
+        blocoInfoAluno.appendChild(favoritarButton);
+
+        // Configura o botão "Tenho Interesse"
+        const interesseButton = document.createElement('button');
+        interesseButton.innerText = 'Tenho Interesse';
+        interesseButton.onclick = () => tenhoInteresse(alunoId, interesseButton, nomeAluno);
+
+        containerBotaoInteresse.innerHTML = ''; // Limpa qualquer conteúdo anterior
+        containerBotaoInteresse.appendChild(interesseButton);
+
         document.querySelector('.container_ver_mais').style.display = 'block';
 
     } catch (error) {
         console.error('Erro ao buscar os detalhes do aluno:', error);
+    }
+}
+
+async function favoritar(alunoId, favoritarButton) {
+    const idUsuarioLogado = getIdUsuarioLogado(); // Supondo que você tenha uma função para obter o ID do usuário logado
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/favoritos/${alunoId}`, {
+            method: 'POST'
+        });
+
+        if (response.ok) {
+            favoritarButton.innerHTML = `Desfavoritar <img src="/imgs/coracao_favoritar.png" alt="Desfavoritar">`;
+            favoritarButton.style.backgroundColor = 'red';
+            favoritarButton.classList.add('favoritado');
+            favoritarButton.onclick = () => desfavoritar(alunoId, favoritarButton);
+        } else {
+            alert('Falha ao favoritar o aluno.');
+        }
+    } catch (error) {
+        console.error('Erro ao favoritar o aluno:', error);
+    }
+}
+
+async function desfavoritar(alunoId, favoritarButton) {
+    const idUsuarioLogado = getIdUsuarioLogado(); // Supondo que você tenha uma função para obter o ID do usuário logado
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/favoritos/${alunoId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            // Atualiza o botão para "Favoritar"
+            favoritarButton.innerHTML = `Favoritar <img src="../imgs/coracao_favoritar.png" alt="Favoritar">`;
+            favoritarButton.classList.remove('favoritado'); // Remove a classe vermelha
+            favoritarButton.style.backgroundColor = '#244aa5';
+            favoritarButton.onclick = () => favoritar(alunoId, favoritarButton);
+        } else {
+            alert('Falha ao desfavoritar o aluno.');
+        }
+    } catch (error) {
+        console.error('Erro ao desfavoritar o aluno:', error);
     }
 }
 
@@ -163,12 +245,56 @@ function calcularIdade(dataNascimento) {
     if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
         idade--;
     }
-    
+
     return idade;
 }
 
+function getIdUsuarioLogado() {
+    const data = JSON.parse(sessionStorage.getItem('user'))
+
+    console.log(data)
+    return data.id;
+}
 
 function fecharVerMais() {
     document.querySelector('.container_ver_mais').style.display = 'none';
 }
 
+async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
+    const idUsuarioLogado = getIdUsuarioLogado(); // Função que obtém o ID do usuário logado
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/interessados/${alunoId}`, {
+            method: 'POST'
+        });
+
+        if (response.ok) {
+            // Chama a função fecharVerMais() para ocultar a seção atual
+            fecharVerMais();
+
+            // Exibe a notificação de interesse
+            const containerInteresse = document.querySelector(".container_interesse");
+            const nomeAlunoSpan = document.querySelector(".nome_do_aluno_mensagem");
+
+            // Verifica se os elementos foram encontrados no DOM
+            if (containerInteresse && nomeAlunoSpan) {
+                // Verifica se nomeAluno não está undefined
+                if (nomeAluno) {
+                    nomeAlunoSpan.textContent = nomeAluno; // Atualiza o nome do aluno na mensagem
+                    containerInteresse.style.display = 'block'; // Exibe a div de interesse
+                } else {
+                    console.error('Erro: nomeAluno está undefined');
+                }
+            } else {
+                console.error('Erro: elementos de notificação não encontrados no DOM');
+            }
+        } else {
+            alert('Falha ao marcar interesse.');
+        }
+    } catch (error) {
+        console.error('Erro ao marcar interesse no aluno:', error);
+    }
+}
+
+function fecharNotificacao() {
+    document.querySelector('.container_interesse').style.display = 'none';
+}
