@@ -1,14 +1,26 @@
 document.addEventListener('DOMContentLoaded', async function () {
+    await atualizarAlunos();
+});
+
+async function atualizarAlunos() {
     try {
-        const response = await fetch('http://localhost:8080/pontuacoes/alunos');
-        const data = await response.json();
+        const idUsuarioLogado = getIdUsuarioLogado(); 
+
+        const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/interessados`);
+        const interessadosData = await interessadosResponse.json();
+        const idsInteressados = interessadosData.map(aluno => aluno.id);
+
+        // Busca os cursos e alunos
+        const cursosResponse = await fetch('http://localhost:8080/pontuacoes/alunos');
+        const data = await cursosResponse.json();
 
         const containerCursos = document.getElementById('cursos_container');
-
         if (!containerCursos) {
             console.error('Contêiner de cursos não encontrado.');
             return;
         }
+
+        containerCursos.innerHTML = ''; 
 
         const cursoIds = Object.keys(data);
         const cursosEmbaralhados = shuffleArray(cursoIds);
@@ -39,24 +51,55 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const blocoAlunos = document.getElementById(`bloco_alunos_${cursoId}`);
 
+            if (!blocoAlunos) {
+                console.error(`Bloco de alunos para o curso ${cursoId} não encontrado.`);
+                continue;
+            }
+
             const maxAlunos = 3;
-            alunos.slice(0, maxAlunos).forEach(aluno => {
-                const alunoDiv = document.createElement('div');
-                alunoDiv.className = 'box_Aluno';
+            let alunosExibidos = [];
+            let alunosParaExibir = [];
 
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                        'bronze_medal.png';
+            for (const aluno of alunos) {
+                if (!idsInteressados.includes(aluno.aluno.id)) {
+                    alunosParaExibir.push(aluno);
+                }
+            }
 
-                alunoDiv.innerHTML = `
-                    <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
-                    <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
-                    <img src="../imgs/${medalha}" alt="medalha">
-                    <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
-                `;
+            if (alunosParaExibir.length > 0) {
+                for (const aluno of alunosParaExibir) {
+                    if (alunosExibidos.length < maxAlunos) {
+                        const alunoDiv = document.createElement('div');
+                        alunoDiv.className = 'box_Aluno';
 
-                blocoAlunos.appendChild(alunoDiv);
-            });
+                        const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
+                            aluno.pontosTotais > 500 ? 'silver_medal.png' :
+                                'bronze_medal.png';
+
+                        alunoDiv.innerHTML = `
+                            <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
+                            <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
+                            <img src="../imgs/${medalha}" alt="medalha">
+                            <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
+                        `;
+
+                        blocoAlunos.appendChild(alunoDiv);
+                        alunosExibidos.push(aluno.aluno.id);
+                    }
+                }
+
+                if (alunosExibidos.length === 0) {
+                    const mensagem = document.createElement('div');
+                    mensagem.className = 'mensagem_no_alunos';
+                    mensagem.innerText = 'Todos os alunos desse curso já foram visualizados.';
+                    blocoAlunos.appendChild(mensagem);
+                }
+            } else {
+                const mensagem = document.createElement('div');
+                mensagem.className = 'mensagem_no_alunos';
+                mensagem.innerText = 'Todos os alunos desse curso já foram visualizados.';
+                blocoAlunos.appendChild(mensagem);
+            }
 
             if (i < cursosEmbaralhados.length - 1) {
                 const espacoDiv = document.createElement('div');
@@ -71,13 +114,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) {
         console.error('Erro ao carregar os dados:', error);
     }
-});
+}
 
 function shuffleArray(array) {
     let currentIndex = array.length, randomIndex;
 
     while (currentIndex !== 0) {
-
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
@@ -85,6 +127,10 @@ function shuffleArray(array) {
     }
 
     return array;
+}
+
+function alunoRemovido() {
+    atualizarAlunos();
 }
 
 async function verMais(alunoId) {
@@ -297,4 +343,5 @@ async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
 
 function fecharNotificacao() {
     document.querySelector('.container_interesse').style.display = 'none';
+    location.reload();
 }
