@@ -300,24 +300,26 @@ a {
 
 .container_fundo_aluno {
     width: 100%;
-    height: 35vh;
+    min-height: 35vh; /* Altura mínima */
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column; /* Alinha os itens na coluna */
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: flex-start; /* Alinha os itens ao topo */
+    padding: 10px; /* Padding opcional */
 }
+
 
 .bloco_alunos {
     width: 71%;
-    height: 100%;
+    min-height: 100px; /* Altura mínima para o bloco */
     display: flex;
-    /* Ativa o flexbox */
-    flex-wrap: wrap;
-    /* Permite que os itens quebrem linha se necessário */
-    justify-content: center;
-    /* Centraliza os itens horizontalmente */
-    align-items: center;
-    /* Centraliza os itens verticalmente */
+    flex-wrap: wrap; /* Permite que os itens quebrem linha se necessário */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    align-items: flex-start; /* Alinha os itens ao topo do bloco */
+    gap: 10px; /* Espaçamento entre os alunos */
+    padding: 10px; /* Padding interno opcional */
 }
+
 
 .box_Aluno {
     background-color: #ffffff;

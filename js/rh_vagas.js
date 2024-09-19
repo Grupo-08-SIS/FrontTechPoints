@@ -1,6 +1,102 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    await atualizarAlunos();
+    await carregarCursos(); // Carrega os cursos ao inicializar
+    await atualizarAlunos(); // Chama a função para mostrar todos os alunos inicialmente
+
+    const cursosSelect = document.getElementById('cursos');
+    cursosSelect.addEventListener('change', exibirAlunosPorCurso);
 });
+
+async function carregarCursos() {
+    try {
+        const response = await fetch('http://localhost:8080/pontuacoes/ranking');
+        const data = await response.json();
+
+        const cursosSelect = document.getElementById('cursos');
+        cursosSelect.innerHTML = '<option value="opc_cursos">Cursos</option>'; // Limpa opções existentes
+
+        // Itera sobre os cursos e cria as opções
+        for (const cursoId in data) {
+            const nomeCurso = data[cursoId].nomeCurso;
+            const option = document.createElement('option');
+            option.value = cursoId; // Define o valor da opção como o ID do curso
+            option.textContent = nomeCurso; // Define o texto da opção como o nome do curso
+            cursosSelect.appendChild(option); // Adiciona a opção ao select
+        }
+    } catch (error) {
+        console.error('Erro ao carregar os dados dos cursos:', error);
+    }
+}
+
+async function exibirAlunosPorCurso() {
+    const cursoId = this.value; // Pega o ID do curso selecionado
+
+    // Se a opção padrão for selecionada, chama atualizarAlunos()
+    if (cursoId === 'opc_cursos') {
+        await atualizarAlunos();
+        return; // Sai da função
+    }
+
+    // Lógica para exibir alunos do curso selecionado
+    try {
+        const response = await fetch(`http://localhost:8080/pontuacoes/alunos`);
+        const data = await response.json();
+
+        const containerCursos = document.getElementById('cursos_container');
+        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+
+        const curso = data[cursoId];
+        if (!curso) {
+            console.error(`Curso com ID ${cursoId} não encontrado.`);
+            return;
+        }
+
+        const cursoDiv = document.createElement('div');
+        cursoDiv.innerHTML = `
+            <div class="container_curso_imagem_nome">
+                <div class="bloco_nome_imagem_curso">
+                    <h1 id="nome_curso_${cursoId}">${curso.nomeCurso}</h1>
+                </div>
+            </div>
+
+            <div class="container_fundo_aluno">
+                <div id="bloco_alunos_${cursoId}" class="bloco_alunos">
+                    <!-- Alunos serão adicionados aqui -->
+                </div>
+            </div>
+        `;
+
+        containerCursos.appendChild(cursoDiv);
+
+        const alunos = curso.ranking || []; // Pega os alunos do curso
+        const blocoAlunos = document.getElementById(`bloco_alunos_${cursoId}`);
+
+        if (!blocoAlunos) {
+            console.error(`Bloco de alunos para o curso ${cursoId} não encontrado.`);
+            return;
+        }
+
+        alunos.forEach(aluno => {
+            const alunoDiv = document.createElement('div');
+            alunoDiv.className = 'box_Aluno';
+
+            const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
+                aluno.pontosTotais > 500 ? 'silver_medal.png' :
+                    'bronze_medal.png';
+
+            alunoDiv.innerHTML = `
+                <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
+                <img src="../imgs/${medalha}" alt="medalha">
+                <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
+            `;
+
+            blocoAlunos.appendChild(alunoDiv);
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar os dados dos alunos:', error);
+    }
+}
 
 async function atualizarAlunos() {
     try {
@@ -345,3 +441,31 @@ function fecharNotificacao() {
     document.querySelector('.container_interesse').style.display = 'none';
     location.reload();
 }
+
+document.addEventListener('DOMContentLoaded', async function () {
+    try {
+        const response = await fetch('http://localhost:8080/usuarios/listar');
+        const data = await response.json();
+
+        const municipioSelect = document.getElementById('municipio');
+
+        municipioSelect.innerHTML = '<option value="opc_municipio">Cidade</option>';
+
+        const cidades = new Set();
+
+        data.forEach(usuario => {
+            if (usuario.tipoUsuario === "Aluno" && usuario.endereco) {
+                cidades.add(usuario.endereco.cidade);
+            }
+        });
+
+        cidades.forEach(cidade => {
+            const option = document.createElement('option');
+            option.value = cidade.toLowerCase().replace(/\s+/g, '_'); 
+            option.textContent = cidade; 
+            municipioSelect.appendChild(option); 
+        });
+    } catch (error) {
+        console.error('Erro ao carregar os dados dos usuários:', error);
+    }
+});
