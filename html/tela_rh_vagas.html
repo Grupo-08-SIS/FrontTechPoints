@@ -20,10 +20,10 @@
         <div class="header-content">
             <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
             <div class="barra_de_pesquisa">
-                <input class="barra_pesquisar" type="text" placeholder="Buscar por uma pessoa...">
+                <input class="barra_pesquisar" type="text" placeholder="Buscar por uma pessoa..."
+                    oninput="buscarAlunoPorNome(this.value)">
                 <img class="lupa_de_pesquisa" src="../imgs/lupa_de_pesquisa.png" alt="Lupa pesquisar">
             </div>
-
             <div class="drop_down" onclick="toggleDropdown()">
                 <div class="container_nome_usuario">
                     <img id="profileImageHeader" class="header_img_usuario" src="" alt="Imagem de perfil">
@@ -124,8 +124,23 @@
 
     <div class="container_filtro">
         <div class="bloco_filtro_fundo">
-            <div class="bloco_idade">
-                <input type="number" placeholder="Digite uma idade...">
+            <div class="blocos_selecao">
+                <select id="cor_raca">
+                    <option value="opc_cor_raca">Cor ou Raça</option>
+                    <option value="opc_cor_branco">Branco(a)</option>
+                    <option value="opc_cor_preto">Preto(a)</option>
+                    <option value="opc_cor_pardo">Pardo(a)</option>
+                    <option value="opc_cor_amarelo">Amarelo(a)</option>
+                    <option value="opc_cor_indigeno">Indigeno(a)</option>
+                </select>
+            </div>
+
+            <div class="blocos_selecao">
+                <select id="sexo">
+                    <option value="opc_sexo">Sexo</option>
+                    <option value="opc_masculino">Masculino</option>
+                    <option value="opc_feminino">Feminino</option>
+                </select>
             </div>
 
             <div class="blocos_selecao">
