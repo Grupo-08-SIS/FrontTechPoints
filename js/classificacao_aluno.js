@@ -31,24 +31,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 tabelaRanking.innerHTML = '';
 
                 arrayRanking.forEach((entrada, index) => {
-                    const medalha = index === 0 ? 'gold_medal.png' :
-                                    index === 1 ? 'silver_medal.png' :
-                                    index === 2 ? 'bronze_medal.png' : '';
-
-                    const numeroColuna = index < 3 ? '' : index + 1;
+                    let medalha = '';
+                    if (entrada.pontosTotais > 600) {
+                        medalha = 'gold_medal.png';
+                    } else if (entrada.pontosTotais > 500) {
+                        medalha = 'silver_medal.png';
+                    } else {
+                        medalha = 'bronze_medal.png';
+                    }
 
                     const linha = document.createElement('tr');
                     linha.innerHTML = `
-                        <td>
-                            ${medalha ? `<img src="/imgs/${medalha}" alt="${index + 1}º lugar" style="width: 40px; height: 40px;">` : numeroColuna}
-                        </td>
                         <td>
                             <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
                             ${entrada.nome}<br>
                             <small>${entrada.email}</small>
                         </td>
                         <td>
-                            ${entrada.pontosTotais}
+                            <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
                         </td>
                     `;
                     tabelaRanking.appendChild(linha);
@@ -124,24 +124,24 @@ document.addEventListener('DOMContentLoaded', function () {
                         tabelaRanking.innerHTML = '';
 
                         dadosRanking.forEach((entrada, index) => {
-                            const medalha = index === 0 ? 'gold_medal.png' :
-                                            index === 1 ? 'silver_medal.png' :
-                                            index === 2 ? 'bronze_medal.png' : '';
-
-                            const numeroColuna = index < 3 ? '' : index + 1;
+                            let medalha = '';
+                            if (entrada.pontosTotais > 600) {
+                                medalha = 'gold_medal.png';
+                            } else if (entrada.pontosTotais > 500) {
+                                medalha = 'silver_medal.png';
+                            } else {
+                                medalha = 'bronze_medal.png';
+                            }
 
                             const linha = document.createElement('tr');
                             linha.innerHTML = `
-                                <td>
-                                    ${medalha ? `<img src="/imgs/${medalha}" alt="${index + 1}º lugar" style="width: 40px; height: 40px;">` : numeroColuna}
-                                </td>
                                 <td>
                                     <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
                                     ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}<br>
                                     <small>${entrada.aluno.email}</small>
                                 </td>
                                 <td>
-                                    ${entrada.pontosTotais}
+                                <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
                                 </td>
                             `;
                             tabelaRanking.appendChild(linha);

@@ -43,12 +43,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     const linha = document.createElement('tr');
                     linha.innerHTML = `
                         <td>
+                            <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
+                        </td>
+
+                        <td>
                             <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
                             ${entrada.nome}<br>
                             <small>${entrada.email}</small>
                         </td>
+                        
                         <td>
-                            <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
+                            ${entrada.pontosTotais}
                         </td>
                     `;
                     tabelaRanking.appendChild(linha);
@@ -141,7 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <small>${entrada.aluno.email}</small>
                                 </td>
                                 <td>
-                                <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
+                                    <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
+                                </td>
+                                <td>
+                                    ${entrada.pontosTotais} pontos
                                 </td>
                             `;
                             tabelaRanking.appendChild(linha);

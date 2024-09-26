@@ -35,7 +35,7 @@ a {
 .barra_de_pesquisa {
     position: relative;
     display: inline-block;
-    width: 100%;
+    width: 100%; 
     max-width: 500px;
 }
 
@@ -48,7 +48,7 @@ a {
 }
 
 .barra_pesquisar::placeholder {
-    color: #999;
+    color: #999; /* Cor do texto placeholder */
 }
 
 .lupa_de_pesquisa {
