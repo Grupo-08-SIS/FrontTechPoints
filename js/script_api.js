@@ -42,13 +42,16 @@ function validarCampos() {
     const cpfInput = document.getElementById('cpf').value;
     const telefoneInput = document.getElementById('telefone').value;
     const escolaridadeInput = document.getElementById('escolaridade').value;
+    const sexoInput = document.getElementById('sexo').value;
+    const corInput = document.getElementById('cor_raca').value;
     const dtNascInput = document.getElementById('dataNascimento').value;
 
     // Verifica se todos os campos obrigatórios estão preenchidos
     return logradouro && numero && cidade && estado && cep &&
         usernameInput && emailInput && passwordInput &&
         firstnameInput && lastnameInput && cpfInput &&
-        telefoneInput && escolaridadeInput && dtNascInput;
+        telefoneInput && escolaridadeInput && dtNascInput &&
+        sexoInput && corInput;
 }
 
 async function cadastrarEndereco() {
@@ -105,42 +108,36 @@ function formatarDataNascimento(event) {
         dataFormatada = dataFormatada.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
     }
 
-    // Atualiza o valor do input com a formatação aplicada
     dataInput.value = dataFormatada;
 
-    // Limita o comprimento do campo
     if (dataInput.value.length > 10) {
         dataInput.value = dataInput.value.slice(0, 10);
     }
 
-    // Realiza a validação e formatação após um breve atraso
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
         validarDataEAtualizarCampo(dataInput);
-    }, 1000); // Ajuste o atraso conforme necessário
+    }, 1000);
 }
 
 function validarDataEAtualizarCampo(input) {
     if (!validarData(input.value)) {
         showAlert('error', 'Data inválida. Por favor, insira uma data válida no formato DD/MM/AAAA.');
-        input.value = ''; // Limpa o campo em caso de erro
+        input.value = '';
     }
 }
 
 function validarData(data) {
-    // Verifica se a data está no formato DD/MM/AAAA
     const partes = data.split('/');
     if (partes.length !== 3) {
         return false;
     }
     const [dia, mes, ano] = partes.map(part => parseInt(part, 10));
 
-    // Verifica se os valores são válidos
     if (isNaN(dia) || isNaN(mes) || isNaN(ano) || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
         return false;
     }
 
-    // Verifica a validade do dia em relação ao mês e ano
     if ((mes === 4 || mes === 6 || mes === 9 || mes === 11) && dia > 30) {
         return false;
     }
@@ -174,6 +171,8 @@ async function cadastrarUsuario(idEndereco) {
     const cpfInput = document.getElementById('cpf');
     const telefoneInput = document.getElementById('telefone');
     const escolaridadeInput = document.getElementById('escolaridade');
+    const sexoInput = document.getElementById('sexo');
+    const corInput = document.getElementById('cor_raca');
     const dtNascInput = document.getElementById('dataNascimento');
 
     // Formatar e validar CPF
@@ -197,18 +196,34 @@ async function cadastrarUsuario(idEndereco) {
         return;
     }
 
+    // Mapear os valores do sexo e cor ou raça para o formato desejado
+    const sexoMap = {
+        "sexo_masculino": "Masculino",
+        "sexo_feminino": "Feminino"
+    };
+    
+    const corMap = {
+        "opc_cor_branco": "Branco",
+        "opc_cor_preto": "Preto",
+        "opc_cor_pardo": "Pardo",
+        "opc_cor_amarelo": "Amarelo",
+        "opc_cor_indigeno": "Indígena"
+    };
+
     const usuario = {
         nomeUsuario: usernameInput.value,
-        cpf: cpf, // CPF sem pontuações
+        cpf: cpf, 
         senha: passwordInput.value,
         primeiroNome: firstnameInput.value,
         sobrenome: lastnameInput.value,
         email: emailInput.value,
-        telefone: telefone, // Telefone sem pontuações
+        telefone: telefone,
         tipoUsuario: document.getElementById('is-rh').checked ? 2 : 1,
         escolaridade: escolaridadeInput.value,
+        sexo: sexoMap[sexoInput.value],  // Mapeando o valor do sexo para o formato correto
+        cor: corMap[corInput.value],  // Mapeando o valor de cor/raça para o formato correto
         enderecoId: idEndereco,
-        dtNasc: dataNascimento // Data de nascimento formatada
+        dtNasc: dataNascimento 
     };
 
     try {
