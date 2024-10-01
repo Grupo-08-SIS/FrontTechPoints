@@ -355,6 +355,7 @@ async function favoritar(alunoId, favoritarButton) {
         if (response.ok) {
             favoritarButton.innerHTML = `Desfavoritar <img src="/imgs/coracao_favoritar.png" alt="Desfavoritar">`;
             favoritarButton.style.backgroundColor = 'red';
+            favoritarButton.style.width = '50%'
             favoritarButton.classList.add('favoritado');
             favoritarButton.onclick = () => desfavoritar(alunoId, favoritarButton);
         } else {
@@ -375,7 +376,8 @@ async function desfavoritar(alunoId, favoritarButton) {
         if (response.ok) {
             // Atualiza o botão para "Favoritar"
             favoritarButton.innerHTML = `Favoritar <img src="../imgs/coracao_favoritar.png" alt="Favoritar">`;
-            favoritarButton.classList.remove('favoritado'); // Remove a classe vermelha
+            favoritarButton.classList.remove('favoritado');
+            favoritarButton.style.width = '43%'
             favoritarButton.style.backgroundColor = '#244aa5';
             favoritarButton.onclick = () => favoritar(alunoId, favoritarButton);
         } else {
