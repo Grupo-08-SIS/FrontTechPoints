@@ -43,7 +43,7 @@ function validarCampos() {
     const telefoneInput = document.getElementById('telefone').value;
     const escolaridadeInput = document.getElementById('escolaridade').value;
     const sexoInput = document.getElementById('sexo').value;
-    const corInput = document.getElementById('cor_raca').value;
+    const etniaInput = document.getElementById('etnia').value;
     const dtNascInput = document.getElementById('dataNascimento').value;
 
     // Verifica se todos os campos obrigatórios estão preenchidos
@@ -51,7 +51,7 @@ function validarCampos() {
         usernameInput && emailInput && passwordInput &&
         firstnameInput && lastnameInput && cpfInput &&
         telefoneInput && escolaridadeInput && dtNascInput &&
-        sexoInput && corInput;
+        sexoInput && etniaInput;
 }
 
 async function cadastrarEndereco() {
@@ -172,7 +172,7 @@ async function cadastrarUsuario(idEndereco) {
     const telefoneInput = document.getElementById('telefone');
     const escolaridadeInput = document.getElementById('escolaridade');
     const sexoInput = document.getElementById('sexo');
-    const corInput = document.getElementById('cor_raca');
+    const etniaInput = document.getElementById('etnia');
     const dtNascInput = document.getElementById('dataNascimento');
 
     // Formatar e validar CPF
@@ -196,18 +196,18 @@ async function cadastrarUsuario(idEndereco) {
         return;
     }
 
-    // Mapear os valores do sexo e cor ou raça para o formato desejado
+    // Mapear os valores do sexo e etnia para o formato desejado
     const sexoMap = {
         "sexo_masculino": "Masculino",
         "sexo_feminino": "Feminino"
     };
     
-    const corMap = {
-        "opc_cor_branco": "Branco",
-        "opc_cor_preto": "Preto",
-        "opc_cor_pardo": "Pardo",
-        "opc_cor_amarelo": "Amarelo",
-        "opc_cor_indigeno": "Indígena"
+    const etniaMap = {
+        "Branco": "Branco(a)",
+        "Preto": "Preto(a)",
+        "Pardo": "Pardo(a)",
+        "Amarelo": "Amarelo(a)",
+        "Indigena": "Indígena(a)"
     };
 
     const usuario = {
@@ -221,7 +221,7 @@ async function cadastrarUsuario(idEndereco) {
         tipoUsuario: document.getElementById('is-rh').checked ? 2 : 1,
         escolaridade: escolaridadeInput.value,
         sexo: sexoMap[sexoInput.value],  // Mapeando o valor do sexo para o formato correto
-        cor: corMap[corInput.value],  // Mapeando o valor de cor/raça para o formato correto
+        etnia: etniaMap[etniaInput.value],  // Mapeando o valor de cor/raça para o formato correto
         enderecoId: idEndereco,
         dtNasc: dataNascimento 
     };
