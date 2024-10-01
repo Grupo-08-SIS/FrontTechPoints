@@ -915,6 +915,11 @@ async function exibirAlunosPorNome(nomeBuscado) {
 }
 
 async function exibirAlunosPorEtnia(etniaSelecionada) {
+    if (etniaSelecionada === "") {
+        atualizarAlunos(); 
+        return; 
+    }
+
     console.log('Etnia selecionada:', etniaSelecionada); // Verifique se está sendo chamada corretamente
 
     try {
@@ -976,6 +981,135 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
 
         // Agrupa alunos por curso
         const alunosPorCurso = alunosComEtnia.reduce((acc, aluno) => {
+            acc[aluno.curso] = acc[aluno.curso] || [];
+            acc[aluno.curso].push(aluno);
+            return acc;
+        }, {});
+
+        // Cria elementos para exibir os alunos encontrados
+        const cursos = Object.keys(alunosPorCurso);
+        cursos.forEach((curso, index) => {
+            const cursoDiv = document.createElement('div');
+            cursoDiv.innerHTML = `
+                <div class="container_curso_imagem_nome">
+                    <div class="bloco_nome_imagem_curso">
+                        <h1>${curso}</h1>
+                    </div>
+                </div>
+                <div class="container_fundo_aluno">
+                    <div id="bloco_alunos_${curso}" class="bloco_alunos">
+                        <!-- Alunos serão adicionados aqui -->
+                    </div>
+                </div>
+            `;
+
+            containerCursos.appendChild(cursoDiv);
+
+            const blocoAlunos = document.getElementById(`bloco_alunos_${curso}`);
+
+            alunosPorCurso[curso].forEach(aluno => {
+                const alunoDiv = document.createElement('div');
+                alunoDiv.className = 'box_Aluno';
+
+                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
+                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
+                        'bronze_medal.png';
+
+                alunoDiv.innerHTML = `
+                    <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
+                    <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
+                    <img src="../imgs/${medalha}" alt="medalha">
+                    <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
+                `;
+
+                blocoAlunos.appendChild(alunoDiv);
+            });
+
+            // Adiciona a div de espaçamento após cada curso, exceto o último
+            if (index < cursos.length - 1) {
+                const espacoDiv = document.createElement('div');
+                espacoDiv.className = 'container_espacamento';
+                espacoDiv.innerHTML = `
+                    <div class="bloco_espacamento"></div>
+                `;
+                containerCursos.appendChild(espacoDiv);
+            }
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar os dados dos alunos:', error);
+    }
+}
+
+async function exibirAlunosPorSexo(sexoSelecionado) {
+    // Verifica se a opção selecionada é a opção "Sexo" (valor vazio)
+    if (sexoSelecionado === "") {
+        atualizarAlunos(); // Chama o método pronto para atualizar os alunos
+        return; // Interrompe a execução desta função
+    }
+
+    console.log('Sexo selecionado:', sexoSelecionado); // Verifique se está sendo chamada corretamente
+
+    try {
+        const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
+        const pontuacoesData = await pontuacoesResponse.json();
+        console.log('Dados de pontuações:', pontuacoesData); // Verifique a resposta
+
+        const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
+        const usuariosData = await usuariosResponse.json();
+        console.log('Dados de usuários:', usuariosData); // Verifique a resposta
+
+        const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
+        const interessadosData = await interessadosResponse.json();
+        console.log('Dados de interessados:', interessadosData); // Verifique a resposta
+
+        const containerCursos = document.getElementById('cursos_container');
+        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+
+        const alunosComSexo = []; // Array para armazenar alunos filtrados por sexo
+
+        // Mapeia usuários para facilitar a busca por sexo
+        const usuariosMap = {};
+        usuariosData.forEach(usuario => {
+            if (usuario.tipoUsuario === "Aluno" && usuario.sexo) {
+                usuariosMap[usuario.id] = {
+                    sexo: usuario.sexo,
+                    nome: `${usuario.primeiroNome} ${usuario.sobrenome}`
+                }; // Mapeia o ID do aluno para o sexo e nome
+            }
+        });
+
+        // Converte a lista de interessados para um Set para facilitar a busca
+        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
+
+        // Itera sobre os dados de pontuação para filtrar os alunos pelo sexo
+        for (const cursoId in pontuacoesData) {
+            const curso = pontuacoesData[cursoId];
+            const alunos = curso.ranking || [];
+
+            // Filtra alunos que possuem o sexo selecionado e que não estão na lista de interessados
+            const alunosFiltrados = alunos.filter(aluno => {
+                const sexoDoAluno = usuariosMap[aluno.aluno.id]?.sexo;
+                const alunoId = aluno.aluno.id;
+                console.log('Verificando aluno:', alunoId, 'com sexo:', sexoDoAluno); // Verificação
+
+                return sexoDoAluno &&
+                    sexoDoAluno.toLowerCase() === sexoSelecionado.toLowerCase() &&
+                    !interessadosSet.has(alunoId); // Verifica se o aluno não está na lista de interessados
+            });
+
+            if (alunosFiltrados.length > 0) {
+                alunosComSexo.push(...alunosFiltrados.map(aluno => ({ ...aluno, curso: curso.nomeCurso })));
+            }
+        }
+
+        if (alunosComSexo.length === 0) {
+            console.log(`Nenhum aluno encontrado com o sexo ${sexoSelecionado}.`);
+            return;
+        }
+
+        // Agrupa alunos por curso
+        const alunosPorCurso = alunosComSexo.reduce((acc, aluno) => {
             acc[aluno.curso] = acc[aluno.curso] || [];
             acc[aluno.curso].push(aluno);
             return acc;

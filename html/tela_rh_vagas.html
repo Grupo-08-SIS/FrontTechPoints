@@ -136,11 +136,11 @@
             </div>
 
             <div class="blocos_selecao">
-                <select id="sexo">
-                    <option value="opc_sexo">Sexo</option>
-                    <option value="opc_masculino">Masculino</option>
-                    <option value="opc_feminino">Feminino</option>
-                </select>
+                <select id="sexo" onchange="exibirAlunosPorSexo(this.value)">
+                    <option value="">Sexo</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                </select>                
             </div>
 
             <div class="blocos_selecao">
