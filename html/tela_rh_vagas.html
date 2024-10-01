@@ -125,14 +125,14 @@
     <div class="container_filtro">
         <div class="bloco_filtro_fundo">
             <div class="blocos_selecao">
-                <select id="cor_raca">
-                    <option value="opc_cor_raca">Cor ou Raça</option>
-                    <option value="opc_cor_branco">Branco(a)</option>
-                    <option value="opc_cor_preto">Preto(a)</option>
-                    <option value="opc_cor_pardo">Pardo(a)</option>
-                    <option value="opc_cor_amarelo">Amarelo(a)</option>
-                    <option value="opc_cor_indigeno">Indígena</option>
-                </select>
+                <select id="etnia" onchange="exibirAlunosPorEtnia(this.value)">
+                    <option value="">Selecione a Etnia</option>
+                    <option value="Branco(a)">Branco(a)</option>
+                    <option value="Preto(a)">Preto(a)</option>
+                    <option value="Pardo(a)">Pardo(a)</option>
+                    <option value="Amarelo(a)">Amarelo(a)</option>
+                    <option value="Indígena">Indígena</option>
+                </select>                             
             </div>
 
             <div class="blocos_selecao">
