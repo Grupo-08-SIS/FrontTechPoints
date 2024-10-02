@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Share+Tech&family=VT323&display=swap');
 
-
-/* styles.css */
 body {
     font-family: Inter, sans-serif;
     margin: 0;
@@ -18,10 +16,12 @@ header {
     justify-content: space-between;
     align-items: center;
 }
+
 a {
-    text-decoration: none; 
-    outline: none; 
+    text-decoration: none;
+    outline: none;
 }
+
 .header-content {
     display: flex;
     justify-content: space-between;
@@ -34,7 +34,7 @@ a {
 .barra_de_pesquisa {
     position: relative;
     display: inline-block;
-    width: 100%; 
+    width: 100%;
     max-width: 500px;
 }
 
@@ -47,7 +47,7 @@ a {
 }
 
 .barra_pesquisar::placeholder {
-    color: #999; /* Cor do texto placeholder */
+    color: #999;
 }
 
 .lupa_de_pesquisa {
@@ -67,67 +67,67 @@ a {
 }
 
 .drop_down {
-    position: relative; /* Define o contêiner pai para o posicionamento absoluto do dropdown */
+    position: relative;
     display: inline-block;
-    background-color: #f9f9f9; /* Cor de fundo */
-    border: 3px solid #000000; /* Borda */
-    border-radius: 10px; /* Bordas arredondadas */
-    padding: 10px; /* Espaçamento interno */
-    cursor: pointer; /* Cursor de mão para indicar interatividade */
-    transition: background-color 0.3s; /* Transição suave para cor de fundo */
-    z-index: 10; /* Garante que o contêiner esteja acima do dropdown */
+    background-color: #f9f9f9;
+    border: 3px solid #000000;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 10;
 }
 
 .container_nome_usuario {
     display: flex;
-    align-items: center; /* Alinha o texto verticalmente ao centro */
+    align-items: center;
     pointer-events: none;
 }
 
 .container_nome_usuario h1 {
-    font-size: 18px; /* Tamanho da fonte */
-    color: #333; /* Cor do texto */
-    margin: 0; /* Remove margens */
-    padding-right: 10px; /* Espaço entre o texto e a imagem */
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+    padding-right: 10px;
 }
 
 .tracos_drop {
-    width: 20px; /* Largura da imagem */
-    height: auto; /* Altura automática para manter a proporção */
+    width: 20px;
+    height: auto;
     pointer-events: none;
 }
 
 .dropdown_content {
-    position: absolute; /* Posiciona o dropdown em relação ao contêiner pai */
-    background-color: #f9f9f9; /* Cor de fundo */
-    border: 3px solid #000000; /* Borda */
-    border-top: none; /* Remove a borda superior */
-    border-radius: 0 0 5px 5px; /* Apenas as bordas inferiores serão arredondadas */
-    padding: 10px; /* Espaçamento interno */
-    margin-top: 8px; /* Espaço entre o dropdown e o conteúdo */
-    width: calc(100% - 25px); /* Ajusta a largura do dropdown, subtraindo o padding */
-    max-height: 0; /* Inicialmente com altura 0 */
-    overflow: hidden; /* Esconde o conteúdo que ultrapassa o contêiner */
-    opacity: 0; /* Inicialmente transparente */
-    transition: max-height 0.3s ease, opacity 0.3s ease; /* Transições suaves */
-    z-index: 1; /* Garante que o dropdown fique atrás do contêiner principal */
-    left: 0; /* Alinha o dropdown com o início do contêiner pai */
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 3px solid #000000;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    padding: 10px;
+    margin-top: 8px;
+    width: calc(100% - 25px);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    z-index: 1;
+    left: 0;
 }
 
 .dropdown_content a {
-    color: #333; /* Cor do texto */
-    padding: 8px 12px; /* Espaçamento interno */
-    text-decoration: none; /* Remove o sublinhado */
-    display: block; /* Faz o link ocupar a largura toda */
+    color: #333;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
 }
 
 .dropdown_content a:hover {
-    background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+    background-color: #e0e0e0;
 }
 
 .show {
-    max-height: 300px; /* Define a altura máxima do dropdown, ajuste conforme necessário */
-    opacity: 1; /* Torna o conteúdo opaco */
+    max-height: 300px;
+    opacity: 1;
 }
 
 .container_perfil {
@@ -140,20 +140,20 @@ a {
 
 .container_interno_perfil {
     display: flex;
-    justify-content: center; /* Centraliza o conteúdo verticalmente */
-    align-items: center; /* Centraliza o conteúdo horizontalmente */
+    justify-content: center;
+    align-items: center;
     background-color: #244aa5;
     width: 70%;
-    padding: 20px; /* Adiciona um espaçamento interno */
+    padding: 20px;
     border-radius: 20px;
     color: white;
-    position: relative; /* Mantém o posicionamento relativo */
+    position: relative;
 }
 
 .container_interno_perfil h1 {
-    font-size: 20px; /* Ajusta o tamanho da fonte */
-    text-align: center; /* Centraliza o texto */
-    margin: 0; /* Remove margens para ajuste fino */
+    font-size: 20px;
+    text-align: center;
+    margin: 0;
     padding: 10px;
 }
 
@@ -176,30 +176,30 @@ a {
     display: flex;
     align-items: center;
     background-color: #fabc09;
-    width: 70%; /* Aumenta a largura para melhor ocupar o espaço */
+    width: 70%;
     padding: 10px 20px;
     border-radius: 10px;
     margin-bottom: 6vh;
     color: white;
-    text-shadow: 2px 2px 4px #0000007c; /* Adiciona sombra ao texto */
+    text-shadow: 2px 2px 4px #0000007c;
     font-size: 10px;
 }
 
 .container_fundo_aluno {
-    width: 90%; /* Ajusta a largura para ser consistente com o título */
-    max-width: 1200px; /* Define uma largura máxima */
-    margin: 0 auto; /* Centraliza o container */
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 0; /* Ajusta o padding para manter a proximidade */
+    padding: 10px 0;
 }
 
 .bloco_alunos {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centraliza os cards */
-    gap: 20px; /* Adiciona espaçamento uniforme entre os cards */
+    justify-content: center;
+    gap: 20px;
 }
 
 .box_Aluno {
@@ -207,11 +207,11 @@ a {
     border: 3px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
-    width: calc(33% - 40px); /* Ajusta a largura para se adaptar ao espaço disponível */
+    width: calc(33% - 40px);
     flex: 1 1 250px;
     height: auto;
-    min-width: 200px; /* Largura mínima para manter a legibilidade */
-    max-width: 250px; /* Largura máxima */
+    min-width: 200px;
+    max-width: 250px;
     padding: 20px;
     margin: 10px;
     display: flex;
@@ -219,34 +219,34 @@ a {
     align-items: center;
     position: relative;
     color: #ffffff;
-    transition: transform 0.3s; /* Adiciona uma pequena animação */
+    transition: transform 0.3s;
 }
 
 .box_Aluno:hover {
-    transform: scale(1.05); /* Leve aumento ao passar o mouse */
+    transform: scale(1.05);
 }
 
 .box_Aluno span:first-child {
-    font-weight: bold; /* Negrito para o nome do aluno */
-    font-size: 1.2rem; /* Tamanho da fonte para o nome do aluno */
-    margin-bottom: 10px; /* Espaçamento abaixo do nome do aluno */
-    text-align: center; /* Centraliza o texto */
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .box_Aluno span:nth-child(2) {
-    font-size: 0.9rem; /* Tamanho da fonte para o texto */
-    margin-bottom: 10px; /* Espaçamento abaixo do texto */
-    text-align: center; /* Centraliza o texto */
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .box_Aluno img {
-    width: 50px; /* Largura da imagem */
-    height: auto; /* Manter a proporção da imagem */
-    margin-top: 10px; /* Espaçamento acima da imagem */
+    width: 50px;
+    height: auto;
+    margin-top: 10px;
 }
 
 .box_Aluno .solicitacao {
-    margin-top: 5px; /* Opcional: adicionar um pouco de margem acima do texto */
+    margin-top: 5px;
     font-size: 12px;
     color: #ffffff;
     position: absolute;
@@ -255,38 +255,38 @@ a {
 }
 
 .box_Aluno button {
-    background-color: #ed1b24; /* Cor de fundo */
-    border: none; /* Sem borda */
-    color: #ffffff; /* Cor do texto */
-    padding: 5px 10px; /* Espaçamento interno reduzido */
-    font-size: 0.75rem; /* Tamanho da fonte reduzido */
-    border-radius: 5px; /* Bordas arredondadas */
-    cursor: pointer; /* Cursor de mãozinha */
-    position: absolute; /* Posição absoluta */
-    bottom: 10px; /* Alinhado ao fundo do bloco */
-    right: 10px; /* Alinhado à direita da imagem */
+    background-color: #ed1b24;
+    border: none;
+    color: #ffffff;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .box_Aluno button:hover {
-    background-color: #ffd700; /* Cor de fundo mais clara ao passar o mouse */
+    background-color: #ffd700;
     color: #244aa5;
 }
 
 .container_fundo_aluno_favoritos {
-    width: 90%; /* Ajusta a largura para ser consistente com o título */
-    max-width: 1200px; /* Define uma largura máxima */
-    margin: 0 auto; /* Centraliza o container */
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 0; /* Ajusta o padding para manter a proximidade */
+    padding: 10px 0;
 }
 
 .bloco_alunos_favoritos {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centraliza os cards */
-    gap: 20px; /* Adiciona espaçamento uniforme entre os cards */
+    justify-content: center;
+    gap: 20px;
 }
 
 .box_Aluno_favoritos {
@@ -294,11 +294,11 @@ a {
     border: 3px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
-    width: calc(33% - 40px); /* Ajusta a largura para se adaptar ao espaço disponível */
+    width: calc(33% - 40px);
     flex: 1 1 250px;
     height: auto;
-    min-width: 200px; /* Largura mínima para manter a legibilidade */
-    max-width: 250px; /* Largura máxima */
+    min-width: 200px;
+    max-width: 250px;
     padding: 20px;
     margin: 10px;
     display: flex;
@@ -306,34 +306,110 @@ a {
     align-items: center;
     position: relative;
     color: #ffffff;
-    transition: transform 0.3s; /* Adiciona uma pequena animação */
+    transition: transform 0.3s;
 }
 
+
+.container_fundo_aluno_contratados {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.bloco_alunos_contratados {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.box_Aluno_contratados {
+    background-color: #244aa5;
+    border: 3px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
+    width: calc(33% - 40px);
+    flex: 1 1 250px;
+    height: auto;
+    min-width: 200px;
+    max-width: 250px;
+    padding: 20px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    color: #ffffff;
+    transition: transform 0.3s;
+}
+
+.container_fundo_aluno_processo_seletivo {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.bloco_alunos_processo_seletivo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.box_Aluno_processo_seletivo {
+    background-color: #244aa5;
+    border: 3px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
+    width: calc(33% - 40px);
+    flex: 1 1 250px;
+    height: auto;
+    min-width: 200px;
+    max-width: 250px;
+    padding: 20px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    color: #ffffff;
+    transition: transform 0.3s;
+}
+
+
 .box_Aluno_favoritos:hover {
-    transform: scale(1.05); /* Leve aumento ao passar o mouse */
+    transform: scale(1.05);
 }
 
 .box_Aluno_favoritos span:first-child {
-    font-weight: bold; /* Negrito para o nome do aluno */
-    font-size: 1.2rem; /* Tamanho da fonte para o nome do aluno */
-    margin-bottom: 10px; /* Espaçamento abaixo do nome do aluno */
-    text-align: center; /* Centraliza o texto */
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .box_Aluno_favoritos span:nth-child(2) {
-    font-size: 0.9rem; /* Tamanho da fonte para o texto */
-    margin-bottom: 10px; /* Espaçamento abaixo do texto */
-    text-align: center; /* Centraliza o texto */
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .box_Aluno_favoritos img {
-    width: 50px; /* Largura da imagem */
-    height: auto; /* Manter a proporção da imagem */
-    margin-top: 10px; /* Espaçamento acima da imagem */
+    width: 50px;
+    height: auto;
+    margin-top: 10px;
 }
 
 .box_Aluno_favoritos .solicitacao {
-    margin-top: 5px; /* Opcional: adicionar um pouco de margem acima do texto */
+    margin-top: 5px;
     font-size: 12px;
     color: #ffffff;
     position: absolute;
@@ -342,25 +418,24 @@ a {
 }
 
 .box_Aluno_favoritos button {
-    background-color: #ed1b24; /* Cor de fundo */
-    border: none; /* Sem borda */
-    color: #ffffff; /* Cor do texto */
-    padding: 5px 10px; /* Espaçamento interno reduzido */
-    font-size: 0.75rem; /* Tamanho da fonte reduzido */
-    border-radius: 5px; /* Bordas arredondadas */
-    cursor: pointer; /* Cursor de mãozinha */
-    position: absolute; /* Posição absoluta */
-    bottom: 10px; /* Alinhado ao fundo do bloco */
-    right: 10px; /* Alinhado à direita da imagem */
+    background-color: #ed1b24;
+    border: none;
+    color: #ffffff;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .box_Aluno_favoritos button:hover {
-    background-color: #ffd700; /* Cor de fundo mais clara ao passar o mouse */
+    background-color: #ffd700;
     color: #244aa5;
 }
 
 
-/* Container principal que centraliza o conteúdo */
 .container_texto_foto_e_data {
     width: 100%;
     height: 7vh;
@@ -370,7 +445,6 @@ a {
     display: flex;
 }
 
-/* Container interno que contém o texto e a foto */
 .container_interno_texto_foto_e_data {
     display: flex;
     background-color: #fabc09;
@@ -381,7 +455,6 @@ a {
     align-items: center;
 }
 
-/* Estilo para o título dentro do container interno */
 .container_interno_texto_foto_e_data h1 {
     font-size: 20px;
     margin: 20px;
@@ -392,12 +465,12 @@ a {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    width: 100%; /* Garante que o container ocupe toda a largura disponível */
+    width: 100%;
 }
 
 .container_interno_foto_e_data {
     display: flex;
-    flex-direction: row; /* Garante que os itens fiquem lado a lado */
+    flex-direction: row;
     background-color: #1E3A8A;
     padding: 20px;
     border-radius: 8px;
@@ -410,7 +483,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40%; /* Reduzido para dar mais espaço para os spans */
+    width: 40%;
 }
 
 .container_foto img {
@@ -426,23 +499,24 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 45%; /* O restante do espaço */
+    width: 45%;
     padding-left: 20px;
 }
 
 .blco_span {
     display: flex;
-    justify-content: space-between; /* Espaço entre as colunas */
+    justify-content: space-between;
     width: 100%;
-    gap: 10vh; /* Espaçamento entre as colunas */
+    gap: 10vh;
 }
 
-.coluna_esquerda, .coluna_direita {
+.coluna_esquerda,
+.coluna_direita {
     display: flex;
     flex-direction: column;
     color: #fff;
     font-size: 16px;
-    gap: 10px; /* Espaçamento entre os spans */
+    gap: 10px;
 }
 
 .bloco_botoes {
@@ -480,57 +554,51 @@ a {
     display: none;
 }
 
-
-/* Estilo para o label do input file */
 .upload_label {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #ffffff; /* Cor de fundo do label */
-    color: #244AA5; /* Cor do texto do label */
-    border: 2px solid #fabc09; /* Borda do label */
-    border-radius: 4px; /* Bordas arredondadas */
-    cursor: pointer; /* Aponta que é clicável */
-    font-size: 16px; /* Tamanho da fonte do label */
-    font-weight: 500; /* Peso da fonte do label */
-    text-align: center; /* Centraliza o texto */
-    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
+    background-color: #ffffff;
+    color: #244AA5;
+    border: 2px solid #fabc09;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
-/* Estilo para o botão de upload */
 .upload_button {
     padding: 10px 20px;
-    background-color: #ffffff; /* Cor de fundo do botão */
-    color: #244AA5; /* Cor do texto do botão */
-    border: 2px solid #fabc09; /* Borda do botão */
-    border-radius: 4px; /* Bordas arredondadas */
-    cursor: pointer; /* Aponta que é clicável */
-    font-size: 16px; /* Tamanho da fonte do botão */
-    font-weight: 500; /* Peso da fonte do botão */
-    text-align: center; /* Centraliza o texto */
-    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
+    background-color: #ffffff;
+    color: #244AA5;
+    border: 2px solid #fabc09;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
-/* Efeito de hover para o botão de upload e o label */
 .upload_button:hover,
 .upload_label:hover {
-    background-color: #fabc09; /* Cor de fundo ao passar o mouse */
-    color: #ffffff; /* Cor do texto ao passar o mouse */
-    border-color: #fabc09; /* Cor da borda ao passar o mouse */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
-    transform: translateY(-3px); /* Levanta o botão ao passar o mouse */
+    background-color: #fabc09;
+    color: #ffffff;
+    border-color: #fabc09;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
 }
 
-/* Estilo para o container do formulário de edição */
 .container_fundo_editar_perfil {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com transparência */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Estilo para o container interno do formulário de edição */
 .container_editar_perfil {
     background-color: #ffffff;
     padding: 20px;
@@ -539,40 +607,35 @@ a {
     max-width: 600px;
 }
 
-/* Estilo para o formulário de edição */
 .container_inputs form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-/* Estilo para os labels do formulário */
 .container_inputs label {
     font-size: 14px;
     margin-bottom: 5px;
 }
 
-/* Estilo para os inputs do formulário */
 .container_inputs input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-/* Estilo para o botão de salvar mudanças */
 .container_inputs button {
-    background-color: #4CAF50; /* Cor de fundo verde */
-    color: #ffffff; /* Cor do texto */
+    background-color: #4CAF50;
+    color: #ffffff;
     padding: 10px;
-    border: none; /* Remove a borda padrão */
-    border-radius: 5px; /* Bordas arredondadas */
-    cursor: pointer; /* Cursor em forma de mão */
-    font-size: 16px; /* Tamanho da fonte */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-/* Estilo para o botão de salvar mudanças quando clicado */
 .container_inputs button:active {
-    background-color: #45a049; /* Cor de fundo verde mais escuro */
+    background-color: #45a049;
 }
 
 .container_fundo_exclusao {
@@ -584,12 +647,12 @@ a {
 }
 
 .container_exclusao {
-    display: flex; /* Ativa o flexbox */
-    flex-direction: column; /* Organiza itens em coluna */
-    gap: 15px; /* Espaçamento entre os itens */
-    width: 100%; /* Largura total */
-    margin: 20px auto; /* Centraliza horizontalmente */
-    padding: 20px; /* Espaçamento interno */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
     align-items: center;
     height: 20vh;
     justify-content: space-around;
@@ -597,58 +660,58 @@ a {
 }
 
 .exclusao_item {
-    display: flex; /* Ativa o flexbox */
-    align-items: center; /* Centraliza verticalmente */
-    gap: 10px; /* Espaçamento entre o botão e o ícone */
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .container_exclusao button {
     width: 50vh;
     height: 6vh;
-    background-color: #ed1b24; /* Cor de fundo */
-    color: #ffffff; /* Cor do texto */
-    border: none; /* Sem borda */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-size: 20px; /* Tamanho da fonte */
-    cursor: pointer; /* Cursor de mãozinha */
-    transition: background-color 0.3s; /* Transição suave */
+    background-color: #ed1b24;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .container_exclusao button:hover {
-    background-color: #c3000a; /* Cor de fundo ao passar o mouse */
+    background-color: #c3000a;
 }
 
 .info_icon {
-    display: flex; /* Ativa o flexbox */
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
-    width: 3vh; /* Largura do ícone */
-    height: 3vh; /* Altura do ícone */
-    border-radius: 50%; /* Bordas arredondadas (círculo) */
-    background-color: #1a3678; /* Cor de fundo do ícone */
-    color: #ffffff; /* Cor do texto do ícone */
-    font-weight: bold; /* Negrito */
-    font-size: 20px; /* Tamanho da fonte */
-    cursor: pointer; /* Cursor de mãozinha */
-    transition: background-color 0.3s; /* Transição suave */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3vh;
+    height: 3vh;
+    border-radius: 50%;
+    background-color: #1a3678;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .info_icon:hover {
-    background-color: #b89a00; /* Cor de fundo ao passar o mouse */
+    background-color: #b89a00;
 }
 
 .container_notificacao_exclusao {
-    position: fixed; /* Mantém o contêiner fixo na tela */
-    background-color: rgba(44, 44, 44, 0.73); /* Cor com opacidade */
+    position: fixed;
+    background-color: rgba(44, 44, 44, 0.73);
     width: 100%;
-    height: 100%; /* Ocupa toda a altura da tela */
-    top: 0; /* Alinha ao topo da tela */
-    left: 0; /* Alinha à esquerda da tela */
-    z-index: 9999; /* Garante que o contêiner esteja acima de outros elementos */
-    display: flex; /* Para centralizar o conteúdo, se necessário */
-    align-items: center; /* Centraliza verticalmente o conteúdo */
-    justify-content: center; /* Centraliza horizontalmente o conteúdo */
-    backdrop-filter: blur(10px); /* Adiciona o efeito de desfoque */
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
 }
 
 .bloco_notificacao_exclusao {
@@ -656,7 +719,7 @@ a {
     width: 33%;
     height: 32vh;
     border-radius: 20px;
-    border: 3px solid #ED1B24; /* Adiciona a borda azul de 3px */
+    border: 3px solid #ED1B24;
 }
 
 .container_notificacao {
@@ -664,113 +727,112 @@ a {
     height: 10vh;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o conteúdo principal */
-    position: relative; /* Posicionamento relativo para permitir a posição absoluta da imagem */
+    justify-content: center;
+    position: relative;
     font-size: 30px;
     color: #ED1B24;
     font-weight: 700;
 }
 
 .notificacao {
-    flex: 1; /* Permite que o span ocupe o espaço disponível */
-    text-align: center; /* Centraliza o texto */
+    flex: 1;
+    text-align: center;
 }
 
 .imagem_wrapper2 {
     position: absolute;
-    right: 20px; /* Posiciona a imagem à direita */
+    right: 20px;
     display: flex;
-    align-items: center; /* Centraliza a imagem verticalmente */
-    border-radius: 5px; /* Arredonda os cantos */
-    transition: background-color 0.3s ease; /* Transição suave para o fundo */
+    align-items: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .imagem_wrapper2:hover {
-    background-color: rgba(255, 0, 0, 0.3); /* Fundo vermelho suave ao passar o mouse */
+    background-color: rgba(255, 0, 0, 0.3);
 }
 
 .container_notificacao img {
-    height: 30%; /* Ajusta a altura da imagem conforme necessário */
-    cursor: pointer; /* Adiciona um cursor de pointer para indicar que a imagem é clicável */
+    height: 30%;
+    cursor: pointer;
 }
 
 
 .container_mensagem_notificacao {
     width: 70%;
     height: 12vh;
-    display: flex; /* Ativa o flexbox */
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
-    text-align: justify; /* Justifica o texto dentro do span */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
     font-size: 18px;
-    margin: 0 auto; /* Centraliza a div horizontalmente */
+    margin: 0 auto;
     font-weight: 600;
 }
 
 .container_mensagem_notificacao span {
-    width: 100%; /* Garante que o span ocupe toda a largura disponível */
+    width: 100%;
 }
 
 .container_fechamento {
     display: flex;
-    gap: 10px; /* Espaçamento entre os botões */
-    justify-content: center; /* Centraliza os botões horizontalmente */
-    margin-top: 20px; /* Espaçamento superior */
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .botao_cancelar {
     width: 25%;
-    background-color: #f44336; /* Fundo cinza */
-    color: #fff; /* Texto branco */
-    border: none; /* Remove a borda padrão */
-    border-radius: 5px; /* Bordas arredondadas */
-    padding: 10px 20px; /* Espaçamento interno */
-    font-size: 1rem; /* Tamanho da fonte */
-    font-weight: bold; /* Deixa o texto em negrito */
-    cursor: pointer; /* Muda o cursor para pointer ao passar sobre o botão */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave para a cor de fundo e transformação */
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .botao_cancelar:hover {
-    background-color: #a3261d; /* Fundo cinza mais claro ao passar o mouse */
-    transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+    background-color: #a3261d;
+    transform: scale(1.05);
 }
 
 .botao_cancelar:active {
-    background-color: #666666; /* Fundo cinza escuro ao clicar */
-    transform: scale(0.95); /* Diminui ligeiramente o tamanho ao clicar */
+    background-color: #666666;
+    transform: scale(0.95);
 }
 
 .botao_ok {
     width: 25%;
-    background-color: #4CAF50; /* Fundo amarelo */
-    color: #fff; /* Texto branco */
-    border: none; /* Remove a borda padrão */
-    border-radius: 5px; /* Bordas arredondadas */
-    padding: 10px 20px; /* Espaçamento interno */
-    font-size: 1rem; /* Tamanho da fonte */
-    font-weight: bold; /* Deixa o texto em negrito */
-    cursor: pointer; /* Muda o cursor para pointer ao passar sobre o botão */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave para a cor de fundo e transformação */
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .botao_ok:hover {
-    background-color: #409543; /* Fundo amarelo mais claro ao passar o mouse */
-    transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+    background-color: #409543;
+    transform: scale(1.05);
 }
 
 .botao_ok:active {
-    background-color: #FFB300; /* Fundo amarelo escuro ao clicar */
-    transform: scale(0.95); /* Diminui ligeiramente o tamanho ao clicar */
+    background-color: #FFB300;
+    transform: scale(0.95);
 }
 
-/* Estilos para o contêiner do alerta */
 .container_alerta {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    background-color: #4CAF50;
     color: white;
     padding: 15px 30px;
     border-radius: 5px;
@@ -778,12 +840,11 @@ a {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
-    width: 300px; /* Largura do alerta */
-    text-align: center; /* Centraliza o texto */
-    display: none; /* Inicialmente oculto */
+    width: 300px;
+    text-align: center;
+    display: none;
 }
 
-/* Estilos para o título do alerta */
 .titulo_alerta {
     font-size: 18px;
     font-weight: bold;
@@ -791,29 +852,24 @@ a {
     display: block;
 }
 
-/* Estilos para o texto do alerta */
 .texto_alerta {
     font-size: 16px;
 }
 
-/* Estilos para o alerta quando exibido */
 .container_alerta.show {
     display: block;
     opacity: 1;
-    top: 40px; /* Movimenta o alerta um pouco para baixo */
+    top: 40px;
 }
 
-/* Estilos para um alerta de erro */
 .container_alerta.error {
-    background-color: #f44336; /* Cor de fundo para erro */
+    background-color: #f44336;
 }
 
-/* Estilos para um alerta de sucesso */
 .container_alerta.success {
-    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    background-color: #4CAF50;
 }
 
-/* Footer */
 footer {
     background-color: #fff;
     padding: 20px;
@@ -830,13 +886,13 @@ footer {
     position: relative;
 }
 
-.footer-content > div {
+.footer-content>div {
     flex: 1;
     padding: 10px;
     position: relative;
 }
 
-.footer-content > div:nth-child(1)::after {
+.footer-content>div:nth-child(1)::after {
     content: '';
     position: absolute;
     top: 10%;
@@ -846,7 +902,7 @@ footer {
     background-color: yellow;
 }
 
-.footer-content > div:nth-child(2)::after {
+.footer-content>div:nth-child(2)::after {
     content: '';
     position: absolute;
     top: 10%;
@@ -884,33 +940,33 @@ footer {
     height: 20px;
 }
 
-.gold-medal{
-    width: 35px; 
-    height: 35px; 
+.gold-medal {
+    width: 35px;
+    height: 35px;
 }
 
 .silver-medal {
-    width: 35px; 
-    height: 35px; 
+    width: 35px;
+    height: 35px;
 }
 
 .bronze-medal {
-    width: 35px; 
-    height: 35px; 
+    width: 35px;
+    height: 35px;
 }
 
 /* Estilo dos títulos do footer */
 .contact h3,
 .social-media h3 {
-    color: #ED1B24; 
+    color: #ED1B24;
     font-family: 'Share Tech', sans-serif;
-    font-size: 24px; 
+    font-size: 24px;
 }
 
 
 .contact h3 {
-    color: #ED1B24; 
-    font-family: 'Share Tech', sans-serif; 
+    color: #ED1B24;
+    font-family: 'Share Tech', sans-serif;
     bottom: 10px;
     position: relative;
     font-size: 30px;
@@ -924,6 +980,7 @@ footer {
     position: relative;
     font-size: 30px;
 }
+
 .info_icon {
     background-color: #244aa5;
     color: white;
@@ -947,20 +1004,20 @@ footer {
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
-    z-index: 10;
+    z-index: 10000;
 }
 
 .no-alunos-message {
-    font-weight: 800; 
+    font-weight: 800;
     font-size: 20px;
-    color: gray;     
+    color: gray;
     height: 10vh;
     margin-top: 20%;
 }
 
 .container_fundo_editar_informacoes {
     width: 100%;
-    height: 100%; /* Ocupar 100% da altura da viewport */
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -968,23 +1025,23 @@ footer {
     top: 0;
     left: 0;
     z-index: 999;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
-    backdrop-filter: blur(8px); /* Adiciona o efeito de desfoque */
-    display: none; /* Inicialmente invisível */
-    overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a tela */
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    display: none;
+    overflow-y: auto;
 }
 
 .container_interno_editar_informacoes {
-    position: relative; /* Necessário para o posicionamento do botão de fechar */
+    position: relative;
     background-color: #2b5f9e;
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    width: 45%; /* Largura menor para evitar encostar nas bordas */
+    width: 45%;
     max-width: 800px;
-    max-height: 80vh; /* Limita a altura do contêiner interno */
-    overflow-y: auto; /* Permite rolagem dentro do contêiner interno se necessário */
-    margin: 100 20px; /* Adiciona margem para não encostar nas bordas */
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: 100 20px;
     color: white;
 }
 
@@ -1047,17 +1104,104 @@ label {
     font-size: 18px;
     transition: background-color 0.3s, transform 0.3s;
     display: block;
-    margin: 20px auto 0; /* Centraliza o botão */
+    margin: 20px auto 0;
     text-align: center;
 }
 
 .btn:hover {
     background-color: #d99400;
-    transform: scale(1.05); /* Efeito de "crescimento" ao passar o mouse */
+    transform: scale(1.05);
     color: white;
 }
 
 .span_texto_recebido {
     font-weight: 800;
     color: #ffffff59;
+}
+
+.container_atribuir {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    display: none;
+}
+
+.bloco_atribuir {
+    background-color: rgba(255, 255, 255, 0.76);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    height: 40vh;
+    width: 70vh;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    border: 3px solid white;
+}
+
+.fechar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.fechar:hover {
+    color: red;
+}
+
+.box_atribuir {
+    background-color: #1a3678;
+    width: 85%;
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-radius: 5px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.box_atribuir p {
+    margin: 0;
+    font-size: 16px;
+    color: white;
+}
+
+.box_atribuir button {
+    background-color: #fff;
+    color: rgb(83, 83, 83);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.box_atribuir button:hover {
+    background-color: #c7c7c7;
+    color: #000;
+}
+
+.btn_processo_seletivo {
+    width: 15vh;
+    height: 6vh;
+    font-size: 10px;
 }

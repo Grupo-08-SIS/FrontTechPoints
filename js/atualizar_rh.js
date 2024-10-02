@@ -122,10 +122,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
             const data = await response.json();
-    
+
             const container = document.querySelector(".bloco_alunos_favoritos");
             container.innerHTML = ""; // Limpa o conteúdo existente
-    
+
             if (data.length === 0) {
                 const noFavoritesMessage = document.createElement("p");
                 noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
@@ -136,11 +136,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                     // Requisição para buscar todos os pontos totais do aluno
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
-    
+
                     // Encontrar o curso com a maior pontuação
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
-    
+
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -148,18 +148,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                             cursoComMaiorPontuacao = curso.nomeCurso;
                         }
                     }
-    
+
                     let medalhaTipo = 'bronze_medal'; // Tipo padrão
-    
+
                     if (maxPontos > 600) {
                         medalhaTipo = 'gold_medal';
                     } else if (maxPontos > 500) {
                         medalhaTipo = 'silver_medal';
                     }
-    
+
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno_favoritos";
-    
+
                     // Agora exibe o nome do curso com a pontuação máxima e a pontuação correspondente
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
@@ -167,59 +167,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                         <img src="../imgs/${medalhaTipo}.png" alt="medalha">
                         <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
                     `;
-    
+
                     container.appendChild(alunoDiv);
                 }
             }
         } catch (error) {
             console.error("Erro ao buscar alunos favoritos:", error);
-        }
-    }
-    
-
-
-    // Função para listar interessados
-    async function listarInteressados() {
-        try {
-            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
-            const data = await response.json();
-
-            const container = document.querySelector(".bloco_alunos");
-            container.innerHTML = ""; // Limpa o conteúdo existente
-
-            if (data.length === 0) {
-                const noInterestedMessage = document.createElement("p");
-                noInterestedMessage.textContent = "Não há alunos interessados no momento.";
-                noInterestedMessage.className = "no-alunos-message";
-                container.appendChild(noInterestedMessage);
-            } else {
-                for (const aluno of data) {
-                    // Requisição para buscar os pontos totais do aluno
-                    const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
-                    const pontosData = await pontosResponse.json();
-
-                    let medalhaTipo = 'bronze_medal'; // Tipo padrão
-
-                    if (pontosData.pontosTotais > 600) {
-                        medalhaTipo = 'gold_medal';
-                    } else if (pontosData.pontosTotais > 500) {
-                        medalhaTipo = 'silver_medal';
-                    }
-
-                    const alunoDiv = document.createElement("div");
-                    alunoDiv.className = "box_Aluno";
-
-                    alunoDiv.innerHTML = `
-                        <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
-                        <span>Aluno do projeto arrastão, finalizou curso <a>${aluno.nomeCurso}</a> com</span>
-                        <img src="../imgs/${medalhaTipo}.png" alt="medalha">
-                    `;
-
-                    container.appendChild(alunoDiv);
-                }
-            }
-        } catch (error) {
-            console.error("Erro ao buscar interessados:", error);
         }
     }
 
@@ -269,6 +222,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a></span>
                         <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                        <button onclick="atribuir(${aluno.id})">Atribuir</button>
                     `;
 
                     container.appendChild(alunoDiv);
@@ -338,3 +292,173 @@ function editarPerfil() {
 function fecharFormulario() {
     document.querySelector('.container_fundo_editar_informacoes').style.display = 'none';
 }
+
+let idAlunoSelecionado = null;
+
+// Chama a função listarContratados quando a página é carregada
+window.onload = function() {
+    listarContratados(); // Chama a função para listar alunos contratados
+};
+
+function atribuir(idAluno) {
+    idAlunoSelecionado = idAluno; // Armazena o id do aluno
+    console.log("Aluno selecionado:", idAlunoSelecionado); // Exibe o id no console
+
+    const atribuicaoDiv = document.getElementById("atribuicao");
+    atribuicaoDiv.style.display = "flex"; // Exibe a div de atribuição
+
+    // Adiciona eventos aos botões
+    const btnContratado = document.querySelector(".btn_contratado");
+    btnContratado.onclick = () => contratarAluno(idAlunoSelecionado);
+
+    const btnProcessoSeletivo = document.querySelector(".btn_processo_seletivo");
+    btnProcessoSeletivo.onclick = () => processoSeletivoAluno(idAlunoSelecionado);
+
+    const btnDesinteressar = document.querySelector(".btn_desinteressar");
+    btnDesinteressar.onclick = () => desinteressarAluno(idAlunoSelecionado);
+}
+
+async function contratarAluno(idAlunoSelecionado) {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const idRecrutador = user.id;
+
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/contratados/${idAlunoSelecionado}`, {
+            method: "POST",
+        });
+
+        if (response.ok) {
+            alert("Aluno contratado com sucesso!");
+            listarContratados();
+            fecharAtribuicao();
+            setTimeout(() => {
+                location.reload();  
+            }, 200); 
+        } else {
+            alert("Erro ao contratar o aluno.");
+        }
+    } catch (error) {
+        console.error("Erro:", error);
+    }
+}
+
+async function listarContratados() {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const idRecrutador = user.id;
+
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/listar/contratados`);
+        const data = await response.json();
+
+        const container = document.querySelector(".bloco_alunos_contratados");
+        container.innerHTML = ""; 
+
+        if (data.length === 0) {
+            const noContractedMessage = document.createElement("p");
+            noContractedMessage.textContent = "Não há alunos contratados no momento.";
+            noContractedMessage.className = "no-alunos-message";
+            container.appendChild(noContractedMessage);
+        } else {
+            for (const aluno of data) {
+                const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
+                const pontosData = await pontosResponse.json();
+
+                let maxPontos = -1;
+                let cursoComMaiorPontuacao = '';
+
+                for (const key in pontosData) {
+                    const curso = pontosData[key];
+                    if (curso.pontosTotais > maxPontos) {
+                        maxPontos = curso.pontosTotais;
+                        cursoComMaiorPontuacao = curso.nomeCurso;
+                    }
+                }
+
+                let medalhaTipo = 'bronze_medal';
+
+                if (maxPontos > 600) {
+                    medalhaTipo = 'gold_medal';
+                } else if (maxPontos > 500) {
+                    medalhaTipo = 'silver_medal';
+                }
+
+                const alunoDiv = document.createElement("div");
+                alunoDiv.className = "box_Aluno";
+
+                alunoDiv.innerHTML = `
+                    <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
+                    <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
+                    <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                `;
+
+                container.appendChild(alunoDiv);
+            }
+        }
+    } catch (error) {
+        console.error("Erro ao buscar alunos contratados:", error);
+    }
+}
+
+async function processoSeletivoAluno(idAluno) {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const idRecrutador = user.id; 
+
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/processoSeletivo/${idAluno}`, {
+            method: "POST",
+        });
+        if (response.ok) {
+            alert("Aluno adicionado ao processo seletivo com sucesso!");
+            listarProcessoSeletivo();
+            fecharAtribuicao();
+            setTimeout(() => {
+                location.reload();  
+            }, 200); 
+            fecharAtribuicao();
+        } else {
+            alert("Erro ao adicionar o aluno no processo seletivo.");
+        }
+    } catch (error) {
+        console.error("Erro:", error);
+    }
+}
+
+async function desinteressarAluno(idAluno) {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const idRecrutador = user.id; 
+
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/cancelados/${idAluno}`, {
+            method: "POST",
+        });
+        if (response.ok) {
+            alert("Interesse cancelado com sucesso!");
+            fecharAtribuicao();
+        } else {
+            alert("Erro ao cancelar interesse.");
+        }
+    } catch (error) {
+        console.error("Erro:", error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const fecharBtn = document.querySelector('.fechar');
+
+    // Verifica se o botão de fechar está corretamente selecionado
+    if (fecharBtn) {
+        fecharBtn.addEventListener('click', function () {
+            console.log('Fechar botão clicado'); // Para verificar se o evento é acionado
+            document.getElementById('atribuicao').style.display = 'none';
+        });
+    } else {
+        console.error('Elemento fechar não encontrado');
+    }
+});
+
+// Função para fechar a div de atribuição
+function fecharAtribuicao() {
+    const atribuicaoDiv = document.getElementById("atribuicao");
+    atribuicaoDiv.style.display = "none"; // Oculta a div de atribuição
+}
+

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +37,7 @@
                 <div id="dropdown-content" class="dropdown_content">
                     <a href="tela_rh_vagas.html">Vagas</a>
                     <a href="classificacao_aluno_rh.html">Classificação</a>
-                    <a href="#">Editar Perfil</a>
+                    <a href="#">Perfil</a>
                     <a href="#" onclick="fazerLogout()">Sair</a>
                 </div>
             </div>
@@ -48,12 +49,47 @@
         <span class="texto_alerta">Lorem ipsum dolor sit amet consectetur</span>
     </div>
 
+    <div id="atribuicao" class="container_atribuir">
+        <div class="bloco_atribuir">
+            <span class="fechar">&times;</span>
+            
+            <div class="box_atribuir">
+                <p>O aluno foi contratado com sucesso. 
+                    <div class="info_icon" 
+                         onmouseover="showTooltip(event, 'Essa ação indica que o aluno foi efetivamente contratado.')" 
+                         onmouseout="hideTooltip(event)">?</div>
+                </p>
+                <button class="btn_contratado">Contratado</button>
+            </div>
+    
+            <div class="box_atribuir">
+                <p>Colocar aluno no processo seletivo.<br/> 
+                    <div class="info_icon" 
+                         onmouseover="showTooltip(event, 'Esta ação indica que o aluno foi/será encaminhado para o processo seletivo.')" 
+                         onmouseout="hideTooltip(event)">?</div>
+                </p>
+                <button class="btn_processo_seletivo">Processo Seletivo</button>
+            </div>
+    
+            <div class="box_atribuir">
+                <p>Cancelar interesse no aluno. 
+                    <div class="info_icon" 
+                         onmouseover="showTooltip(event, 'Esta ação indica que o aluno não passou no processo seletivo ou a empresa não há mais interesse no aluno.')" 
+                         onmouseout="hideTooltip(event)">?</div>
+                </p>
+                <button class="btn_desinteressar">Desinteressar</button>
+            </div>
+        </div>
+    </div>
+      
+
     <div style="display: none;" class="container_notificacao_exclusao">
         <div class="bloco_notificacao_exclusao">
             <div class="container_notificacao">
                 <span class="notificacao">Exclusão parcial do perfil</span>
                 <div class="imagem_wrapper2">
-                    <img onclick="fecharNotificacao()" src="../imgs/x_de_fechamento.png" alt="fechar aba de ver mais sobre o aluno">
+                    <img onclick="fecharNotificacao()" src="../imgs/x_de_fechamento.png"
+                        alt="fechar aba de ver mais sobre o aluno">
                 </div>
             </div>
             <div class="container_mensagem_notificacao">
@@ -93,19 +129,23 @@
                 <div class="blco_span">
                     <div class="coluna_esquerda">
                         <span>Nome do usuário: <span class="span_texto_recebido" id="id_nome">nome</span></span>
-                        <span>Email do usuário: <span class="span_texto_recebido" id="id_email_usuario">email</span></span>
-                        <span>Data de Criação: <span class="span_texto_recebido" id="span_data_criacao">data</span></span>
-                        <span>Data da última atualização: <span class="span_texto_recebido" id="span_data_ultima_atualizacao">data</span></span>
+                        <span>Email do usuário: <span class="span_texto_recebido"
+                                id="id_email_usuario">email</span></span>
+                        <span>Data de Criação: <span class="span_texto_recebido"
+                                id="span_data_criacao">data</span></span>
+                        <span>Data da última atualização: <span class="span_texto_recebido"
+                                id="span_data_ultima_atualizacao">data</span></span>
                     </div>
                     <div class="coluna_direita">
                         <span>Empresa: <span class="span_texto_recebido" id="span_empresa">empresa</span></span>
                         <span>Setor: <span class="span_texto_recebido" id="span_setor">setor</span></span>
                         <span>Cargo: <span class="span_texto_recebido" id="span_cargo">cargo</span></span>
-                        <span>Email da Empresa: <span class="span_texto_recebido" id="span_email_empresa">email</span></span>
+                        <span>Email da Empresa: <span class="span_texto_recebido"
+                                id="span_email_empresa">email</span></span>
 
                     </div>
                 </div>
-                <div class="bloco_botoes"> 
+                <div class="bloco_botoes">
                     <input type="file" id="fileInput" class="inputfile" />
                     <label for="fileInput" class="upload_label">Escolher arquivo</label>
                     <button class="upload_button" id="uploadButton">Atualizar Foto</button>
@@ -114,8 +154,8 @@
             </div>
         </div>
     </div>
-    
-    
+
+
     <div class="container_fundo_editar_informacoes">
         <div class="container_interno_editar_informacoes">
             <h1>Editar Informações do Perfil</h1>
@@ -123,27 +163,28 @@
             <form id="editarPerfilForm">
                 <label for="apelido">Apelido</label>
                 <input type="text" id="novo_apelido" name="apelido" placeholder="Digite seu novo apelido...">
-    
+
                 <label for="sobrenome">Sobrenome</label>
                 <input type="text" id="novo_sobrenome" name="sobrenome" placeholder="Digite seu sobrenome...">
-    
+
                 <label for="novo_telefone">Telefone</label>
                 <input type="text" id="novo_telefone" name="novo_telefone" placeholder="Digite seu novo telefone...">
-    
+
                 <label for="email">Novo E-mail</label>
                 <input type="email" id="email" name="email" placeholder="Digite seu novo e-mail...">
-    
+
                 <label for="senha">Nova Senha</label>
                 <input type="password" id="nova_senha" name="senha" placeholder="Digite sua nova senha...">
-    
+
                 <label for="conf_senha">Confirmação da Senha</label>
-                <input type="password" id="nova_senha_confirmacao" name="conf_senha" placeholder="Confirme sua nova senha...">
-    
+                <input type="password" id="nova_senha_confirmacao" name="conf_senha"
+                    placeholder="Confirme sua nova senha...">
+
                 <button type="submit" class="btn" onclick="salvarMudancas(event)">Salvar Mudanças</button>
             </form>
         </div>
     </div>
-       
+
 
     <div class="container_separacao">
         <div class="container_interno_separacao">
@@ -180,6 +221,38 @@
 
     <div class="container_separacao">
         <div class="container_interno_separacao">
+            <h1>Pessoas Contratadas</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_aluno_contratados">
+        <div class="bloco_alunos_contratados">
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="../imgs/gold medal.png" alt="medalha">
+            </div>
+        </div>
+    </div>
+
+    <div class="container_separacao">
+        <div class="container_interno_separacao">
+            <h1>Pessoas no processo seletivo</h1>
+        </div>
+    </div>
+
+    <div class="container_fundo_aluno_processo_seletivo"></div>
+        <div class="bloco_alunos_processo_seletivo">
+            <div class="box_Aluno">
+                <span>Nome do Aluno</span>
+                <span>Aluno do projeto arrastão, finalizou curso <a>Nome do curso</a> com</span>
+                <img src="../imgs/gold medal.png" alt="medalha">
+            </div>
+        </div>
+    </div>
+
+    <div class="container_separacao">
+        <div class="container_interno_separacao">
             <h1>Exclusão da Conta</h1>
         </div>
     </div>
@@ -188,15 +261,19 @@
         <div class="container_exclusao">
             <div class="exclusao_item">
                 <button onclick="abrirNotificacaoParcial()">Excluir conta parcialmente</button>
-                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta parcialmente. Algumas informações do seu perfil ficará salva no nosso sistema.')" onmouseout="hideTooltip()">?</div>
+                <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Esta ação excluirá sua conta parcialmente. Algumas informações do seu perfil ficará salva no nosso sistema.')"
+                    onmouseout="hideTooltip()">?</div>
             </div>
             <div class="exclusao_item">
                 <button onclick="abrirNotificacaoPermanente()">Excluir conta permanentemente</button>
-                <div class="info_icon" onmouseover="showTooltip(event, 'Esta ação excluirá sua conta permanentemente. Todas informações do seu perfil será excluído do nosso sistema.')" onmouseout="hideTooltip()">?</div>
+                <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Esta ação excluirá sua conta permanentemente. Todas informações do seu perfil será excluído do nosso sistema.')"
+                    onmouseout="hideTooltip()">?</div>
             </div>
         </div>
         <div id="tooltip" class="tooltip"></div>
-    </div>    
+    </div>
 
     <footer>
         <div class="footer-content">
@@ -229,4 +306,5 @@
 
 
 </body>
+
 </html>
