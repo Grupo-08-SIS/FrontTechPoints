@@ -160,7 +160,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno_favoritos";
 
-                    // Agora exibe o nome do curso com a pontuação máxima e a pontuação correspondente
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
@@ -296,16 +295,29 @@ function fecharFormulario() {
 let idAlunoSelecionado = null;
 
 // Chama a função listarContratados quando a página é carregada
-window.onload = function() {
+window.onload = function () {
     listarContratados(); // Chama a função para listar alunos contratados
 };
 
-function atribuir(idAluno) {
-    idAlunoSelecionado = idAluno; // Armazena o id do aluno
-    console.log("Aluno selecionado:", idAlunoSelecionado); // Exibe o id no console
+function atribuir(idAluno, fromListar = false) {
+    idAlunoSelecionado = idAluno; 
+    console.log("Aluno selecionado:", idAlunoSelecionado); 
 
     const atribuicaoDiv = document.getElementById("atribuicao");
-    atribuicaoDiv.style.display = "flex"; // Exibe a div de atribuição
+    atribuicaoDiv.style.display = "flex"; 
+
+    if (fromListar) {
+        const boxProcessoSeletivo = document.querySelector(".box_atribuir:nth-child(3)");
+        const blocoAtribuir = document.querySelector(".bloco_atribuir");
+
+        if (boxProcessoSeletivo) {
+            boxProcessoSeletivo.style.display = "none";
+        }
+
+        if (blocoAtribuir) {
+            blocoAtribuir.style.height = "20vh"; // Define a altura apenas se chamado do listarProcessoSeletivo
+        }
+    }
 
     // Adiciona eventos aos botões
     const btnContratado = document.querySelector(".btn_contratado");
@@ -332,8 +344,8 @@ async function contratarAluno(idAlunoSelecionado) {
             listarContratados();
             fecharAtribuicao();
             setTimeout(() => {
-                location.reload();  
-            }, 200); 
+                location.reload();
+            }, 200);
         } else {
             alert("Erro ao contratar o aluno.");
         }
@@ -351,7 +363,7 @@ async function listarContratados() {
         const data = await response.json();
 
         const container = document.querySelector(".bloco_alunos_contratados");
-        container.innerHTML = ""; 
+        container.innerHTML = "";
 
         if (data.length === 0) {
             const noContractedMessage = document.createElement("p");
@@ -384,6 +396,9 @@ async function listarContratados() {
 
                 const alunoDiv = document.createElement("div");
                 alunoDiv.className = "box_Aluno";
+                alunoDiv.style.backgroundColor = "#9ABE62";
+                alunoDiv.style.border = "3px solid #828282";
+                alunoDiv.style.color = "#363636"
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
@@ -401,7 +416,7 @@ async function listarContratados() {
 
 async function processoSeletivoAluno(idAluno) {
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const idRecrutador = user.id; 
+    const idRecrutador = user.id;
 
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/processoSeletivo/${idAluno}`, {
@@ -409,12 +424,11 @@ async function processoSeletivoAluno(idAluno) {
         });
         if (response.ok) {
             alert("Aluno adicionado ao processo seletivo com sucesso!");
-            listarProcessoSeletivo();
-            fecharAtribuicao();
+            await listarProcessoSeletivo(); // Aguarda a lista de alunos ser atualizada
+            fecharAtribuicao(); // Presumindo que você tenha essa função
             setTimeout(() => {
-                location.reload();  
-            }, 200); 
-            fecharAtribuicao();
+                location.reload();
+            }, 200);
         } else {
             alert("Erro ao adicionar o aluno no processo seletivo.");
         }
@@ -423,9 +437,76 @@ async function processoSeletivoAluno(idAluno) {
     }
 }
 
+async function listarProcessoSeletivo() {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const idRecrutador = user.id;
+
+    try {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/listar/processoSeletivo`);
+        const data = await response.json();
+
+        const container = document.querySelector(".bloco_alunos_processo_seletivo");
+        if (!container) {
+            console.error("Elemento contêiner não encontrado.");
+            return;
+        }
+        container.innerHTML = "";
+
+        if (data.length === 0) {
+            const noInterestedMessage = document.createElement("p");
+            noInterestedMessage.textContent = "Não há alunos no processo seletivo no momento.";
+            noInterestedMessage.className = "no-alunos-message";
+            container.appendChild(noInterestedMessage);
+        } else {
+            for (const aluno of data) {
+                const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
+                const pontosData = await pontosResponse.json();
+
+                let maxPontos = -1;
+                let cursoComMaiorPontuacao = '';
+
+                for (const key in pontosData) {
+                    const curso = pontosData[key];
+                    if (curso.pontosTotais > maxPontos) {
+                        maxPontos = curso.pontosTotais;
+                        cursoComMaiorPontuacao = curso.nomeCurso;
+                    }
+                }
+
+                let medalhaTipo = 'bronze_medal';
+
+                if (maxPontos > 600) {
+                    medalhaTipo = 'gold_medal';
+                } else if (maxPontos > 500) {
+                    medalhaTipo = 'silver_medal';
+                }
+
+                const alunoDiv = document.createElement("div");
+                alunoDiv.className = "box_Aluno";
+                alunoDiv.style.backgroundColor = "#FFE879";
+                alunoDiv.style.border = "3px solid #828282";
+                alunoDiv.style.color = "#363636";
+
+                alunoDiv.innerHTML = `
+                    <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
+                    <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
+                    <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                    <button onclick="atribuir(${aluno.id}, true)">Atribuir</button>
+                `;
+
+                container.appendChild(alunoDiv);
+            }
+        }
+    } catch (error) {
+        console.error("Erro ao buscar alunos no processo seletivo:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", listarProcessoSeletivo);
+
 async function desinteressarAluno(idAluno) {
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const idRecrutador = user.id; 
+    const idRecrutador = user.id;
 
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/cancelados/${idAluno}`, {
@@ -434,6 +515,10 @@ async function desinteressarAluno(idAluno) {
         if (response.ok) {
             alert("Interesse cancelado com sucesso!");
             fecharAtribuicao();
+            fecharAtribuicao(); // Presumindo que você tenha essa função
+            setTimeout(() => {
+                location.reload();
+            }, 200);
         } else {
             alert("Erro ao cancelar interesse.");
         }

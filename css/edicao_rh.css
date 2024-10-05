@@ -282,6 +282,16 @@ a {
     padding: 10px 0;
 }
 
+.container_fundo_aluno_processoSeletivo {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
 .bloco_alunos_favoritos {
     display: flex;
     flex-wrap: wrap;
@@ -327,6 +337,13 @@ a {
     gap: 20px;
 }
 
+.bloco_alunos_processoSeletivo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
 .box_Aluno_contratados {
     background-color: #244aa5;
     border: 3px solid #ddd;
@@ -362,6 +379,7 @@ a {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    align-items: center;
 }
 
 .box_Aluno_processo_seletivo {
