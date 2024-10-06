@@ -35,7 +35,69 @@
     </header>
 
     <main>
+
         <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+                <h3>Selecione o tipo de lista e a empresa:</h3>
+            </div>
+
+            <!-- Select para o Tipo de Lista -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="select-tipo-lista">Tipo de Lista:</label>
+                    <select id="select-tipo-lista" class="form-control">
+                        <option value="contratados">Contratados</option>
+                        <option value="interessados">Interessados</option>
+                        <option value="processoSeletivo">Processo Seletivo</option>
+                    </select>
+                </div>
+
+                <!-- Select para a Empresa -->
+                <div class="col-md-6">
+                    <label for="select-empresa">Empresa:</label>
+                    <select id="select-empresa" class="form-control">
+                        <option value="">Selecione uma empresa</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12 ">
+                    <button id="btn-enviar" class="btn btn-primary">Buscar Demografia</button>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+                <h3>Perfil de alunos nas listas dos recrutadores:</h3>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <h4>Distribuição por Sexo</h4>
+                    <canvas id="distribuicaoPorSexoListas" width="100" height="100"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <h4>Distribuição por Etnia</h4>
+                    <canvas id="distribuicaoPorEtniaListas" width="100" height="100"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <h4>Distribuição por Escolaridade</h4>
+                    <canvas id="distribuicaoPorEscolaridadeListas" width="100" height="100"></canvas>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Cursos</h4>
+                        <canvas id="CursosLista" width="1200" height="500"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Cidades</h4>
+                        <canvas id="alunosPorCidade" width="1200" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+                <h3>Perfil dos alunos cadastrados:</h3>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <h4>Alunos por Curso</h4>
@@ -165,7 +227,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../js/dash_adm.js"></script>
-
+    <script src="../js/dash_adm_alunos.js"></script>
+    <script src="../js/dash_adm_demografia_listas.js"></script>
 </body>
 </html>

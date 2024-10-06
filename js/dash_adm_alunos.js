@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
     carregarAlunosPorCurso()
 })
 
+
+
 async function carregarAlunos() {
     try {
         const response = await fetch('http://localhost:8080/usuarios/listar?tipo=Aluno')    
@@ -127,7 +129,7 @@ async function carregarImagemPerfil(id) {
     }
 }
 
-function gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos) {
+function gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos, coresCursos) {
     const ctxCursos = document.getElementById('alunosPorCurso').getContext('2d')
 
     new Chart(ctxCursos, {
@@ -137,8 +139,7 @@ function gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos) {
             datasets: [{
                 label: 'Quantidade de Alunos',
                 data: quantidadeAlunos,
-                backgroundColor: 'rgba(75, 192, 192, 0.8)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: coresCursos,
                 borderWidth: 2
             }]
         },
@@ -146,7 +147,11 @@ function gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos) {
             responsive: false,
             plugins: {
                 legend: {
-                    display: true
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: "Distribuição por curso"
                 }
             },
             scales: {
@@ -166,8 +171,8 @@ async function carregarAlunosPorCurso() {
 
             const nomeCursos = cursosData.map(curso => curso.nomeCurso)
             const quantidadeAlunos = cursosData.map(curso => curso.quantidadeAlunos)
-
-            gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos)
+            const coresCursos = gerarCores(cursosData.length);
+            gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos, coresCursos)
         } else {
             console.error('Erro ao carregar alunos por curso:', response.statusText)
         }
@@ -176,17 +181,25 @@ async function carregarAlunosPorCurso() {
     }
 }
 
+function gerarCores(quantidade) {
+    const cores = [];
+    for (let i = 0; i < quantidade; i++) {
+        cores.push(`hsl(${Math.floor(Math.random() * 360)}, 100%, 75%)`);
+    }
+    return cores;
+}
+
 function gerarGraficos(sexoData, etniaData) {
     const ctxSexo = document.getElementById('distribuicaoPorSexo').getContext('2d')
     new Chart(ctxSexo, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: Object.keys(sexoData),
             datasets: [{
                 label: 'Distribuição por Sexo',
                 data: Object.values(sexoData),
-                backgroundColor: ['rgba(255, 105, 180, 0.8)', 'rgba(0, 123, 255, 0.8)'],
-                borderColor: ['rgba(255, 105, 180, 1)', 'rgba(0, 123, 255, 1)'],
+                backgroundColor: ['#36A2EB', '#FF6384','#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                hoverBackgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
                 borderWidth: 2,
             }]
         },
@@ -217,20 +230,8 @@ function gerarGraficos(sexoData, etniaData) {
             datasets: [{
                 label: 'Distribuição por Etnia',
                 data: Object.values(etniaData),
-                backgroundColor: [
-                    'rgba(0, 0, 200, 0.8)',    
-                    'rgba(255, 105, 180, 0.8)', 
-                    'rgba(255, 223, 0, 0.8)',   
-                    'rgba(0, 128, 0, 0.8)',     
-                    'rgba(139, 69, 19, 0.8)'    
-                ],
-                borderColor: [
-                    'rgba(0, 0, 128, 1)',    
-                    'rgba(255, 105, 180, 1)', 
-                    'rgba(255, 223, 0, 1)',   
-                    'rgba(0, 128, 0, 1)',     
-                    'rgba(139, 69, 19, 1)'    
-                ],
+                backgroundColor: ['#36A2EB', '#FF6384','#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                hoverBackgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
                 borderWidth: 2,
             }]
         },
