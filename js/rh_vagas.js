@@ -36,7 +36,6 @@ async function exibirAlunosPorCurso() {
         return; // Sai da função
     }
 
-    // Lógica para exibir alunos do curso selecionado
     try {
         const response = await fetch(`http://localhost:8080/pontuacoes/alunos`);
         const data = await response.json();
@@ -62,6 +61,9 @@ async function exibirAlunosPorCurso() {
                 <div id="bloco_alunos_${cursoId}" class="bloco_alunos">
                     <!-- Alunos serão adicionados aqui -->
                 </div>
+                <div id="mensagem_${cursoId}" class="mensagem" style="display: none;">
+                    Nenhum aluno disponível no curso "${curso.nomeCurso}".
+                </div>
             </div>
         `;
 
@@ -72,34 +74,55 @@ async function exibirAlunosPorCurso() {
         const interessadosData = await interessadosResponse.json();
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
 
+        // Buscar a lista de alunos no processo seletivo
+        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
+        const processoSeletivoData = await processoSeletivoResponse.json();
+        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
+
+        // Buscar a lista de contratados
+        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
+        const contratadosData = await contratadosResponse.json();
+        const contratadosSet = new Set(contratadosData.map(aluno => aluno.id));
+
         const alunos = curso.ranking || []; // Pega os alunos do curso
         const blocoAlunos = document.getElementById(`bloco_alunos_${cursoId}`);
+        const mensagemDiv = document.getElementById(`mensagem_${cursoId}`);
 
         if (!blocoAlunos) {
             console.error(`Bloco de alunos para o curso ${cursoId} não encontrado.`);
             return;
         }
 
-        // Filtrar alunos que não estão na lista de interessados
-        const alunosFiltrados = alunos.filter(aluno => !interessadosSet.has(aluno.aluno.id));
+        // Filtrar alunos que não estão na lista de interessados, no processo seletivo ou contratados
+        const alunosFiltrados = alunos.filter(aluno =>
+            !interessadosSet.has(aluno.aluno.id) &&
+            !processoSeletivoSet.has(aluno.aluno.id) &&
+            !contratadosSet.has(aluno.aluno.id)
+        );
 
-        alunosFiltrados.forEach(aluno => {
-            const alunoDiv = document.createElement('div');
-            alunoDiv.className = 'box_Aluno';
+        // Verifica se há alunos filtrados
+        if (alunosFiltrados.length === 0) {
+            mensagemDiv.style.display = 'block'; // Mostra a mensagem se não houver alunos
+        } else {
+            mensagemDiv.style.display = 'none'; // Esconde a mensagem se houver alunos
+            alunosFiltrados.forEach(aluno => {
+                const alunoDiv = document.createElement('div');
+                alunoDiv.className = 'box_Aluno';
 
-            const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                    'bronze_medal.png';
+                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
+                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
+                        'bronze_medal.png';
 
-            alunoDiv.innerHTML = `
-                <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
-                <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
-                <img src="../imgs/${medalha}" alt="medalha">
-                <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
-            `;
+                alunoDiv.innerHTML = `
+                    <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
+                    <span>Aluno do projeto arrastão, finalizou curso <a href="#">${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
+                    <img src="../imgs/${medalha}" alt="medalha">
+                    <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
+                `;
 
-            blocoAlunos.appendChild(alunoDiv);
-        });
+                blocoAlunos.appendChild(alunoDiv);
+            });
+        }
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
@@ -110,9 +133,20 @@ async function atualizarAlunos() {
     try {
         const idUsuarioLogado = getIdUsuarioLogado();
 
+        // Busca os interessados
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
         const idsInteressados = interessadosData.map(aluno => aluno.id);
+
+        // Busca os alunos no processo seletivo
+        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/processoSeletivo`);
+        const processoSeletivoData = await processoSeletivoResponse.json();
+        const idsProcessoSeletivo = processoSeletivoData.map(aluno => aluno.id);
+
+        // Busca os alunos contratados
+        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/contratados`);
+        const contratadosData = await contratadosResponse.json();
+        const idsContratados = contratadosData.map(aluno => aluno.id);
 
         // Busca os cursos e alunos
         const cursosResponse = await fetch('http://localhost:8080/pontuacoes/alunos');
@@ -165,7 +199,10 @@ async function atualizarAlunos() {
             let alunosParaExibir = [];
 
             for (const aluno of alunos) {
-                if (!idsInteressados.includes(aluno.aluno.id)) {
+                // Filtrar alunos que não estão interessados, no processo seletivo ou contratados
+                if (!idsInteressados.includes(aluno.aluno.id) &&
+                    !idsProcessoSeletivo.includes(aluno.aluno.id) &&
+                    !idsContratados.includes(aluno.aluno.id)) {
                     alunosParaExibir.push(aluno);
                 }
             }
@@ -192,6 +229,7 @@ async function atualizarAlunos() {
                     }
                 }
 
+                // Se nenhum aluno foi exibido, mostra a mensagem
                 if (alunosExibidos.length === 0) {
                     const mensagem = document.createElement('div');
                     mensagem.className = 'mensagem_no_alunos';
@@ -199,9 +237,10 @@ async function atualizarAlunos() {
                     blocoAlunos.appendChild(mensagem);
                 }
             } else {
+                // Se não houver alunos para exibir
                 const mensagem = document.createElement('div');
                 mensagem.className = 'mensagem_no_alunos';
-                mensagem.innerText = 'Todos os alunos desse curso já foram visualizados.';
+                mensagem.innerText = 'Nenhum aluno disponível para este curso.';
                 blocoAlunos.appendChild(mensagem);
             }
 
@@ -475,14 +514,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             municipioSelect.appendChild(option);
         });
 
-        // Adicionando o listener de mudança ao select
         municipioSelect.addEventListener('change', async function () {
             const cidadeSelecionada = this.value;
 
             if (cidadeSelecionada === 'opc_municipio') {
-                await atualizarAlunos(); // Chama a função atualizarAlunos quando 'opc_municipio' é selecionado
+                await atualizarAlunos(); 
             } else {
-                await exibirAlunosPorCidade(cidadeSelecionada); // Chama a função para exibir alunos por cidade selecionada
+                await exibirAlunosPorCidade(cidadeSelecionada);
             }
         });
 
@@ -492,119 +530,111 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function exibirAlunosPorCidade(cidadeSelecionada) {
-    console.log('Cidade selecionada:', cidadeSelecionada); // Verifique se está sendo chamada corretamente
-
+    console.log('Cidade selecionada:', cidadeSelecionada); 
     try {
-        const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
-        const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData); // Verifique a resposta
+        // Faz as requisições necessárias
+        const [pontuacoesResponse, usuariosResponse, interessadosResponse, contratadosResponse, processoSeletivoResponse] = await Promise.all([
+            fetch(`http://localhost:8080/pontuacoes/ranking`),
+            fetch('http://localhost:8080/usuarios/listar'),
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`),
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`), // Exemplo de endpoint para contratados
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`) // Exemplo de endpoint para processo seletivo
+        ]);
 
-        const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
-        const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData); // Verifique a resposta
+        const [pontuacoesData, usuariosData, interessadosData, contratadosData, processoSeletivoData] = await Promise.all([
+            pontuacoesResponse.json(),
+            usuariosResponse.json(),
+            interessadosResponse.json(),
+            contratadosResponse.json(),
+            processoSeletivoResponse.json()
+        ]);
 
-        const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
-        const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData); // Verifique a resposta
+        console.log('Dados de pontuações:', pontuacoesData);
+        console.log('Dados de usuários:', usuariosData);
+        console.log('Dados de interessados:', interessadosData);
+        console.log('Dados de contratados:', contratadosData);
+        console.log('Dados de processo seletivo:', processoSeletivoData);
 
         const containerCursos = document.getElementById('cursos_container');
         containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
 
-        const alunosNaCidade = []; // Array para armazenar alunos filtrados 
-
-        // Mapeia usuários para facilitar a busca por cidade
-        const usuariosMap = {};
-        usuariosData.forEach(usuario => {
+        // Cria um mapa de usuários para fácil acesso
+        const usuariosMap = usuariosData.reduce((map, usuario) => {
             if (usuario.tipoUsuario === "Aluno" && usuario.endereco) {
-                usuariosMap[usuario.id] = {
+                map[usuario.id] = {
                     cidade: usuario.endereco.cidade,
                     nome: `${usuario.primeiroNome} ${usuario.sobrenome}`
-                }; // Mapeia o ID do aluno para a cidade e nome
+                };
             }
-        });
+            return map;
+        }, {});
 
-        // Converte a lista de interessados para um Set para facilitar a busca
-        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id)); // Aqui usamos o id correto
+        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id)); // Converte lista de interessados em Set
+        const contratadosSet = new Set(contratadosData.map(contratado => contratado.id)); // Converte lista de contratados em Set
+        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id)); // Converte lista de alunos em processo seletivo em Set
 
-        // Itera sobre os dados de pontuação para filtrar os alunos pela cidade
-        for (const cursoId in pontuacoesData) {
-            const curso = pontuacoesData[cursoId];
-            const alunos = curso.ranking || [];
-
-            // Filtra alunos que estão na cidade selecionada e que não estão na lista de interessados
-            const alunosFiltrados = alunos.filter(aluno => {
-                const cidadeDoAluno = usuariosMap[aluno.aluno.id]?.cidade;
+        // Filtra e agrupa alunos por curso
+        const alunosPorCurso = Object.entries(pontuacoesData).reduce((acc, [cursoId, curso]) => {
+            const alunosFiltrados = curso.ranking?.filter(aluno => {
                 const alunoId = aluno.aluno.id;
-                console.log('Verificando aluno:', alunoId, 'na cidade:', cidadeDoAluno); // Verificação
+                const cidadeDoAluno = usuariosMap[alunoId]?.cidade;
 
                 return cidadeDoAluno &&
                     cidadeDoAluno.toLowerCase() === cidadeSelecionada.toLowerCase().replace(/_/g, ' ') &&
-                    !interessadosSet.has(alunoId); // Verifica se o aluno não está na lista de interessados
-            });
+                    !interessadosSet.has(alunoId) && // Verifica se o aluno não está na lista de interessados
+                    !contratadosSet.has(alunoId) && // Verifica se o aluno não está na lista de contratados
+                    !processoSeletivoSet.has(alunoId); // Verifica se o aluno não está na lista de processo seletivo
+            }) || [];
 
             if (alunosFiltrados.length > 0) {
-                alunosNaCidade.push(...alunosFiltrados.map(aluno => ({ ...aluno, curso: curso.nomeCurso })));
+                acc[curso.nomeCurso] = acc[curso.nomeCurso] || [];
+                acc[curso.nomeCurso].push(...alunosFiltrados);
             }
-        }
+            return acc;
+        }, {});
 
-        if (alunosNaCidade.length === 0) {
+        if (Object.keys(alunosPorCurso).length === 0) {
             console.log(`Nenhum aluno encontrado na cidade ${cidadeSelecionada}.`);
             return;
         }
 
-        // Agrupa alunos por curso
-        const alunosPorCurso = alunosNaCidade.reduce((acc, aluno) => {
-            acc[aluno.curso] = acc[aluno.curso] || [];
-            acc[aluno.curso].push(aluno);
-            return acc;
-        }, {});
-
         // Cria elementos para exibir os alunos encontrados
-        const cursos = Object.keys(alunosPorCurso);
-        cursos.forEach((curso, index) => {
+        Object.entries(alunosPorCurso).forEach(([curso, alunos], index) => {
             const cursoDiv = document.createElement('div');
             cursoDiv.innerHTML = `
-                    <div class="container_curso_imagem_nome">
-                        <div class="bloco_nome_imagem_curso">
-                            <h1>${curso}</h1>
-                        </div>
+                <div class="container_curso_imagem_nome">
+                    <div class="bloco_nome_imagem_curso">
+                        <h1>${curso}</h1>
                     </div>
-                    <div class="container_fundo_aluno">
-                        <div id="bloco_alunos_${curso}" class="bloco_alunos">
-                            <!-- Alunos serão adicionados aqui -->
-                        </div>
-                    </div>
-                `;
-
+                </div>
+                <div class="container_fundo_aluno">
+                    <div id="bloco_alunos_${curso}" class="bloco_alunos"></div>
+                </div>
+            `;
             containerCursos.appendChild(cursoDiv);
 
             const blocoAlunos = document.getElementById(`bloco_alunos_${curso}`);
+            alunos.forEach(aluno => {
+                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
+                                aluno.pontosTotais > 500 ? 'silver_medal.png' :
+                                'bronze_medal.png';
 
-            alunosPorCurso[curso].forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
-
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                        'bronze_medal.png';
-
                 alunoDiv.innerHTML = `
-                        <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
-                        <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
-                        <img src="../imgs/${medalha}" alt="medalha">
-                        <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
-                    `;
-
+                    <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
+                    <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
+                    <img src="../imgs/${medalha}" alt="medalha">
+                    <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
+                `;
                 blocoAlunos.appendChild(alunoDiv);
             });
 
             // Adiciona a div de espaçamento após cada curso, exceto o último
-            if (index < cursos.length - 1) {
+            if (index < Object.keys(alunosPorCurso).length - 1) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
-                espacoDiv.innerHTML = `
-                        <div class="bloco_espacamento"></div>
-                    `;
+                espacoDiv.innerHTML = `<div class="bloco_espacamento"></div>`;
                 containerCursos.appendChild(espacoDiv);
             }
         });
@@ -659,51 +689,67 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
     console.log('Escolaridade selecionada:', escolaridadeSelecionada); // Verifique se está sendo chamada corretamente
 
     try {
+        // Limpa o container de cursos e mensagens antes de carregar novos dados
+        const containerCursos = document.getElementById('cursos_container');
+        
+        // Remove todos os filhos do container, incluindo mensagens e blocos de alunos
+        while (containerCursos.firstChild) {
+            containerCursos.removeChild(containerCursos.firstChild);
+        }
+
+        // Redefine o estilo do contêiner para o estado padrão
+        containerCursos.style.display = 'block'; // Define o display como block
+        containerCursos.style.justifyContent = ''; // Limpa o alinhamento
+        containerCursos.style.alignItems = ''; // Limpa o alinhamento
+        containerCursos.style.height = ''; // Limpa a altura
+
+        // Realizando os fetchs para obter os dados necessários
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData); // Verifique a resposta
 
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData); // Verifique a resposta
+
+        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
+        const contratadosData = await contratadosResponse.json();
 
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData); // Verifique a resposta
 
-        const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
+        const processoSeletivoData = await processoSeletivoResponse.json();
 
-        const alunosComEscolaridade = []; // Array para armazenar alunos filtrados por escolaridade
+        // Convertendo dados em Sets para melhorar a eficiência nas comparações
+        const contratadosSet = new Set(contratadosData.map(aluno => aluno.id));
+        const interessadosSet = new Set(interessadosData.map(aluno => aluno.id));
+        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
-        // Mapeia usuários para facilitar a busca por escolaridade
+        // Criando um map para os dados de usuários com base na escolaridade
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno" && usuario.escolaridade) {
                 usuariosMap[usuario.id] = {
                     escolaridade: usuario.escolaridade,
                     nome: `${usuario.primeiroNome} ${usuario.sobrenome}`
-                }; // Mapeia o ID do aluno para a escolaridade e nome
+                };
             }
         });
 
-        // Converte a lista de interessados para um Set para facilitar a busca
-        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id)); // Aqui usamos o id correto
+        const alunosComEscolaridade = [];
 
-        // Itera sobre os dados de pontuação para filtrar os alunos pela escolaridade
+        // Itera sobre os dados de pontuação e filtra alunos
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
 
-            // Filtra alunos que possuem a escolaridade selecionada e que não estão na lista de interessados
             const alunosFiltrados = alunos.filter(aluno => {
-                const escolaridadeDoAluno = usuariosMap[aluno.aluno.id]?.escolaridade;
                 const alunoId = aluno.aluno.id;
-                console.log('Verificando aluno:', alunoId, 'com escolaridade:', escolaridadeDoAluno); // Verificação
+                const escolaridadeDoAluno = usuariosMap[alunoId]?.escolaridade?.toLowerCase().replace(/\s+/g, '_');
 
-                return escolaridadeDoAluno &&
-                    escolaridadeDoAluno.toLowerCase().replace(/\s+/g, '_') === escolaridadeSelecionada.toLowerCase() &&
-                    !interessadosSet.has(alunoId); // Verifica se o aluno não está na lista de interessados
+                return escolaridadeDoAluno === escolaridadeSelecionada.toLowerCase().replace(/\s+/g, '_') &&
+                    !contratadosSet.has(alunoId) &&
+                    !interessadosSet.has(alunoId) &&
+                    !processoSeletivoSet.has(alunoId);
             });
 
             if (alunosFiltrados.length > 0) {
@@ -711,19 +757,36 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
             }
         }
 
+        // Mensagem se nenhum aluno for encontrado com a escolaridade selecionada
         if (alunosComEscolaridade.length === 0) {
+            const noResultsMessage = document.createElement('div');
+            noResultsMessage.innerText = `Nenhum aluno encontrado com a escolaridade ${escolaridadeSelecionada}.`;
+            noResultsMessage.className = 'mensagem_nenhum_aluno';
+            noResultsMessage.style.textAlign = 'center'; // Centraliza o texto
+            noResultsMessage.style.margin = '20px 0'; // Adiciona margens verticais
+            noResultsMessage.style.fontWeight = '800';
+            noResultsMessage.style.fontSize = '20px';
+            noResultsMessage.style.color = '#808080';
+
+            // Define estilos para centralizar a mensagem no contêiner
+            containerCursos.style.display = 'flex'; // Define o display como flex
+            containerCursos.style.justifyContent = 'center'; // Centraliza horizontalmente
+            containerCursos.style.alignItems = 'center'; // Centraliza verticalmente
+            containerCursos.style.height = '20vh'; // Define altura total do viewport
+
+            containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado com a escolaridade ${escolaridadeSelecionada}.`);
             return;
         }
 
-        // Agrupa alunos por curso
+        // Aqui você pode continuar a lógica para exibir alunos como desejado
+        // Agrupa os alunos por curso e exibe eles...
         const alunosPorCurso = alunosComEscolaridade.reduce((acc, aluno) => {
             acc[aluno.curso] = acc[aluno.curso] || [];
             acc[aluno.curso].push(aluno);
             return acc;
         }, {});
 
-        // Cria elementos para exibir os alunos encontrados
         const cursos = Object.keys(alunosPorCurso);
         cursos.forEach((curso, index) => {
             const cursoDiv = document.createElement('div');
@@ -739,7 +802,6 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
                     </div>
                 </div>
             `;
-
             containerCursos.appendChild(cursoDiv);
 
             const blocoAlunos = document.getElementById(`bloco_alunos_${curso}`);
@@ -748,6 +810,7 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
 
+                // Determina a medalha com base nos pontos
                 const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
                     aluno.pontosTotais > 500 ? 'silver_medal.png' :
                         'bronze_medal.png';
@@ -762,7 +825,7 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
                 blocoAlunos.appendChild(alunoDiv);
             });
 
-            // Adiciona a div de espaçamento após cada curso, exceto o último
+            // Adiciona espaçamento entre os cursos
             if (index < cursos.length - 1) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
@@ -774,7 +837,7 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
         });
 
     } catch (error) {
-        console.error('Erro ao carregar os dados dos alunos:', error);
+        console.error('Erro ao buscar ou exibir alunos por escolaridade:', error);
     }
 }
 
@@ -804,6 +867,14 @@ async function exibirAlunosPorNome(nomeBuscado) {
         const interessadosData = await interessadosResponse.json();
         console.log('Dados de interessados:', interessadosData); // Verifique a resposta
 
+        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
+        const contratadosData = await contratadosResponse.json();
+        console.log('Dados de contratados:', contratadosData); // Verifique a resposta
+
+        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
+        const processoSeletivoData = await processoSeletivoResponse.json();
+        console.log('Dados de processo seletivo:', processoSeletivoData); // Verifique a resposta
+
         const containerCursos = document.getElementById('cursos_container');
         containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
 
@@ -821,15 +892,17 @@ async function exibirAlunosPorNome(nomeBuscado) {
             }
         });
 
-        // Converte a lista de interessados para um Set para facilitar a busca
-        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id)); // Aqui usamos o id correto
+        // Converte as listas de interessados, contratados e processo seletivo para um Set para facilitar a busca
+        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
+        const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
+        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
         // Itera sobre os dados de pontuação para filtrar os alunos pelo nome
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
 
-            // Filtra alunos que correspondem ao nome buscado e que não estão na lista de interessados
+            // Filtra alunos que correspondem ao nome buscado e que não estão nas listas de interessados, contratados e processo seletivo
             const alunosFiltradosPorNome = alunos.filter(aluno => {
                 const alunoNome = usuariosMap[aluno.aluno.id]?.nome;
                 const alunoId = aluno.aluno.id;
@@ -837,7 +910,9 @@ async function exibirAlunosPorNome(nomeBuscado) {
                 console.log('Verificando aluno:', alunoId, 'com nome:', alunoNome); // Verificação
 
                 return nomeCompleto.toLowerCase().includes(nomeBuscado.toLowerCase()) &&
-                    !interessadosSet.has(alunoId); // Verifica se o aluno não está na lista de interessados
+                    !interessadosSet.has(alunoId) && // Verifica se o aluno não está na lista de interessados
+                    !contratadosSet.has(alunoId) && // Verifica se o aluno não está na lista de contratados
+                    !processoSeletivoSet.has(alunoId); // Verifica se o aluno não está na lista de processo seletivo
             });
 
             if (alunosFiltradosPorNome.length > 0) {
@@ -918,8 +993,8 @@ async function exibirAlunosPorNome(nomeBuscado) {
 
 async function exibirAlunosPorEtnia(etniaSelecionada) {
     if (etniaSelecionada === "") {
-        atualizarAlunos(); 
-        return; 
+        atualizarAlunos();
+        return;
     }
 
     console.log('Etnia selecionada:', etniaSelecionada); // Verifique se está sendo chamada corretamente
@@ -933,12 +1008,23 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
         const usuariosData = await usuariosResponse.json();
         console.log('Dados de usuários:', usuariosData); // Verifique a resposta
 
+        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
+        const contratadosData = await contratadosResponse.json();
+        console.log('Dados de contratados:', contratadosData); // Verifique a resposta
+
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
         console.log('Dados de interessados:', interessadosData); // Verifique a resposta
 
+        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
+        const processoSeletivoData = await processoSeletivoResponse.json();
+        console.log('Dados de processo seletivo:', processoSeletivoData); // Verifique a resposta
+
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+        
+        // Limpa o container e restaura os estilos
+        containerCursos.innerHTML = ''; // Limpa o conteúdo
+        containerCursos.removeAttribute('style'); // Remove os estilos inline anteriores
 
         const alunosComEtnia = []; // Array para armazenar alunos filtrados por etnia
 
@@ -953,22 +1039,28 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             }
         });
 
-        // Converte a lista de interessados para um Set para facilitar a busca
-        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id)); // Aqui usamos o id correto
+        // Converte a lista de interessados, contratados e processo seletivo para um Set para facilitar a busca
+        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
+        const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
+        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
         // Itera sobre os dados de pontuação para filtrar os alunos pela etnia
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
 
-            // Filtra alunos que possuem a etnia selecionada e que não estão na lista de interessados
+            // Filtra alunos que possuem a etnia selecionada e que não estão nas listas de interessados, contratados e processo seletivo
             const alunosFiltrados = alunos.filter(aluno => {
-                const alunoId = aluno.aluno.id;
-                const etniaDoAluno = usuariosMap[alunoId]?.etnia;
-                
+                const alunoId = aluno.aluno.id; // Obtém o ID do aluno
+                const etniaDoAluno = usuariosMap[alunoId]?.etnia; // Verifica a etnia
+
                 console.log(`Verificando aluno ID ${alunoId}: Etnia - ${etniaDoAluno}`);
 
-                return etniaDoAluno === etniaSelecionada && !interessadosSet.has(alunoId); // Filtra pela etnia
+                // Condição para verificar se o aluno não é um interessado, já foi contratado ou está em processo seletivo
+                return etniaDoAluno === etniaSelecionada &&
+                    !interessadosSet.has(alunoId) &&
+                    !contratadosSet.has(alunoId) &&
+                    !processoSeletivoSet.has(alunoId);
             });
 
             if (alunosFiltrados.length > 0) {
@@ -976,7 +1068,24 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             }
         }
 
+        // Mensagem se nenhum aluno for encontrado com a etnia selecionada
         if (alunosComEtnia.length === 0) {
+            const noResultsMessage = document.createElement('div');
+            noResultsMessage.innerText = `Nenhum aluno encontrado com a etnia ${etniaSelecionada}.`;
+            noResultsMessage.className = 'mensagem_nenhum_aluno';
+            noResultsMessage.style.textAlign = 'center'; // Centraliza o texto
+            noResultsMessage.style.margin = '20px 0'; // Adiciona margens verticais
+            noResultsMessage.style.fontWeight = 800;
+            noResultsMessage.style.fontSize = '20px';
+            noResultsMessage.style.color = '#808080';
+
+            // Define estilos para centralizar a mensagem no contêiner
+            containerCursos.style.display = 'flex'; // Define o display como flex
+            containerCursos.style.justifyContent = 'center'; // Centraliza horizontalmente
+            containerCursos.style.alignItems = 'center'; // Centraliza verticalmente
+            containerCursos.style.height = '20vh'; // Define altura total do viewport
+
+            containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado com a etnia ${etniaSelecionada}.`);
             return;
         }
@@ -1044,31 +1153,44 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
 }
 
 async function exibirAlunosPorSexo(sexoSelecionado) {
-    // Verifica se a opção selecionada é a opção "Sexo" (valor vazio)
     if (sexoSelecionado === "") {
-        atualizarAlunos(); // Chama o método pronto para atualizar os alunos
-        return; // Interrompe a execução desta função
+        atualizarAlunos();
+        return;
     }
 
-    console.log('Sexo selecionado:', sexoSelecionado); // Verifique se está sendo chamada corretamente
+    console.log('Sexo selecionado:', sexoSelecionado);
 
     try {
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData); // Verifique a resposta
+        console.log('Dados de pontuações:', pontuacoesData);
 
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData); // Verifique a resposta
+        console.log('Dados de usuários:', usuariosData);
 
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData); // Verifique a resposta
+        console.log('Dados de interessados:', interessadosData);
+
+        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
+        const contratadosData = await contratadosResponse.json();
+        console.log('Dados de contratados:', contratadosData);
+
+        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
+        const processoSeletivoData = await processoSeletivoResponse.json();
+        console.log('Dados de processo seletivo:', processoSeletivoData);
 
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+        
+        // Limpa o conteúdo e redefine os estilos do contêiner antes de adicionar novos elementos
+        containerCursos.innerHTML = '';
+        containerCursos.style.display = '';  // Remove o display: flex; aplicado anteriormente
+        containerCursos.style.justifyContent = '';  // Remove a centralização horizontal
+        containerCursos.style.alignItems = '';  // Remove a centralização vertical
+        containerCursos.style.height = '';  // Remove a altura definida anteriormente
 
-        const alunosComSexo = []; // Array para armazenar alunos filtrados por sexo
+        const alunosComSexo = [];
 
         // Mapeia usuários para facilitar a busca por sexo
         const usuariosMap = {};
@@ -1077,27 +1199,30 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
                 usuariosMap[usuario.id] = {
                     sexo: usuario.sexo,
                     nome: `${usuario.primeiroNome} ${usuario.sobrenome}`
-                }; // Mapeia o ID do aluno para o sexo e nome
+                };
             }
         });
 
-        // Converte a lista de interessados para um Set para facilitar a busca
+        // Cria conjuntos para os alunos que não devem aparecer
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
+        const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
+        const processoSeletivoSet = new Set(processoSeletivoData.map(processo => processo.id));
 
         // Itera sobre os dados de pontuação para filtrar os alunos pelo sexo
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
 
-            // Filtra alunos que possuem o sexo selecionado e que não estão na lista de interessados
+            // Filtra alunos que possuem o sexo selecionado e que não estão na lista de interessados, contratados ou processo seletivo
             const alunosFiltrados = alunos.filter(aluno => {
                 const sexoDoAluno = usuariosMap[aluno.aluno.id]?.sexo;
                 const alunoId = aluno.aluno.id;
-                console.log('Verificando aluno:', alunoId, 'com sexo:', sexoDoAluno); // Verificação
 
                 return sexoDoAluno &&
                     sexoDoAluno.toLowerCase() === sexoSelecionado.toLowerCase() &&
-                    !interessadosSet.has(alunoId); // Verifica se o aluno não está na lista de interessados
+                    !interessadosSet.has(alunoId) &&
+                    !contratadosSet.has(alunoId) &&
+                    !processoSeletivoSet.has(alunoId);
             });
 
             if (alunosFiltrados.length > 0) {
@@ -1105,7 +1230,24 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
             }
         }
 
+        // Mensagem se nenhum aluno for encontrado com o sexo selecionado
         if (alunosComSexo.length === 0) {
+            const noResultsMessage = document.createElement('div');
+            noResultsMessage.innerText = `Nenhum aluno encontrado com o sexo ${sexoSelecionado}.`;
+            noResultsMessage.className = 'mensagem_nenhum_aluno';
+            noResultsMessage.style.textAlign = 'center'; // Centraliza o texto
+            noResultsMessage.style.margin = '20px 0'; // Adiciona margens verticais
+            noResultsMessage.style.fontWeight = 800;
+            noResultsMessage.style.fontSize = '20px';
+            noResultsMessage.style.color = '#808080';
+
+            // Define estilos para centralizar a mensagem no contêiner
+            containerCursos.style.display = 'flex'; // Define o display como flex
+            containerCursos.style.justifyContent = 'center'; // Centraliza horizontalmente
+            containerCursos.style.alignItems = 'center'; // Centraliza verticalmente
+            containerCursos.style.height = '20vh'; // Define altura para ajustar a mensagem no centro
+
+            containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado com o sexo ${sexoSelecionado}.`);
             return;
         }
