@@ -6,6 +6,26 @@ document.addEventListener('DOMContentLoaded', async function () {
     cursosSelect.addEventListener('change', exibirAlunosPorCurso);
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Coloca o código aqui dentro para garantir que o DOM esteja carregado
+    document.querySelectorAll('.blocos_selecao select').forEach(select => {
+        select.addEventListener('change', function() {
+            clearOtherSelects(this); // Limpa os outros selects ao selecionar uma opção
+        });
+    });
+});
+
+function clearOtherSelects(currentSelect) {
+    const selects = document.querySelectorAll('.blocos_selecao select');
+
+    selects.forEach(select => {
+        if (select !== currentSelect) {
+            select.selectedIndex = 0; // Reseta o select para a primeira opção
+        }
+    });
+}
+
+
 async function carregarCursos() {
     try {
         const response = await fetch('http://localhost:8080/pontuacoes/ranking');
