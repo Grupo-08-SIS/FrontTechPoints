@@ -42,18 +42,15 @@ async function salvarMudancas(event) {
         });
 
         if (response.ok) {
-            // Atualização bem-sucedida
             showAlert('Informações atualizadas com sucesso! Você será redirecionado para a tela de login.', 'success');
             setTimeout(() => {
-                window.location.href = 'login.html'; // Redireciona para a página de login
-            }, 3000); // Aguarda 3 segundos antes de redirecionar
+                window.location.href = 'login.html'; 
+            }, 3000); 
         } else {
-            // Se a resposta não for OK, exibe uma mensagem de erro
             const error = await response.json();
             showAlert(`Erro: ${error.message || 'Não foi possível atualizar as informações.'}`, 'error');
         }
     } catch (error) {
-        // Lida com erros de rede ou outros erros
         showAlert(`Erro: ${error.message}`, 'error');
     }
 }
@@ -64,15 +61,12 @@ function showAlert(message, type = 'success') {
     const alertTitle = alertBox.querySelector('.titulo_alerta');
     const alertText = alertBox.querySelector('.texto_alerta');
 
-    // Define o título e o texto do alerta
     alertTitle.textContent = type === 'success' ? 'Sucesso' : 'Erro';
     alertText.textContent = message;
 
-    // Define a classe para o tipo de alerta
     alertBox.className = `container_alerta show ${type}`;
     alertBox.style.display = 'block';
 
-    // Remove o alerta após 3 segundos
     setTimeout(() => {
         alertBox.style.opacity = '0';
         setTimeout(() => {
@@ -107,7 +101,6 @@ async function fazerLogout() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // Recupera o item 'user' do sessionStorage
     const user = JSON.parse(sessionStorage.getItem('user'));
 
     if (!user || !user.id) {
@@ -117,14 +110,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const idUsuario = user.id;
 
-    // Função para listar favoritos
     async function listarFavoritos() {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
             const data = await response.json();
 
             const container = document.querySelector(".bloco_alunos_favoritos");
-            container.innerHTML = ""; // Limpa o conteúdo existente
+            container.innerHTML = ""; 
 
             if (data.length === 0) {
                 const noFavoritesMessage = document.createElement("p");
@@ -133,11 +125,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 container.appendChild(noFavoritesMessage);
             } else {
                 for (const aluno of data) {
-                    // Requisição para buscar todos os pontos totais do aluno
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
 
-                    // Encontrar o curso com a maior pontuação
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
 
@@ -149,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         }
                     }
 
-                    let medalhaTipo = 'bronze_medal'; // Tipo padrão
+                    let medalhaTipo = 'bronze_medal'; 
 
                     if (maxPontos > 600) {
                         medalhaTipo = 'gold_medal';
@@ -181,7 +171,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const data = await response.json();
 
             const container = document.querySelector(".bloco_alunos");
-            container.innerHTML = ""; // Limpa o conteúdo existente
+            container.innerHTML = ""; 
 
             if (data.length === 0) {
                 const noInterestedMessage = document.createElement("p");
@@ -190,11 +180,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 container.appendChild(noInterestedMessage);
             } else {
                 for (const aluno of data) {
-                    // Requisição para buscar todos os pontos totais do aluno
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
 
-                    // Encontrar o curso com a maior pontuação
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
 
@@ -206,7 +194,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         }
                     }
 
-                    let medalhaTipo = 'bronze_medal'; // Tipo padrão
+                    let medalhaTipo = 'bronze_medal';
 
                     if (maxPontos > 600) {
                         medalhaTipo = 'gold_medal';
@@ -242,7 +230,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (response.ok) {
                 console.log(`Aluno com ID ${idAluno} desfavoritado.`);
-                listarFavoritos(); // Atualiza a lista de favoritos
+                listarFavoritos(); 
             } else {
                 console.error('Erro ao desfavoritar o aluno.');
             }
@@ -251,14 +239,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    // Função para formatar a data
     function formatDate(dateString) {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         const date = new Date(dateString);
         return date.toLocaleDateString('pt-BR', options);
     }
 
-    // Chama as funções para listar favoritos e interessados
     listarFavoritos();
     listarInteressados();
 });
@@ -294,9 +280,8 @@ function fecharFormulario() {
 
 let idAlunoSelecionado = null;
 
-// Chama a função listarContratados quando a página é carregada
 window.onload = function () {
-    listarContratados(); // Chama a função para listar alunos contratados
+    listarContratados(); 
 };
 
 function atribuir(idAluno, fromListar = false) {
@@ -315,11 +300,10 @@ function atribuir(idAluno, fromListar = false) {
         }
 
         if (blocoAtribuir) {
-            blocoAtribuir.style.height = "20vh"; // Define a altura apenas se chamado do listarProcessoSeletivo
+            blocoAtribuir.style.height = "20vh";
         }
     }
 
-    // Adiciona eventos aos botões
     const btnContratado = document.querySelector(".btn_contratado");
     btnContratado.onclick = () => contratarAluno(idAlunoSelecionado);
 
@@ -340,12 +324,12 @@ async function contratarAluno(idAlunoSelecionado) {
         });
 
         if (response.ok) {
-            alert("Aluno contratado com sucesso!");
+            showAlert('Aluno contratado com sucesso!', 'success');
             listarContratados();
             fecharAtribuicao();
             setTimeout(() => {
                 location.reload();
-            }, 200);
+            }, 1000);
         } else {
             alert("Erro ao contratar o aluno.");
         }
@@ -423,12 +407,12 @@ async function processoSeletivoAluno(idAluno) {
             method: "POST",
         });
         if (response.ok) {
-            alert("Aluno adicionado ao processo seletivo com sucesso!");
-            await listarProcessoSeletivo(); // Aguarda a lista de alunos ser atualizada
-            fecharAtribuicao(); // Presumindo que você tenha essa função
+            showAlert('Aluno movido para o processo seletivo!', 'success');
+            await listarProcessoSeletivo(); 
+            fecharAtribuicao(); 
             setTimeout(() => {
                 location.reload();
-            }, 200);
+            }, 1000);
         } else {
             alert("Erro ao adicionar o aluno no processo seletivo.");
         }
@@ -513,12 +497,11 @@ async function desinteressarAluno(idAluno) {
             method: "POST",
         });
         if (response.ok) {
-            alert("Interesse cancelado com sucesso!");
-            fecharAtribuicao();
-            fecharAtribuicao(); // Presumindo que você tenha essa função
+            showAlert('Interesse cancelado com sucesso!', 'success');
+            fecharAtribuicao(); 
             setTimeout(() => {
                 location.reload();
-            }, 200);
+            }, 1000);
         } else {
             alert("Erro ao cancelar interesse.");
         }
@@ -530,10 +513,9 @@ async function desinteressarAluno(idAluno) {
 document.addEventListener('DOMContentLoaded', function () {
     const fecharBtn = document.querySelector('.fechar');
 
-    // Verifica se o botão de fechar está corretamente selecionado
     if (fecharBtn) {
         fecharBtn.addEventListener('click', function () {
-            console.log('Fechar botão clicado'); // Para verificar se o evento é acionado
+            console.log('Fechar botão clicado'); 
             document.getElementById('atribuicao').style.display = 'none';
         });
     } else {
