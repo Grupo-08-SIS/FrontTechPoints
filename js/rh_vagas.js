@@ -32,8 +32,7 @@ async function exibirAlunosPorCurso() {
 
     // Se a opção padrão for selecionada, chama atualizarAlunos()
     if (cursoId === 'opc_cursos') {
-        await atualizarAlunos();
-        return; // Sai da função
+        location.reload();
     }
 
     try {
@@ -50,13 +49,8 @@ async function exibirAlunosPorCurso() {
         }
 
         const cursoDiv = document.createElement('div');
-        cursoDiv.innerHTML = `
-            <div class="container_curso_imagem_nome">
-                <div class="bloco_nome_imagem_curso">
-                    <h1 id="nome_curso_${cursoId}">${curso.nomeCurso}</h1>
-                </div>
-            </div>
 
+        cursoDiv.innerHTML = `
             <div class="container_fundo_aluno">
                 <div id="bloco_alunos_${cursoId}" class="bloco_alunos">
                     <!-- Alunos serão adicionados aqui -->
@@ -103,8 +97,34 @@ async function exibirAlunosPorCurso() {
         // Verifica se há alunos filtrados
         if (alunosFiltrados.length === 0) {
             mensagemDiv.style.display = 'block'; // Mostra a mensagem se não houver alunos
+
+            // Define o estilo do container quando não há alunos
+            containerCursos.style.display = 'flex';
+            containerCursos.style.justifyContent = 'center';
+            containerCursos.style.alignItems = 'center';
+            containerCursos.style.height = '20vh'; 
+            containerCursos.style.fontWeight = '800';
+            containerCursos.style.fontSize = '20px';
+            containerCursos.style.color = '#808080';
+             
         } else {
             mensagemDiv.style.display = 'none'; // Esconde a mensagem se houver alunos
+
+            // Adiciona o nome do curso somente se houver alunos
+            const tituloCurso = document.createElement('div');
+            tituloCurso.innerHTML = `
+                <div class="container_curso_imagem_nome">
+                    <div class="bloco_nome_imagem_curso">
+                        <h1 id="nome_curso_${cursoId}">${curso.nomeCurso}</h1>
+                    </div>
+                </div>
+            `;
+            containerCursos.insertBefore(tituloCurso, cursoDiv);
+
+            // Restaura o estilo normal do container
+            containerCursos.style.display = 'block';
+            containerCursos.style.height = 'auto';
+
             alunosFiltrados.forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
@@ -518,7 +538,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const cidadeSelecionada = this.value;
 
             if (cidadeSelecionada === 'opc_municipio') {
-                await atualizarAlunos(); 
+                location.reload();
             } else {
                 await exibirAlunosPorCidade(cidadeSelecionada);
             }
@@ -532,13 +552,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 async function exibirAlunosPorCidade(cidadeSelecionada) {
     console.log('Cidade selecionada:', cidadeSelecionada); 
     try {
-        // Faz as requisições necessárias
         const [pontuacoesResponse, usuariosResponse, interessadosResponse, contratadosResponse, processoSeletivoResponse] = await Promise.all([
             fetch(`http://localhost:8080/pontuacoes/ranking`),
             fetch('http://localhost:8080/usuarios/listar'),
             fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`),
-            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`), // Exemplo de endpoint para contratados
-            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`) // Exemplo de endpoint para processo seletivo
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`),
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`)
         ]);
 
         const [pontuacoesData, usuariosData, interessadosData, contratadosData, processoSeletivoData] = await Promise.all([
@@ -549,16 +568,13 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
             processoSeletivoResponse.json()
         ]);
 
-        console.log('Dados de pontuações:', pontuacoesData);
-        console.log('Dados de usuários:', usuariosData);
-        console.log('Dados de interessados:', interessadosData);
-        console.log('Dados de contratados:', contratadosData);
-        console.log('Dados de processo seletivo:', processoSeletivoData);
-
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+        containerCursos.innerHTML = ''; // Limpa o container
+        containerCursos.style.display = 'block'; // Restaura display padrão
+        containerCursos.style.justifyContent = ''; // Remove alinhamento central
+        containerCursos.style.alignItems = ''; 
+        containerCursos.style.height = ''; // Remove altura fixa
 
-        // Cria um mapa de usuários para fácil acesso
         const usuariosMap = usuariosData.reduce((map, usuario) => {
             if (usuario.tipoUsuario === "Aluno" && usuario.endereco) {
                 map[usuario.id] = {
@@ -569,11 +585,10 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
             return map;
         }, {});
 
-        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id)); // Converte lista de interessados em Set
-        const contratadosSet = new Set(contratadosData.map(contratado => contratado.id)); // Converte lista de contratados em Set
-        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id)); // Converte lista de alunos em processo seletivo em Set
+        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
+        const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
+        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
-        // Filtra e agrupa alunos por curso
         const alunosPorCurso = Object.entries(pontuacoesData).reduce((acc, [cursoId, curso]) => {
             const alunosFiltrados = curso.ranking?.filter(aluno => {
                 const alunoId = aluno.aluno.id;
@@ -581,9 +596,9 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
 
                 return cidadeDoAluno &&
                     cidadeDoAluno.toLowerCase() === cidadeSelecionada.toLowerCase().replace(/_/g, ' ') &&
-                    !interessadosSet.has(alunoId) && // Verifica se o aluno não está na lista de interessados
-                    !contratadosSet.has(alunoId) && // Verifica se o aluno não está na lista de contratados
-                    !processoSeletivoSet.has(alunoId); // Verifica se o aluno não está na lista de processo seletivo
+                    !interessadosSet.has(alunoId) &&
+                    !contratadosSet.has(alunoId) &&
+                    !processoSeletivoSet.has(alunoId);
             }) || [];
 
             if (alunosFiltrados.length > 0) {
@@ -594,11 +609,27 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
         }, {});
 
         if (Object.keys(alunosPorCurso).length === 0) {
+            const noResultsMessage = document.createElement('div');
+            noResultsMessage.innerText = `Nenhum aluno encontrado na cidade ${cidadeSelecionada}.`;
+            noResultsMessage.className = 'mensagem_nenhum_aluno';
+            noResultsMessage.style.textAlign = 'center';
+            noResultsMessage.style.margin = '20px 0';
+            noResultsMessage.style.fontWeight = '800';
+            noResultsMessage.style.fontSize = '20px';
+            noResultsMessage.style.color = '#808080';
+
+            // Define estilos para centralizar a mensagem no contêiner
+            containerCursos.style.display = 'flex';
+            containerCursos.style.justifyContent = 'center';
+            containerCursos.style.alignItems = 'center';
+            containerCursos.style.height = '20vh';
+
+            containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado na cidade ${cidadeSelecionada}.`);
             return;
         }
 
-        // Cria elementos para exibir os alunos encontrados
+        // Exibe os alunos encontrados
         Object.entries(alunosPorCurso).forEach(([curso, alunos], index) => {
             const cursoDiv = document.createElement('div');
             cursoDiv.innerHTML = `
@@ -630,7 +661,6 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
                 blocoAlunos.appendChild(alunoDiv);
             });
 
-            // Adiciona a div de espaçamento após cada curso, exceto o último
             if (index < Object.keys(alunosPorCurso).length - 1) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
@@ -674,7 +704,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const escolaridadeSelecionada = this.value;
 
             if (escolaridadeSelecionada === 'opc_escolaridade') {
-                await atualizarAlunos(); // Lógica adicional, se necessário
+                location.reload();
             } else {
                 await exibirAlunosPorEscolaridade(escolaridadeSelecionada); // Exibe alunos por escolaridade selecionada
             }
@@ -993,8 +1023,7 @@ async function exibirAlunosPorNome(nomeBuscado) {
 
 async function exibirAlunosPorEtnia(etniaSelecionada) {
     if (etniaSelecionada === "") {
-        atualizarAlunos();
-        return;
+        location.reload();
     }
 
     console.log('Etnia selecionada:', etniaSelecionada); // Verifique se está sendo chamada corretamente
@@ -1154,8 +1183,7 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
 
 async function exibirAlunosPorSexo(sexoSelecionado) {
     if (sexoSelecionado === "") {
-        atualizarAlunos();
-        return;
+        location.reload();
     }
 
     console.log('Sexo selecionado:', sexoSelecionado);
