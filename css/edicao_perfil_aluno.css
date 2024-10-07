@@ -16,13 +16,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 2px solid #2b5f9e; /* Adiciona uma borda azul de 2px */
+    border: 2px solid #2b5f9e;
     border-radius: 20px;
 }
+
 a {
-    text-decoration: none; 
-    outline: none; 
+    text-decoration: none;
+    outline: none;
 }
+
 .header-content {
     display: flex;
     justify-content: space-between;
@@ -35,88 +37,87 @@ a {
 .barra_de_pesquisa {
     position: relative;
     display: inline-block;
-    width: 100%; 
+    width: 100%;
     max-width: 500px;
 }
 
 .drop_down {
-    position: relative; /* Define o contêiner pai para o posicionamento absoluto do dropdown */
+    position: relative;
     display: inline-block;
-    background-color: #f9f9f9; /* Cor de fundo */
-    border: 3px solid #000000; /* Borda */
-    border-radius: 10px; /* Bordas arredondadas */
-    padding: 10px; /* Espaçamento interno */
-    cursor: pointer; /* Cursor de mão para indicar interatividade */
-    transition: background-color 0.3s; /* Transição suave para cor de fundo */
-    z-index: 10; /* Garante que o contêiner esteja acima do dropdown */
+    background-color: #f9f9f9;
+    border: 3px solid #000000;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 10;
 }
 
 .container_nome_usuario {
     display: flex;
-    align-items: center; /* Alinha o texto verticalmente ao centro */
+    align-items: center;
     pointer-events: none;
     gap: 10px;
 }
 
 .container_nome_usuario h1 {
-    font-size: 18px; /* Tamanho da fonte */
-    color: #333; /* Cor do texto */
-    margin: 0; /* Remove margens */
-    padding-right: 10px; /* Espaço entre o texto e a imagem */
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+    padding-right: 10px;
 }
 
 .tracos_drop {
-    width: 20px; /* Largura da imagem */
-    height: auto; /* Altura automática para manter a proporção */
+    width: 20px;
+    height: auto;
     pointer-events: none;
 }
 
 .dropdown_content {
-    position: absolute; /* Posiciona o dropdown em relação ao contêiner pai */
-    background-color: #f9f9f9; /* Cor de fundo */
-    border: 3px solid #000000; /* Borda */
-    border-top: none; /* Remove a borda superior */
-    border-radius: 0 0 5px 5px; /* Apenas as bordas inferiores serão arredondadas */
-    padding: 10px; /* Espaçamento interno */
-    margin-top: 8px; /* Espaço entre o dropdown e o conteúdo */
-    width: calc(100%); /* Ajusta a largura do dropdown, subtraindo o padding */
-    max-height: 0; /* Inicialmente com altura 0 */
-    overflow: hidden; /* Esconde o conteúdo que ultrapassa o contêiner */
-    opacity: 0; /* Inicialmente transparente */
-    transition: max-height 0.3s ease, opacity 0.3s ease; /* Transições suaves */
-    z-index: 1; /* Garante que o dropdown fique atrás do contêiner principal */
-    left: 0; /* Alinha o dropdown com o início do contêiner pai */
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 3px solid #000000;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    padding: 10px;
+    margin-top: 8px;
+    width: calc(100%);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    z-index: 1;
+    left: 0;
 }
 
 .dropdown_content a {
-    color: #333; /* Cor do texto */
-    padding: 8px 12px; /* Espaçamento interno */
-    text-decoration: none; /* Remove o sublinhado */
-    display: block; /* Faz o link ocupar a largura toda */
+    color: #333;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
 }
 
 .dropdown_content a:hover {
-    background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+    background-color: #e0e0e0;
 }
 
 .show {
-    max-height: 300px; /* Define a altura máxima do dropdown, ajuste conforme necessário */
-    opacity: 1; /* Torna o conteúdo opaco */
+    max-height: 300px;
+    opacity: 1;
 }
 
-/* Estilo do dropdown */
 .course-select select {
-    background-color: #244AA5; 
-    color: #FFFFFF; 
+    background-color: #244AA5;
+    color: #FFFFFF;
     border: 1px solid #244AA5;
-    border-radius: 20px; 
+    border-radius: 20px;
     padding: 5px 10px;
     font-size: 16px;
-    width: 191px; 
-    height: 40px; 
-    appearance: none; 
+    width: 191px;
+    height: 40px;
+    appearance: none;
     -webkit-appearance: none;
-    -moz-appearance: none; 
+    -moz-appearance: none;
     background-image: url('../imgs/seta\ dropdown\ amarela.png');
     background-repeat: no-repeat;
     background-position: right 10px center;
@@ -153,7 +154,6 @@ a {
     height: 3px;
 }
 
-/* Container principal que centraliza o conteúdo */
 .container_texto_foto_e_data {
     width: 100%;
     height: 7vh;
@@ -163,7 +163,6 @@ a {
     display: flex;
 }
 
-/* Container interno que contém o texto e a foto */
 .container_interno_texto_foto_e_data {
     display: flex;
     background-color: #fabc09;
@@ -174,25 +173,22 @@ a {
     align-items: center;
 }
 
-/* Estilo para o título dentro do container interno */
 .container_interno_texto_foto_e_data h1 {
     font-size: 20px;
     margin: 20px;
     font-weight: 800;
 }
 
-/* Container externo para a foto e os botões */
 .container_fundo_foto_e_data {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    width: 100%; /* Garante que o container ocupe toda a largura disponível */
+    width: 100%;
 }
 
-/* Container interno para a foto e os botões */
 .container_interno_foto_e_data {
     display: flex;
-    flex-direction: row; /* Garante que os itens fiquem lado a lado */
+    flex-direction: row;
     background-color: #1E3A8A;
     padding: 20px;
     border-radius: 8px;
@@ -200,37 +196,33 @@ a {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Container para a foto e botões */
 .container_foto_e_botoes {
     display: flex;
     align-items: center;
-    width: 50vh; /* Certifique-se de que isso seja adequado */
+    width: 50vh;
 }
 
-/* Container específico para a foto */
 .container_foto {
     flex: 1;
-    display: flex; /* Adiciona flexbox para centrar a imagem */
-    justify-content: center; /* Centraliza a imagem horizontalmente */
-    align-items: center; /* Centraliza a imagem verticalmente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container_foto img {
-    max-width: 100%; /* Garante que a imagem não exceda o container */
+    max-width: 100%;
     width: 40vh;
-    height: 40vh; /* Mantém a proporção original da imagem */
+    height: 40vh;
     border-radius: 100%;
 }
 
-/* Container para o texto e botões ao lado da foto */
 .container_span_e_botoes {
     background-color: #409543;
     height: 100%;
     display: flex;
-    flex-direction: column; /* Organiza os itens verticalmente */
+    flex-direction: column;
 }
 
-/* Estilo para o título e dados */
 .bloco_de_titulo_foto_e_data h1 {
     text-align: center;
     color: #ffffff;
@@ -259,79 +251,71 @@ a {
     justify-content: space-between;
 }
 
-/* Container para o texto e os botões ao lado da foto */
 .container_span_e_botoes {
     display: flex;
-    flex-direction: column; /* Organiza os itens verticalmente */
-    align-items: flex-start; /* Alinha os itens ao início do container */
-    background-color: #244aa5; /* Cor de fundo do container */
-    padding: 20px; /* Espaçamento interno */
-    border-radius: 8px; /* Bordas arredondadas */
-    flex: 1; /* Faz com que o container ocupe o espaço restante */
-    gap: 20px; /* Espaçamento entre os blocos internos */
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #244aa5;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1;
+    gap: 20px;
 }
 
-/* Estilo para o bloco de texto com informações do usuário */
 .blco_span {
-    color: #ffffff; /* Cor do texto */
-    font-size: 16px; /* Tamanho da fonte */
+    color: #ffffff;
+    font-size: 16px;
 }
 
-/* Estilo para os spans dentro do bloco de texto */
 .blco_span span {
-    display: block; /* Exibe cada linha em um bloco separado */
-    margin-bottom: 10px; /* Espaçamento entre linhas */
+    display: block;
+    margin-bottom: 10px;
 }
 
-/* Estilo para o bloco de botões */
 .bloco_botoes {
     display: flex;
-    align-items: center; /* Centraliza os botões horizontalmente */
-    gap: 10px; /* Espaçamento entre os botões */
+    align-items: center;
+    gap: 10px;
 }
 
-/* Estilo para o input file */
 .inputfile {
-    display: none; /* Oculta o input file, mostrado apenas pelo label */
+    display: none;
 }
 
-/* Estilo para o label do input file */
 .upload_label {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #ffffff; /* Cor de fundo do label */
-    color: #244AA5; /* Cor do texto do label */
-    border: 2px solid #fabc09; /* Borda do label */
-    border-radius: 4px; /* Bordas arredondadas */
-    cursor: pointer; /* Aponta que é clicável */
-    font-size: 16px; /* Tamanho da fonte do label */
-    font-weight: 600; /* Peso da fonte do label */
-    text-align: center; /* Centraliza o texto */
-    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
+    background-color: #ffffff;
+    color: #244AA5;
+    border: 2px solid #fabc09;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
-/* Estilo para o botão de upload */
 .upload_button {
     padding: 10px 20px;
-    background-color: #ffffff; /* Cor de fundo do botão */
-    color: #244AA5; /* Cor do texto do botão */
-    border: 2px solid #fabc09; /* Borda do botão */
-    border-radius: 4px; /* Bordas arredondadas */
-    cursor: pointer; /* Aponta que é clicável */
-    font-size: 16px; /* Tamanho da fonte do botão */
-    font-weight: 800; /* Peso da fonte do botão */
-    text-align: center; /* Centraliza o texto */
-    transition: all 0.3s ease; /* Transição suave para todos os efeitos */
+    background-color: #ffffff;
+    color: #244AA5;
+    border: 2px solid #fabc09;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
-/* Efeito de hover para o botão de upload e o label */
 .upload_button:hover,
 .upload_label:hover {
-    background-color: #fabc09; /* Cor de fundo ao passar o mouse */
-    color: #ffffff; /* Cor do texto ao passar o mouse */
-    border-color: #fabc09; /* Cor da borda ao passar o mouse */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
-    transform: translateY(-3px); /* Levanta o botão ao passar o mouse */
+    background-color: #fabc09;
+    color: #ffffff;
+    border-color: #fabc09;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
 }
 
 .container_fundo_editar_informacoes {
@@ -344,10 +328,10 @@ a {
     top: 0;
     left: 0;
     z-index: 999;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
-    backdrop-filter: blur(8px); /* Adiciona o efeito de desfoque */
-    display: none; /* Inicialmente invisível */
-    overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a tela */
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    display: none;
+    overflow-y: auto;
 }
 
 .span_texto_recebido {
@@ -360,15 +344,15 @@ a {
 }
 
 .container_interno_editar_informacoes {
-    position: relative; /* Necessário para o posicionamento do botão de fechar */
+    position: relative;
     background-color: #2b5f9e;
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     width: 50%;
     max-width: 800px;
-    max-height: 90vh; /* Limita a altura do contêiner interno */
-    overflow-y: auto; /* Permite rolagem dentro do contêiner interno se necessário */
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .close_button {
@@ -396,7 +380,9 @@ label {
     font-size: 16px;
 }
 
-input[type="text"], input[type="email"], input[type="password"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
@@ -408,7 +394,9 @@ input[type="text"], input[type="email"], input[type="password"] {
     color: #333;
 }
 
-input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
     border-color: #007bff;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -426,13 +414,13 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
     font-size: 18px;
     transition: background-color 0.3s, transform 0.3s;
     display: block;
-    margin: 20px auto 0; /* Centraliza o botão */
+    margin: 20px auto 0;
     text-align: center;
 }
 
 .btn:hover {
     background-color: #d99400;
-    transform: scale(1.05); /* Efeito de "crescimento" ao passar o mouse */
+    transform: scale(1.05);
     color: white;
 }
 
@@ -445,70 +433,70 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
 }
 
 .container_exclusao {
-    display: flex; /* Ativa o flexbox */
-    flex-direction: column; /* Organiza itens em coluna */
-    gap: 15px; /* Espaçamento entre os itens */
-    width: 100%; /* Largura total */
-    margin: 20px auto; /* Centraliza horizontalmente */
-    padding: 20px; /* Espaçamento interno */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
     align-items: center;
     height: 20vh;
     justify-content: space-around;
 }
 
 .exclusao_item {
-    display: flex; /* Ativa o flexbox */
-    align-items: center; /* Centraliza verticalmente */
-    gap: 10px; /* Espaçamento entre o botão e o ícone */
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .container_exclusao button {
     width: 35vh;
     height: 5vh;
-    background-color: #ed1b24; /* Cor de fundo */
-    color: #ffffff; /* Cor do texto */
-    border: none; /* Sem borda */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-size: 15px; /* Tamanho da fonte */
-    cursor: pointer; /* Cursor de mãozinha */
-    transition: background-color 0.3s; /* Transição suave */
+    background-color: #ed1b24;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .container_exclusao button:hover {
-    background-color: #c3000a; /* Cor de fundo ao passar o mouse */
+    background-color: #c3000a;
 }
 
 .info_icon {
-    display: flex; /* Ativa o flexbox */
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
-    width: 3vh; /* Largura do ícone */
-    height: 3vh; /* Altura do ícone */
-    border-radius: 50%; /* Bordas arredondadas (círculo) */
-    background-color: #1a3678; /* Cor de fundo do ícone */
-    color: #ffffff; /* Cor do texto do ícone */
-    font-weight: bold; /* Negrito */
-    font-size: 20px; /* Tamanho da fonte */
-    cursor: pointer; /* Cursor de mãozinha */
-    transition: background-color 0.3s; /* Transição suave */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3vh;
+    height: 3vh;
+    border-radius: 50%;
+    background-color: #1a3678;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .info_icon:hover {
-    background-color: #b89a00; /* Cor de fundo ao passar o mouse */
+    background-color: #b89a00;
 }
 
 .container_notificacao_exclusao {
-    position: fixed; /* Mantém o contêiner fixo na tela */
-    background-color: rgba(44, 44, 44, 0.73); /* Cor com opacidade */
+    position: fixed;
+    background-color: rgba(44, 44, 44, 0.73);
     width: 100%;
-    height: 100%; /* Ocupa toda a altura da tela */
-    top: 0; /* Alinha ao topo da tela */
-    left: 0; /* Alinha à esquerda da tela */
-    z-index: 9999; /* Garante que o contêiner esteja acima de outros elementos */
-    display: flex; /* Para centralizar o conteúdo, se necessário */
-    align-items: center; /* Centraliza verticalmente o conteúdo */
-    justify-content: center; /* Centraliza horizontalmente o conteúdo */
-    backdrop-filter: blur(10px); /* Adiciona o efeito de desfoque */
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
 }
 
 .bloco_notificacao_exclusao {
@@ -516,7 +504,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
     width: 33%;
     height: 32vh;
     border-radius: 20px;
-    border: 3px solid #ED1B24; /* Adiciona a borda azul de 3px */
+    border: 3px solid #ED1B24;
 }
 
 .container_notificacao {
@@ -524,107 +512,107 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
     height: 10vh;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o conteúdo principal */
-    position: relative; /* Posicionamento relativo para permitir a posição absoluta da imagem */
+    justify-content: center;
+    position: relative;
     font-size: 30px;
     color: #ED1B24;
     font-weight: 700;
+    font-size: 25px;
 }
 
 .notificacao {
-    flex: 1; /* Permite que o span ocupe o espaço disponível */
-    text-align: center; /* Centraliza o texto */
+    flex: 1;
+    text-align: center;
 }
 
 .imagem_wrapper2 {
     position: absolute;
-    right: 20px; /* Posiciona a imagem à direita */
+    right: 20px;
     display: flex;
-    align-items: center; /* Centraliza a imagem verticalmente */
-    border-radius: 5px; /* Arredonda os cantos */
-    transition: background-color 0.3s ease; /* Transição suave para o fundo */
+    align-items: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .imagem_wrapper2:hover {
-    background-color: rgba(255, 0, 0, 0.3); /* Fundo vermelho suave ao passar o mouse */
+    background-color: rgba(255, 0, 0, 0.3);
 }
 
 .container_notificacao img {
-    height: 30%; /* Ajusta a altura da imagem conforme necessário */
-    cursor: pointer; /* Adiciona um cursor de pointer para indicar que a imagem é clicável */
+    height: 30%;
+    cursor: pointer;
 }
 
 
 .container_mensagem_notificacao {
     width: 70%;
     height: 12vh;
-    display: flex; /* Ativa o flexbox */
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
-    text-align: justify; /* Justifica o texto dentro do span */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
     font-size: 18px;
-    margin: 0 auto; /* Centraliza a div horizontalmente */
+    margin: 0 auto;
     font-weight: 600;
 }
 
 .container_mensagem_notificacao span {
-    width: 100%; /* Garante que o span ocupe toda a largura disponível */
+    width: 100%;
 }
 
 .container_fechamento {
     display: flex;
-    gap: 10px; /* Espaçamento entre os botões */
-    justify-content: center; /* Centraliza os botões horizontalmente */
-    margin-top: 20px; /* Espaçamento superior */
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .botao_cancelar {
     width: 25%;
-    background-color: #f44336; /* Fundo cinza */
-    color: #fff; /* Texto branco */
-    border: none; /* Remove a borda padrão */
-    border-radius: 5px; /* Bordas arredondadas */
-    padding: 10px 20px; /* Espaçamento interno */
-    font-size: 1rem; /* Tamanho da fonte */
-    font-weight: bold; /* Deixa o texto em negrito */
-    cursor: pointer; /* Muda o cursor para pointer ao passar sobre o botão */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave para a cor de fundo e transformação */
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .botao_cancelar:hover {
-    background-color: #a3261d; /* Fundo cinza mais claro ao passar o mouse */
-    transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+    background-color: #a3261d;
+    transform: scale(1.05);
 }
 
 .botao_cancelar:active {
-    background-color: #666666; /* Fundo cinza escuro ao clicar */
-    transform: scale(0.95); /* Diminui ligeiramente o tamanho ao clicar */
+    background-color: #666666;
+    transform: scale(0.95);
 }
 
 .botao_ok {
     width: 25%;
-    background-color: #4CAF50; /* Fundo amarelo */
-    color: #fff; /* Texto branco */
-    border: none; /* Remove a borda padrão */
-    border-radius: 5px; /* Bordas arredondadas */
-    padding: 10px 20px; /* Espaçamento interno */
-    font-size: 1rem; /* Tamanho da fonte */
-    font-weight: bold; /* Deixa o texto em negrito */
-    cursor: pointer; /* Muda o cursor para pointer ao passar sobre o botão */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave para a cor de fundo e transformação */
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .botao_ok:hover {
-    background-color: #409543; /* Fundo amarelo mais claro ao passar o mouse */
-    transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+    background-color: #409543;
+    transform: scale(1.05);
 }
 
 .botao_ok:active {
-    background-color: #FFB300; /* Fundo amarelo escuro ao clicar */
-    transform: scale(0.95); /* Diminui ligeiramente o tamanho ao clicar */
+    background-color: #FFB300;
+    transform: scale(0.95);
 }
 
-/* Footer */
 footer {
     background-color: #fff;
     padding: 20px;
@@ -641,13 +629,13 @@ footer {
     position: relative;
 }
 
-.footer-content > div {
+.footer-content>div {
     flex: 1;
     padding: 10px;
     position: relative;
 }
 
-.footer-content > div:nth-child(1)::after {
+.footer-content>div:nth-child(1)::after {
     content: '';
     position: absolute;
     top: 10%;
@@ -657,7 +645,7 @@ footer {
     background-color: yellow;
 }
 
-.footer-content > div:nth-child(2)::after {
+.footer-content>div:nth-child(2)::after {
     content: '';
     position: absolute;
     top: 10%;
@@ -695,33 +683,32 @@ footer {
     height: 20px;
 }
 
-.gold-medal{
-    width: 35px; 
-    height: 35px; 
+.gold-medal {
+    width: 35px;
+    height: 35px;
 }
 
 .silver-medal {
-    width: 35px; 
-    height: 35px; 
+    width: 35px;
+    height: 35px;
 }
 
 .bronze-medal {
-    width: 35px; 
-    height: 35px; 
+    width: 35px;
+    height: 35px;
 }
 
-/* Estilo dos títulos do footer */
 .contact h3,
 .social-media h3 {
-    color: #ED1B24; 
+    color: #ED1B24;
     font-family: 'Share Tech', sans-serif;
-    font-size: 24px; 
+    font-size: 24px;
 }
 
 
 .contact h3 {
-    color: #ED1B24; 
-    font-family: 'Share Tech', sans-serif; 
+    color: #ED1B24;
+    font-family: 'Share Tech', sans-serif;
     bottom: 10px;
     position: relative;
     font-size: 30px;
@@ -736,13 +723,12 @@ footer {
     font-size: 30px;
 }
 
-/* Estilos para o contêiner do alerta */
 .container_alerta {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    background-color: #4CAF50;
     color: white;
     padding: 15px 30px;
     border-radius: 5px;
@@ -750,12 +736,11 @@ footer {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
-    width: 300px; /* Largura do alerta */
-    text-align: center; /* Centraliza o texto */
-    display: none; /* Inicialmente oculto */
+    width: 300px;
+    text-align: center;
+    display: none;
 }
 
-/* Estilos para o título do alerta */
 .titulo_alerta {
     font-size: 18px;
     font-weight: bold;
@@ -763,45 +748,40 @@ footer {
     display: block;
 }
 
-/* Estilos para o texto do alerta */
 .container_alerta {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    background-color: #4CAF50;
     color: white;
     padding: 15px 30px;
     border-radius: 5px;
-    z-index: 9999; /* Alta prioridade para sobrepor outros elementos */
+    z-index: 9999;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
-    width: 300px; /* Largura do alerta */
-    text-align: center; /* Centraliza o texto */
-    display: none; /* Inicialmente oculto */
+    width: 300px;
+    text-align: center;
+    display: none;
 }
 
-/* Estilos para o texto do alerta */
 .texto_alerta {
     font-size: 16px;
 }
 
-/* Estilos para o alerta quando exibido */
 .container_alerta.show {
     display: block;
     opacity: 1;
-    top: 40px; /* Movimenta o alerta um pouco para baixo */
+    top: 40px;
 }
 
-/* Estilos para um alerta de erro */
 .container_alerta.error {
-    background-color: #f44336; /* Cor de fundo para erro */
+    background-color: #f44336;
 }
 
-/* Estilos para um alerta de sucesso */
 .container_alerta.success {
-    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    background-color: #4CAF50;
 }
 
 
