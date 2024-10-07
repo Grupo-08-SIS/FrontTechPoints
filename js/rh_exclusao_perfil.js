@@ -45,7 +45,9 @@ function abrirNotificacaoParcial() {
     container.style.display = 'flex';
 
     var linkElement = container.querySelector('a');
+    var linkElement2 = container.querySelector('m');
     linkElement.textContent = 'parcialmente';
+    linkElement2.textContent = 'parcial'
     linkElement.style.color = 'red';
 
     var botaoConfirmar = document.getElementById('confirmarExclusao');
@@ -57,7 +59,9 @@ function abrirNotificacaoPermanente() {
     container.style.display = 'flex';
 
     var linkElement = container.querySelector('a');
+    var linkElement2 = container.querySelector('m');
     linkElement.textContent = 'permanentemente';
+    linkElement2.textContent = 'permanente'
     linkElement.style.color = 'red';
 
     var botaoConfirmar = document.getElementById('confirmarExclusao');
