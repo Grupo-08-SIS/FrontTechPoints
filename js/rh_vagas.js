@@ -1,3 +1,15 @@
+import { obterMedalha } from './medalhas.js';
+window.verMais = verMais
+window.fazerLogout = fazerLogout
+window.desfavoritar = desfavoritar
+window.tenhoInteresse = tenhoInteresse
+window.fecharVerMais = fecharVerMais 
+window.fecharNotificacao = fecharNotificacao 
+window.alunoRemovido = alunoRemovido
+window.buscarAlunoPorNome = buscarAlunoPorNome
+window.exibirAlunosPorSexo = exibirAlunosPorSexo
+window.exibirAlunosPorEtnia = exibirAlunosPorEtnia
+
 document.addEventListener('DOMContentLoaded', async function () {
     await carregarCursos(); 
     await atualizarAlunos(); 
@@ -33,13 +45,12 @@ async function carregarCursos() {
         const cursosSelect = document.getElementById('cursos');
         cursosSelect.innerHTML = '<option value="opc_cursos">Cursos</option>'; 
 
-        // Itera sobre os cursos e cria as opções
         for (const cursoId in data) {
             const nomeCurso = data[cursoId].nomeCurso;
             const option = document.createElement('option');
-            option.value = cursoId; // Define o valor da opção como o ID do curso
-            option.textContent = nomeCurso; // Define o texto da opção como o nome do curso
-            cursosSelect.appendChild(option); // Adiciona a opção ao select
+            option.value = cursoId; 
+            option.textContent = nomeCurso; 
+            cursosSelect.appendChild(option); 
         }
     } catch (error) {
         console.error('Erro ao carregar os dados dos cursos:', error);
@@ -47,9 +58,8 @@ async function carregarCursos() {
 }
 
 async function exibirAlunosPorCurso() {
-    const cursoId = this.value; // Pega o ID do curso selecionado
+    const cursoId = this.value;
 
-    // Se a opção padrão for selecionada, chama atualizarAlunos()
     if (cursoId === 'opc_cursos') {
         location.reload();
     }
@@ -59,7 +69,7 @@ async function exibirAlunosPorCurso() {
         const data = await response.json();
 
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+        containerCursos.innerHTML = '';
 
         const curso = data[cursoId];
         if (!curso) {
@@ -82,22 +92,19 @@ async function exibirAlunosPorCurso() {
 
         containerCursos.appendChild(cursoDiv);
 
-        // Buscar a lista de interessados
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
 
-        // Buscar a lista de alunos no processo seletivo
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
         const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
-        // Buscar a lista de contratados
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
         const contratadosSet = new Set(contratadosData.map(aluno => aluno.id));
 
-        const alunos = curso.ranking || []; // Pega os alunos do curso
+        const alunos = curso.ranking || [];
         const blocoAlunos = document.getElementById(`bloco_alunos_${cursoId}`);
         const mensagemDiv = document.getElementById(`mensagem_${cursoId}`);
 
@@ -106,30 +113,25 @@ async function exibirAlunosPorCurso() {
             return;
         }
 
-        // Filtrar alunos que não estão na lista de interessados, no processo seletivo ou contratados
         const alunosFiltrados = alunos.filter(aluno =>
             !interessadosSet.has(aluno.aluno.id) &&
             !processoSeletivoSet.has(aluno.aluno.id) &&
             !contratadosSet.has(aluno.aluno.id)
         );
 
-        // Verifica se há alunos filtrados
         if (alunosFiltrados.length === 0) {
-            mensagemDiv.style.display = 'block'; // Mostra a mensagem se não houver alunos
+            mensagemDiv.style.display = 'block';
 
-            // Define o estilo do container quando não há alunos
             containerCursos.style.display = 'flex';
             containerCursos.style.justifyContent = 'center';
             containerCursos.style.alignItems = 'center';
-            containerCursos.style.height = '20vh'; 
+            containerCursos.style.height = '20vh';
             containerCursos.style.fontWeight = '800';
             containerCursos.style.fontSize = '20px';
             containerCursos.style.color = '#808080';
-             
         } else {
-            mensagemDiv.style.display = 'none'; // Esconde a mensagem se houver alunos
+            mensagemDiv.style.display = 'none';
 
-            // Adiciona o nome do curso somente se houver alunos
             const tituloCurso = document.createElement('div');
             tituloCurso.innerHTML = `
                 <div class="container_curso_imagem_nome">
@@ -140,7 +142,6 @@ async function exibirAlunosPorCurso() {
             `;
             containerCursos.insertBefore(tituloCurso, cursoDiv);
 
-            // Restaura o estilo normal do container
             containerCursos.style.display = 'block';
             containerCursos.style.height = 'auto';
 
@@ -148,13 +149,11 @@ async function exibirAlunosPorCurso() {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
 
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                        'bronze_medal.png';
+                const medalha = obterMedalha(aluno.pontosTotais);
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
-                    <span>Aluno do projeto arrastão, finalizou curso <a href="#">${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
+                    <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
                     <img src="../imgs/${medalha}" alt="medalha">
                     <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
                 `;
@@ -172,22 +171,18 @@ async function atualizarAlunos() {
     try {
         const idUsuarioLogado = getIdUsuarioLogado();
 
-        // Busca os interessados
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
         const idsInteressados = interessadosData.map(aluno => aluno.id);
 
-        // Busca os alunos no processo seletivo
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
         const idsProcessoSeletivo = processoSeletivoData.map(aluno => aluno.id);
 
-        // Busca os alunos contratados
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
         const idsContratados = contratadosData.map(aluno => aluno.id);
 
-        // Busca os cursos e alunos
         const cursosResponse = await fetch('http://localhost:8080/pontuacoes/alunos');
         const data = await cursosResponse.json();
 
@@ -238,7 +233,6 @@ async function atualizarAlunos() {
             let alunosParaExibir = [];
 
             for (const aluno of alunos) {
-                // Filtrar alunos que não estão interessados, no processo seletivo ou contratados
                 if (!idsInteressados.includes(aluno.aluno.id) &&
                     !idsProcessoSeletivo.includes(aluno.aluno.id) &&
                     !idsContratados.includes(aluno.aluno.id)) {
@@ -252,14 +246,12 @@ async function atualizarAlunos() {
                         const alunoDiv = document.createElement('div');
                         alunoDiv.className = 'box_Aluno';
 
-                        const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                            aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                                'bronze_medal.png';
+                        const medalhaTipo = obterMedalha(aluno.pontosTotais);
 
                         alunoDiv.innerHTML = `
                             <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
                             <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
-                            <img src="../imgs/${medalha}" alt="medalha">
+                            <img src="../imgs/${medalhaTipo}" alt="medalha">
                             <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
                         `;
 
@@ -268,7 +260,6 @@ async function atualizarAlunos() {
                     }
                 }
 
-                // Se nenhum aluno foi exibido, mostra a mensagem
                 if (alunosExibidos.length === 0) {
                     const mensagem = document.createElement('div');
                     mensagem.className = 'mensagem_no_alunos';
@@ -276,7 +267,6 @@ async function atualizarAlunos() {
                     blocoAlunos.appendChild(mensagem);
                 }
             } else {
-                // Se não houver alunos para exibir
                 const mensagem = document.createElement('div');
                 mensagem.className = 'mensagem_no_alunos';
                 mensagem.innerText = 'Nenhum aluno disponível para este curso.';
@@ -317,16 +307,13 @@ function alunoRemovido() {
 
 async function verMais(alunoId) {
     try {
-        const idUsuarioLogado = getIdUsuarioLogado(); // Função que obtém o ID do usuário logado
+        const idUsuarioLogado = getIdUsuarioLogado();
 
-        // Requisição para buscar os detalhes do aluno
         const response = await fetch(`http://localhost:8080/usuarios/buscar/${alunoId}`);
         const aluno = await response.json();
 
-        // Defina o nome do aluno
         const nomeAluno = `${aluno.primeiroNome} ${aluno.sobrenome}`;
 
-        // Atualize o conteúdo da página com as informações do aluno
         document.getElementById('nome_do_aluno').innerText = nomeAluno;
         const idade = calcularIdade(aluno.dataNascimento);
         document.getElementById('idade_do_aluno').innerText = `${idade} anos`;
@@ -335,7 +322,6 @@ async function verMais(alunoId) {
         document.getElementById('email_do_aluno').innerText = aluno.email;
         document.getElementById('descricao_do_aluno').innerText = aluno.descricao;
 
-        // Carregar a foto do aluno
         const imgElement = document.querySelector('.bloco_foto_aluno img');
         const fotoResponse = await fetch(`http://localhost:8080/usuarios/imagem/${alunoId}`);
         if (fotoResponse.ok) {
@@ -346,7 +332,6 @@ async function verMais(alunoId) {
             imgElement.src = '/imgs/foto_padrao.png';
         }
 
-        // Carregar os emblemas
         const emblemasResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${alunoId}`);
         const emblemasData = await emblemasResponse.json();
 
@@ -359,26 +344,20 @@ async function verMais(alunoId) {
         for (const key in emblemasData) {
             const emblema = emblemasData[key];
             const pontos = emblema.pontosTotais;
-            let emblemaTipo = 'bronze_medal';
-
-            if (pontos > 600) {
-                emblemaTipo = 'gold_medal';
-            } else if (pontos > 500) {
-                emblemaTipo = 'silver_medal';
-            }
-
+        
+            const emblemaTipo = obterMedalha(pontos);
+        
             const emblemaElement = document.createElement('div');
             emblemaElement.classList.add('box_emblemas');
-            emblemaElement.innerHTML = `<img src="/imgs/${emblemaTipo}.png" alt="${emblema.nomeCurso}">`;
+            emblemaElement.innerHTML = `<img src="/imgs/${emblemaTipo}" alt="${emblema.nomeCurso}">`;
             blocoEmblemas.appendChild(emblemaElement);
-        }
+        }        
 
         emblemasContainer.appendChild(blocoEmblemas);
 
         const blocoInfoAluno = document.querySelector('.bloco_info_aluno');
         const containerBotaoInteresse = document.querySelector('.bloco_botao_interesse');
 
-        // Limpa os botões anteriores
         blocoInfoAluno.innerHTML = `
             <h1 id="nome_do_aluno">${nomeAluno}</h1>
             <span>Idade: <span id="idade_do_aluno">${idade}</span> anos</span>
@@ -387,11 +366,9 @@ async function verMais(alunoId) {
             <span>Email: <span id="email_do_aluno">${aluno.email}</span></span>
         `;
 
-        // Verifica se o aluno já está na lista de favoritos
         const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/favoritos`);
         const favoritosData = await favoritosResponse.json();
 
-        // Cria o botão "Favoritar" ou "Desfavoritar"
         const favoritarButton = document.createElement('button');
         favoritarButton.classList.add('favoritar-btn');
 
@@ -400,6 +377,7 @@ async function verMais(alunoId) {
         if (alunoFavoritado) {
             favoritarButton.innerHTML = `Desfavoritar <img src="/imgs/coracao_favoritar.png" alt="Desfavoritar">`;
             favoritarButton.style.backgroundColor = 'red';
+            favoritarButton.style.width = '50%'
             favoritarButton.onclick = () => desfavoritar(alunoId, favoritarButton);
         } else {
             favoritarButton.innerHTML = `Favoritar <img src="../imgs/coracao_favoritar.png" alt="Favoritar">`;
@@ -408,12 +386,11 @@ async function verMais(alunoId) {
 
         blocoInfoAluno.appendChild(favoritarButton);
 
-        // Configura o botão "Tenho Interesse"
         const interesseButton = document.createElement('button');
         interesseButton.innerText = 'Tenho Interesse';
         interesseButton.onclick = () => tenhoInteresse(alunoId, interesseButton, nomeAluno);
 
-        containerBotaoInteresse.innerHTML = ''; // Limpa qualquer conteúdo anterior
+        containerBotaoInteresse.innerHTML = ''; 
         containerBotaoInteresse.appendChild(interesseButton);
 
         document.querySelector('.container_ver_mais').style.display = 'block';
@@ -424,7 +401,7 @@ async function verMais(alunoId) {
 }
 
 async function favoritar(alunoId, favoritarButton) {
-    const idUsuarioLogado = getIdUsuarioLogado(); // Supondo que você tenha uma função para obter o ID do usuário logado
+    const idUsuarioLogado = getIdUsuarioLogado();
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/favoritos/${alunoId}`, {
             method: 'POST'
@@ -452,7 +429,6 @@ async function desfavoritar(alunoId, favoritarButton) {
         });
 
         if (response.ok) {
-            // Atualiza o botão para "Favoritar"
             favoritarButton.innerHTML = `Favoritar <img src="../imgs/coracao_favoritar.png" alt="Favoritar">`;
             favoritarButton.classList.remove('favoritado');
             favoritarButton.style.width = '43%'
@@ -491,26 +467,22 @@ function fecharVerMais() {
 }
 
 async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
-    const idUsuarioLogado = getIdUsuarioLogado(); // Função que obtém o ID do usuário logado
+    const idUsuarioLogado = getIdUsuarioLogado(); 
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/interessados/${alunoId}`, {
             method: 'POST'
         });
 
         if (response.ok) {
-            // Chama a função fecharVerMais() para ocultar a seção atual
             fecharVerMais();
 
-            // Exibe a notificação de interesse
             const containerInteresse = document.querySelector(".container_interesse");
             const nomeAlunoSpan = document.querySelector(".nome_do_aluno_mensagem");
 
-            // Verifica se os elementos foram encontrados no DOM
             if (containerInteresse && nomeAlunoSpan) {
-                // Verifica se nomeAluno não está undefined
                 if (nomeAluno) {
-                    nomeAlunoSpan.textContent = nomeAluno; // Atualiza o nome do aluno na mensagem
-                    containerInteresse.style.display = 'block'; // Exibe a div de interesse
+                    nomeAlunoSpan.textContent = nomeAluno; 
+                    containerInteresse.style.display = 'block';
                 } else {
                     console.error('Erro: nomeAluno está undefined');
                 }
@@ -588,11 +560,11 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
         ]);
 
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; // Limpa o container
-        containerCursos.style.display = 'block'; // Restaura display padrão
-        containerCursos.style.justifyContent = ''; // Remove alinhamento central
+        containerCursos.innerHTML = ''; 
+        containerCursos.style.display = 'block'; 
+        containerCursos.style.justifyContent = ''; 
         containerCursos.style.alignItems = ''; 
-        containerCursos.style.height = ''; // Remove altura fixa
+        containerCursos.style.height = ''; 
 
         const usuariosMap = usuariosData.reduce((map, usuario) => {
             if (usuario.tipoUsuario === "Aluno" && usuario.endereco) {
@@ -637,7 +609,6 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
             noResultsMessage.style.fontSize = '20px';
             noResultsMessage.style.color = '#808080';
 
-            // Define estilos para centralizar a mensagem no contêiner
             containerCursos.style.display = 'flex';
             containerCursos.style.justifyContent = 'center';
             containerCursos.style.alignItems = 'center';
@@ -648,7 +619,6 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
             return;
         }
 
-        // Exibe os alunos encontrados
         Object.entries(alunosPorCurso).forEach(([curso, alunos], index) => {
             const cursoDiv = document.createElement('div');
             cursoDiv.innerHTML = `
@@ -665,9 +635,7 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
 
             const blocoAlunos = document.getElementById(`bloco_alunos_${curso}`);
             alunos.forEach(aluno => {
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                                aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                                'bronze_medal.png';
+                const medalha = obterMedalha(aluno.pontosTotais); 
 
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
@@ -703,14 +671,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const escolaridades = new Set();
 
-        // Itera sobre os usuários para extrair escolaridades
         data.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno" && usuario.escolaridade) {
                 escolaridades.add(usuario.escolaridade);
             }
         });
 
-        // Preenche o select de escolaridade
         escolaridades.forEach(escolaridade => {
             const option = document.createElement('option');
             option.value = escolaridade.toLowerCase().replace(/\s+/g, '_');
@@ -718,14 +684,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             escolaridadeSelect.appendChild(option);
         });
 
-        // Listener para mudanças no select de escolaridade
         escolaridadeSelect.addEventListener('change', async function () {
             const escolaridadeSelecionada = this.value;
 
             if (escolaridadeSelecionada === 'opc_escolaridade') {
                 location.reload();
             } else {
-                await exibirAlunosPorEscolaridade(escolaridadeSelecionada); // Exibe alunos por escolaridade selecionada
+                await exibirAlunosPorEscolaridade(escolaridadeSelecionada);
             }
         });
 
@@ -735,24 +700,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
-    console.log('Escolaridade selecionada:', escolaridadeSelecionada); // Verifique se está sendo chamada corretamente
+    console.log('Escolaridade selecionada:', escolaridadeSelecionada); 
 
     try {
-        // Limpa o container de cursos e mensagens antes de carregar novos dados
         const containerCursos = document.getElementById('cursos_container');
         
-        // Remove todos os filhos do container, incluindo mensagens e blocos de alunos
         while (containerCursos.firstChild) {
             containerCursos.removeChild(containerCursos.firstChild);
         }
 
-        // Redefine o estilo do contêiner para o estado padrão
-        containerCursos.style.display = 'block'; // Define o display como block
-        containerCursos.style.justifyContent = ''; // Limpa o alinhamento
-        containerCursos.style.alignItems = ''; // Limpa o alinhamento
-        containerCursos.style.height = ''; // Limpa a altura
+        containerCursos.style.display = 'block'; 
+        containerCursos.style.justifyContent = ''; 
+        containerCursos.style.alignItems = ''; 
+        containerCursos.style.height = ''; 
 
-        // Realizando os fetchs para obter os dados necessários
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
 
@@ -768,12 +729,10 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
 
-        // Convertendo dados em Sets para melhorar a eficiência nas comparações
         const contratadosSet = new Set(contratadosData.map(aluno => aluno.id));
         const interessadosSet = new Set(interessadosData.map(aluno => aluno.id));
         const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
-        // Criando um map para os dados de usuários com base na escolaridade
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno" && usuario.escolaridade) {
@@ -786,7 +745,6 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
 
         const alunosComEscolaridade = [];
 
-        // Itera sobre os dados de pontuação e filtra alunos
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
@@ -806,30 +764,26 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
             }
         }
 
-        // Mensagem se nenhum aluno for encontrado com a escolaridade selecionada
         if (alunosComEscolaridade.length === 0) {
             const noResultsMessage = document.createElement('div');
             noResultsMessage.innerText = `Nenhum aluno encontrado com a escolaridade ${escolaridadeSelecionada}.`;
             noResultsMessage.className = 'mensagem_nenhum_aluno';
-            noResultsMessage.style.textAlign = 'center'; // Centraliza o texto
-            noResultsMessage.style.margin = '20px 0'; // Adiciona margens verticais
+            noResultsMessage.style.textAlign = 'center'; 
+            noResultsMessage.style.margin = '20px 0'; 
             noResultsMessage.style.fontWeight = '800';
             noResultsMessage.style.fontSize = '20px';
             noResultsMessage.style.color = '#808080';
 
-            // Define estilos para centralizar a mensagem no contêiner
-            containerCursos.style.display = 'flex'; // Define o display como flex
-            containerCursos.style.justifyContent = 'center'; // Centraliza horizontalmente
-            containerCursos.style.alignItems = 'center'; // Centraliza verticalmente
-            containerCursos.style.height = '20vh'; // Define altura total do viewport
+            containerCursos.style.display = 'flex'; 
+            containerCursos.style.justifyContent = 'center'; 
+            containerCursos.style.alignItems = 'center'; 
+            containerCursos.style.height = '20vh'; 
 
             containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado com a escolaridade ${escolaridadeSelecionada}.`);
             return;
         }
 
-        // Aqui você pode continuar a lógica para exibir alunos como desejado
-        // Agrupa os alunos por curso e exibe eles...
         const alunosPorCurso = alunosComEscolaridade.reduce((acc, aluno) => {
             acc[aluno.curso] = acc[aluno.curso] || [];
             acc[aluno.curso].push(aluno);
@@ -859,10 +813,7 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
 
-                // Determina a medalha com base nos pontos
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                        'bronze_medal.png';
+                const medalha = obterMedalha(aluno.pontosTotais);
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
@@ -874,7 +825,6 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
                 blocoAlunos.appendChild(alunoDiv);
             });
 
-            // Adiciona espaçamento entre os cursos
             if (index < cursos.length - 1) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
@@ -891,45 +841,43 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
 }
 
 function buscarAlunoPorNome(nome) {
-    if (nome.length >= 3) { // Só busca se o nome tiver 3 ou mais caracteres
+    if (nome.length >= 3) { 
         exibirAlunosPorNome(nome);
     } else {
-        // Limpa a exibição de alunos se não houver um nome suficiente para buscar
         document.getElementById('cursos_container').innerHTML = '';
         atualizarAlunos()
     }
 }
 
 async function exibirAlunosPorNome(nomeBuscado) {
-    console.log('Nome buscado:', nomeBuscado); // Verifique se está sendo chamado corretamente
+    console.log('Nome buscado:', nomeBuscado); 
 
     try {
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData); // Verifique a resposta
+        console.log('Dados de pontuações:', pontuacoesData); 
 
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData); // Verifique a resposta
+        console.log('Dados de usuários:', usuariosData); 
 
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData); // Verifique a resposta
+        console.log('Dados de interessados:', interessadosData); 
 
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
-        console.log('Dados de contratados:', contratadosData); // Verifique a resposta
+        console.log('Dados de contratados:', contratadosData); 
 
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
-        console.log('Dados de processo seletivo:', processoSeletivoData); // Verifique a resposta
+        console.log('Dados de processo seletivo:', processoSeletivoData); 
 
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; // Limpa o container antes de mostrar os alunos
+        containerCursos.innerHTML = ''; 
 
-        const alunosFiltrados = []; // Array para armazenar alunos filtrados por nome
+        const alunosFiltrados = []; 
 
-        // Mapeia usuários para facilitar a busca por nome
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno") {
@@ -937,31 +885,27 @@ async function exibirAlunosPorNome(nomeBuscado) {
                     nome: `${usuario.primeiroNome} ${usuario.sobrenome}`,
                     primeiroNome: usuario.primeiroNome,
                     sobrenome: usuario.sobrenome
-                }; // Mapeia o ID do aluno para o nome completo e os campos de nome
+                }; 
             }
         });
 
-        // Converte as listas de interessados, contratados e processo seletivo para um Set para facilitar a busca
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
         const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
         const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
-        // Itera sobre os dados de pontuação para filtrar os alunos pelo nome
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
 
-            // Filtra alunos que correspondem ao nome buscado e que não estão nas listas de interessados, contratados e processo seletivo
             const alunosFiltradosPorNome = alunos.filter(aluno => {
-                const alunoNome = usuariosMap[aluno.aluno.id]?.nome;
                 const alunoId = aluno.aluno.id;
-                const nomeCompleto = `${usuariosMap[aluno.aluno.id]?.primeiroNome} ${usuariosMap[aluno.aluno.id]?.sobrenome}`;
-                console.log('Verificando aluno:', alunoId, 'com nome:', alunoNome); // Verificação
+                const nomeCompleto = `${usuariosMap[alunoId]?.primeiroNome} ${usuariosMap[alunoId]?.sobrenome}`;
+                console.log('Verificando aluno:', alunoId, 'com nome:', nomeCompleto); 
 
                 return nomeCompleto.toLowerCase().includes(nomeBuscado.toLowerCase()) &&
-                    !interessadosSet.has(alunoId) && // Verifica se o aluno não está na lista de interessados
-                    !contratadosSet.has(alunoId) && // Verifica se o aluno não está na lista de contratados
-                    !processoSeletivoSet.has(alunoId); // Verifica se o aluno não está na lista de processo seletivo
+                    !interessadosSet.has(alunoId) &&
+                    !contratadosSet.has(alunoId) && 
+                    !processoSeletivoSet.has(alunoId);
             });
 
             if (alunosFiltradosPorNome.length > 0) {
@@ -972,20 +916,18 @@ async function exibirAlunosPorNome(nomeBuscado) {
         if (alunosFiltrados.length === 0) {
             console.log(`Nenhum aluno encontrado com o nome "${nomeBuscado}".`);
             const mensagem = document.createElement('div');
-            mensagem.className = 'mensagem_no_alunos'; // Classe de estilo para a mensagem
+            mensagem.className = 'mensagem_no_alunos'; 
             mensagem.innerText = `Nenhum aluno encontrado com o nome "${nomeBuscado}".`;
             containerCursos.appendChild(mensagem);
             return;
         }
 
-        // Agrupa alunos por curso
         const alunosPorCurso = alunosFiltrados.reduce((acc, aluno) => {
             acc[aluno.curso] = acc[aluno.curso] || [];
             acc[aluno.curso].push(aluno);
             return acc;
         }, {});
 
-        // Cria elementos para exibir os alunos encontrados
         const cursos = Object.keys(alunosPorCurso);
         cursos.forEach((curso, index) => {
             const cursoDiv = document.createElement('div');
@@ -1010,9 +952,7 @@ async function exibirAlunosPorNome(nomeBuscado) {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
 
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                        'bronze_medal.png';
+                const medalha = obterMedalha(aluno.pontosTotais);
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
@@ -1024,7 +964,6 @@ async function exibirAlunosPorNome(nomeBuscado) {
                 blocoAlunos.appendChild(alunoDiv);
             });
 
-            // Adiciona a div de espaçamento após cada curso, exceto o último
             if (index < cursos.length - 1) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
@@ -1045,66 +984,59 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
         location.reload();
     }
 
-    console.log('Etnia selecionada:', etniaSelecionada); // Verifique se está sendo chamada corretamente
+    console.log('Etnia selecionada:', etniaSelecionada);
 
     try {
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData); // Verifique a resposta
+        console.log('Dados de pontuações:', pontuacoesData); 
 
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData); // Verifique a resposta
+        console.log('Dados de usuários:', usuariosData); 
 
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
-        console.log('Dados de contratados:', contratadosData); // Verifique a resposta
+        console.log('Dados de contratados:', contratadosData); 
 
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData); // Verifique a resposta
+        console.log('Dados de interessados:', interessadosData); 
 
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
-        console.log('Dados de processo seletivo:', processoSeletivoData); // Verifique a resposta
+        console.log('Dados de processo seletivo:', processoSeletivoData); 
 
         const containerCursos = document.getElementById('cursos_container');
         
-        // Limpa o container e restaura os estilos
-        containerCursos.innerHTML = ''; // Limpa o conteúdo
-        containerCursos.removeAttribute('style'); // Remove os estilos inline anteriores
+        containerCursos.innerHTML = ''; 
+        containerCursos.removeAttribute('style'); 
 
-        const alunosComEtnia = []; // Array para armazenar alunos filtrados por etnia
-
-        // Mapeia usuários para facilitar a busca por etnia
+        const alunosComEtnia = []; 
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno" && usuario.etnia) {
                 usuariosMap[usuario.id] = {
                     etnia: usuario.etnia,
                     nome: `${usuario.primeiroNome} ${usuario.sobrenome}`
-                }; // Mapeia o ID do aluno para a etnia e nome
+                }; 
             }
         });
 
-        // Converte a lista de interessados, contratados e processo seletivo para um Set para facilitar a busca
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
         const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
         const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
 
-        // Itera sobre os dados de pontuação para filtrar os alunos pela etnia
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
 
-            // Filtra alunos que possuem a etnia selecionada e que não estão nas listas de interessados, contratados e processo seletivo
             const alunosFiltrados = alunos.filter(aluno => {
-                const alunoId = aluno.aluno.id; // Obtém o ID do aluno
-                const etniaDoAluno = usuariosMap[alunoId]?.etnia; // Verifica a etnia
+                const alunoId = aluno.aluno.id; 
+                const etniaDoAluno = usuariosMap[alunoId]?.etnia; 
 
                 console.log(`Verificando aluno ID ${alunoId}: Etnia - ${etniaDoAluno}`);
 
-                // Condição para verificar se o aluno não é um interessado, já foi contratado ou está em processo seletivo
                 return etniaDoAluno === etniaSelecionada &&
                     !interessadosSet.has(alunoId) &&
                     !contratadosSet.has(alunoId) &&
@@ -1116,36 +1048,32 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             }
         }
 
-        // Mensagem se nenhum aluno for encontrado com a etnia selecionada
         if (alunosComEtnia.length === 0) {
             const noResultsMessage = document.createElement('div');
             noResultsMessage.innerText = `Nenhum aluno encontrado com a etnia ${etniaSelecionada}.`;
             noResultsMessage.className = 'mensagem_nenhum_aluno';
-            noResultsMessage.style.textAlign = 'center'; // Centraliza o texto
-            noResultsMessage.style.margin = '20px 0'; // Adiciona margens verticais
+            noResultsMessage.style.textAlign = 'center'; 
+            noResultsMessage.style.margin = '20px 0'; 
             noResultsMessage.style.fontWeight = 800;
             noResultsMessage.style.fontSize = '20px';
             noResultsMessage.style.color = '#808080';
 
-            // Define estilos para centralizar a mensagem no contêiner
-            containerCursos.style.display = 'flex'; // Define o display como flex
-            containerCursos.style.justifyContent = 'center'; // Centraliza horizontalmente
-            containerCursos.style.alignItems = 'center'; // Centraliza verticalmente
-            containerCursos.style.height = '20vh'; // Define altura total do viewport
+            containerCursos.style.display = 'flex'; 
+            containerCursos.style.justifyContent = 'center'; 
+            containerCursos.style.alignItems = 'center'; 
+            containerCursos.style.height = '20vh'; 
 
             containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado com a etnia ${etniaSelecionada}.`);
             return;
         }
 
-        // Agrupa alunos por curso
         const alunosPorCurso = alunosComEtnia.reduce((acc, aluno) => {
             acc[aluno.curso] = acc[aluno.curso] || [];
             acc[aluno.curso].push(aluno);
             return acc;
         }, {});
 
-        // Cria elementos para exibir os alunos encontrados
         const cursos = Object.keys(alunosPorCurso);
         cursos.forEach((curso, index) => {
             const cursoDiv = document.createElement('div');
@@ -1169,22 +1097,19 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             alunosPorCurso[curso].forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
-
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                        'bronze_medal.png';
-
+            
+                const medalha = obterMedalha(aluno.pontosTotais);
+            
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
                     <img src="../imgs/${medalha}" alt="medalha">
                     <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
                 `;
-
+            
                 blocoAlunos.appendChild(alunoDiv);
             });
 
-            // Adiciona a div de espaçamento após cada curso, exceto o último
             if (index < cursos.length - 1) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
@@ -1230,16 +1155,14 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
 
         const containerCursos = document.getElementById('cursos_container');
         
-        // Limpa o conteúdo e redefine os estilos do contêiner antes de adicionar novos elementos
         containerCursos.innerHTML = '';
-        containerCursos.style.display = '';  // Remove o display: flex; aplicado anteriormente
-        containerCursos.style.justifyContent = '';  // Remove a centralização horizontal
-        containerCursos.style.alignItems = '';  // Remove a centralização vertical
-        containerCursos.style.height = '';  // Remove a altura definida anteriormente
+        containerCursos.style.display = '';  
+        containerCursos.style.justifyContent = '';  
+        containerCursos.style.alignItems = ''; 
+        containerCursos.style.height = '';  
 
         const alunosComSexo = [];
 
-        // Mapeia usuários para facilitar a busca por sexo
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno" && usuario.sexo) {
@@ -1250,17 +1173,14 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
             }
         });
 
-        // Cria conjuntos para os alunos que não devem aparecer
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
         const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
         const processoSeletivoSet = new Set(processoSeletivoData.map(processo => processo.id));
 
-        // Itera sobre os dados de pontuação para filtrar os alunos pelo sexo
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
 
-            // Filtra alunos que possuem o sexo selecionado e que não estão na lista de interessados, contratados ou processo seletivo
             const alunosFiltrados = alunos.filter(aluno => {
                 const sexoDoAluno = usuariosMap[aluno.aluno.id]?.sexo;
                 const alunoId = aluno.aluno.id;
@@ -1277,36 +1197,32 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
             }
         }
 
-        // Mensagem se nenhum aluno for encontrado com o sexo selecionado
         if (alunosComSexo.length === 0) {
             const noResultsMessage = document.createElement('div');
             noResultsMessage.innerText = `Nenhum aluno encontrado com o sexo ${sexoSelecionado}.`;
             noResultsMessage.className = 'mensagem_nenhum_aluno';
-            noResultsMessage.style.textAlign = 'center'; // Centraliza o texto
-            noResultsMessage.style.margin = '20px 0'; // Adiciona margens verticais
+            noResultsMessage.style.textAlign = 'center'; 
+            noResultsMessage.style.margin = '20px 0'; 
             noResultsMessage.style.fontWeight = 800;
             noResultsMessage.style.fontSize = '20px';
             noResultsMessage.style.color = '#808080';
 
-            // Define estilos para centralizar a mensagem no contêiner
-            containerCursos.style.display = 'flex'; // Define o display como flex
-            containerCursos.style.justifyContent = 'center'; // Centraliza horizontalmente
-            containerCursos.style.alignItems = 'center'; // Centraliza verticalmente
-            containerCursos.style.height = '20vh'; // Define altura para ajustar a mensagem no centro
+            containerCursos.style.display = 'flex'; 
+            containerCursos.style.justifyContent = 'center';
+            containerCursos.style.alignItems = 'center'; 
+            containerCursos.style.height = '20vh'; 
 
             containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado com o sexo ${sexoSelecionado}.`);
             return;
         }
 
-        // Agrupa alunos por curso
         const alunosPorCurso = alunosComSexo.reduce((acc, aluno) => {
             acc[aluno.curso] = acc[aluno.curso] || [];
             acc[aluno.curso].push(aluno);
             return acc;
         }, {});
 
-        // Cria elementos para exibir os alunos encontrados
         const cursos = Object.keys(alunosPorCurso);
         cursos.forEach((curso, index) => {
             const cursoDiv = document.createElement('div');
@@ -1330,22 +1246,19 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
             alunosPorCurso[curso].forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
-
-                const medalha = aluno.pontosTotais > 600 ? 'gold_medal.png' :
-                    aluno.pontosTotais > 500 ? 'silver_medal.png' :
-                        'bronze_medal.png';
-
+        
+                const medalha = obterMedalha(aluno.pontosTotais);
+        
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
                     <img src="../imgs/${medalha}" alt="medalha">
                     <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
                 `;
-
+        
                 blocoAlunos.appendChild(alunoDiv);
             });
 
-            // Adiciona a div de espaçamento após cada curso, exceto o último
             if (index < cursos.length - 1) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
@@ -1371,7 +1284,6 @@ async function fazerLogout() {
     }
 
     try {
-        // Envia uma requisição POST para fazer logoff
         const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
             method: 'POST'
         });
