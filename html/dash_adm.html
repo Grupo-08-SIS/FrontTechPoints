@@ -13,15 +13,12 @@
 </head>
 
 <body>
-
     <header>
         <div class="header-content">
             <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
-
             <div class="drop_down" onclick="toggleDropdown()">
                 <div class="container_nome_usuario">
-                    <img id="profileImageHeader" class="header_img_usuario" src="" alt="Imagem de perfil">
-                    <h1 id="id_nome_usuario">Nome do Usuário</h1>
+                     <h1 id="id_nome_usuario">Nome do Usuário</h1>
                     <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
                 </div>
                 <div id="dropdown-content" class="dropdown_content">
@@ -45,7 +42,7 @@
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label for="select-tipo-lista">Tipo de Lista:</label>
-                    <select id="select-tipo-lista" class="form-control">
+                    <select id="selectListas" class="form-control">
                         <option value="contratados">Contratados</option>
                         <option value="interessados">Interessados</option>
                         <option value="processoSeletivo">Processo Seletivo</option>
@@ -54,43 +51,35 @@
 
                 <!-- Select para a Empresa -->
                 <div class="col-md-6">
-                    <label for="select-empresa">Empresa:</label>
-                    <select id="select-empresa" class="form-control">
-                        <option value="">Selecione uma empresa</option>
+                    <label for="selectEmpresas">Selecione uma Empresa</label>
+                    <select id="selectEmpresas" class="form-control">
+                
                     </select>
                 </div>
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-12 ">
-                    <button id="btn-enviar" class="btn btn-primary">Buscar Demografia</button>
-                </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h3>Perfil de alunos nas listas dos recrutadores:</h3>
             </div>
             <div class="row mt-4">
                 <div class="col-md-4">
-                    <h4>Distribuição por Sexo</h4>
                     <canvas id="distribuicaoPorSexoListas" width="100" height="100"></canvas>
                 </div>
                 <div class="col-md-4">
-                    <h4>Distribuição por Etnia</h4>
                     <canvas id="distribuicaoPorEtniaListas" width="100" height="100"></canvas>
                 </div>
                 <div class="col-md-4">
-                    <h4>Distribuição por Escolaridade</h4>
                     <canvas id="distribuicaoPorEscolaridadeListas" width="100" height="100"></canvas>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <h4>Cursos</h4>
                         <canvas id="CursosLista" width="1200" height="500"></canvas>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <h4>Cidades</h4>
                         <canvas id="alunosPorCidade" width="1200" height="500"></canvas>
                     </div>
                 </div>

@@ -1,19 +1,76 @@
 document.addEventListener('DOMContentLoaded', function () {
-    renderizarGraficos();
-});
+    listarEmpresas().then(dadosEmpresa => {
+        const selectElement = document.getElementById('selectEmpresas')
+        preencherEmpresa(selectElement, dadosEmpresa)
+    })
+
+    document.getElementById('selectEmpresas').addEventListener('change', function () {
+        renderizarGraficos()
+    })
+    document.getElementById('selectListas').addEventListener('change', function () {
+        renderizarGraficos()
+    })
+
+    renderizarGraficos() 
+})
+
+let graficoSexo, graficoEtnia, graficoEscolaridade, graficoCidade, graficoCursos
+
+async function listarEmpresas() {
+    try {
+        const resposta = await fetch('http://localhost:8080/empresa/listar')
+        if (!resposta.ok) {
+            throw new Error('Erro ao buscar os dados das empresas')
+        }
+        const dadosEmpresa = await resposta.json()
+        return dadosEmpresa
+    } catch (erro) {
+        console.error('Erro ao buscar os dados das empresas:', erro)
+        return null
+    }
+}
+
+function preencherEmpresa(selectElement, dadosEmpresa) {
+    selectElement.innerHTML = '<option value="">Todos</option>'
+    dadosEmpresa.forEach(empresa => {
+        const option = document.createElement('option')
+        option.value = empresa.id
+        option.textContent = empresa.nomeEmpresa
+        selectElement.appendChild(option)
+    })
+}
 
 async function buscarDados() {
     try {
-        const resposta = await fetch('http://localhost:8080/dashboardAdm/demografia-alunos?tipoLista=contratados');
-        if (!resposta.ok) {
-            throw new Error('Erro ao buscar os dados');
+        const selectElementEmpresa = document.getElementById('selectEmpresas')
+        const empresaId = selectElementEmpresa.value
+        const selectLista = document.getElementById('selectListas')
+        const tipoLista = selectLista.value
+
+        let url = `http://localhost:8080/dashboardAdm/demografia-alunos?tipoLista=${tipoLista}`
+
+        if (empresaId) {
+            url += `&idEmpresa=${empresaId}`
         }
-        const dados = await resposta.json();
-        return dados;
+
+        const resposta = await fetch(url)
+        if (!resposta.ok) {
+            throw new Error('Erro ao buscar os dados de demografia')
+        }
+        const dados = await resposta.json()
+        return dados
     } catch (erro) {
-        console.error('Erro:', erro);
-        return null;
+        console.error('Erro ao buscar os dados de demografia:', erro)
+        return null
     }
+}
+
+function destruirGraficos() {
+    if (graficoSexo) graficoSexo.destroy()
+    if (graficoEtnia) graficoEtnia.destroy()
+    if (graficoEscolaridade) graficoEscolaridade.destroy()
+    if (graficoCidade) graficoCidade.destroy()
+    if (graficoCursos) graficoCursos.destroy()
 }
 
 function criarGraficoRosca(ctx, rotulos, dados, titulo) {
@@ -40,7 +97,7 @@ function criarGraficoRosca(ctx, rotulos, dados, titulo) {
                 }
             }
         }
-    });
+    })
 }
 
 function criarGraficoBarras(ctx, rotulos, dados, titulo, cores) {
@@ -66,48 +123,50 @@ function criarGraficoBarras(ctx, rotulos, dados, titulo, cores) {
                 }
             }
         }
-    });
+    })
 }
 
 function gerarCores(quantidade) {
-    const cores = [];
+    const cores = []
     for (let i = 0; i < quantidade; i++) {
-        cores.push(`hsl(${Math.floor(Math.random() * 360)}, 100%, 75%)`);
+        cores.push(`hsl(${Math.floor(Math.random() * 360)}, 100%, 75%)`)
     }
-    return cores;
+    return cores
 }
 
 async function renderizarGraficos() {
-    const dadosRecebidos = await buscarDados();
+    destruirGraficos() 
+
+    const dadosRecebidos = await buscarDados()
 
     if (dadosRecebidos) {
-        const rotulosSexo = Object.keys(dadosRecebidos.sexo);
-        const dadosSexo = Object.values(dadosRecebidos.sexo);
-        const ctxSexo = document.getElementById('distribuicaoPorSexoListas').getContext('2d');
-        criarGraficoRosca(ctxSexo, rotulosSexo, dadosSexo, 'Distribuição por Sexo');
+        const rotulosSexo = Object.keys(dadosRecebidos.sexo)
+        const dadosSexo = Object.values(dadosRecebidos.sexo)
+        const ctxSexo = document.getElementById('distribuicaoPorSexoListas').getContext('2d')
+        graficoSexo = criarGraficoRosca(ctxSexo, rotulosSexo, dadosSexo, 'Distribuição por Sexo')
 
-        const rotulosEtnia = Object.keys(dadosRecebidos.etnia);
-        const dadosEtnia = Object.values(dadosRecebidos.etnia);
-        const ctxEtnia = document.getElementById('distribuicaoPorEtniaListas').getContext('2d');
-        criarGraficoRosca(ctxEtnia, rotulosEtnia, dadosEtnia, 'Distribuição por Etnia');
+        const rotulosEtnia = Object.keys(dadosRecebidos.etnia)
+        const dadosEtnia = Object.values(dadosRecebidos.etnia)
+        const ctxEtnia = document.getElementById('distribuicaoPorEtniaListas').getContext('2d')
+        graficoEtnia = criarGraficoRosca(ctxEtnia, rotulosEtnia, dadosEtnia, 'Distribuição por Etnia')
 
-        const rotulosEscolaridade = Object.keys(dadosRecebidos.escolaridade);
-        const dadosEscolaridade = Object.values(dadosRecebidos.escolaridade);
-        const ctxEscolaridade = document.getElementById('distribuicaoPorEscolaridadeListas').getContext('2d');
-        criarGraficoRosca(ctxEscolaridade, rotulosEscolaridade, dadosEscolaridade, 'Distribuição por Escolaridade');
+        const rotulosEscolaridade = Object.keys(dadosRecebidos.escolaridade)
+        const dadosEscolaridade = Object.values(dadosRecebidos.escolaridade)
+        const ctxEscolaridade = document.getElementById('distribuicaoPorEscolaridadeListas').getContext('2d')
+        graficoEscolaridade = criarGraficoRosca(ctxEscolaridade, rotulosEscolaridade, dadosEscolaridade, 'Distribuição por Escolaridade')
 
-        const rotulosCidade = Object.keys(dadosRecebidos.cidade);
-        const dadosCidade = Object.values(dadosRecebidos.cidade);
-        const ctxCidade = document.getElementById('alunosPorCidade').getContext('2d');
-        const coresCidade = gerarCores(rotulosCidade.length);
-        criarGraficoBarras(ctxCidade, rotulosCidade, dadosCidade, 'Distribuição por Cidade', coresCidade);
+        const rotulosCidade = Object.keys(dadosRecebidos.cidade)
+        const dadosCidade = Object.values(dadosRecebidos.cidade)
+        const ctxCidade = document.getElementById('alunosPorCidade').getContext('2d')
+        const coresCidade = gerarCores(rotulosCidade.length)
+        graficoCidade = criarGraficoBarras(ctxCidade, rotulosCidade, dadosCidade, 'Distribuição por Cidade', coresCidade)
 
-        const rotulosCursos = Object.keys(dadosRecebidos.cursosFeitos);
-        const dadosCursos = Object.values(dadosRecebidos.cursosFeitos);
-        const ctxCursos = document.getElementById('CursosLista').getContext('2d');
-        const coresCursos = gerarCores(rotulosCursos.length);
-        criarGraficoBarras(ctxCursos, rotulosCursos, dadosCursos, 'Distribuição de Cursos Feitos', coresCursos);
+        const rotulosCursos = Object.keys(dadosRecebidos.cursosFeitos)
+        const dadosCursos = Object.values(dadosRecebidos.cursosFeitos)
+        const ctxCursos = document.getElementById('CursosLista').getContext('2d')
+        const coresCursos = gerarCores(rotulosCursos.length)
+        graficoCursos = criarGraficoBarras(ctxCursos, rotulosCursos, dadosCursos, 'Distribuição de Cursos Feitos', coresCursos)
     } else {
-        console.error('Nenhum dado encontrado!');
+        console.error('Nenhum dado encontrado!')
     }
 }
