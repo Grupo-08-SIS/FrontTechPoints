@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    await carregarCursos(); // Carrega os cursos ao inicializar
-    await atualizarAlunos(); // Chama a função para mostrar todos os alunos inicialmente
+    await carregarCursos(); 
+    await atualizarAlunos(); 
 
     const cursosSelect = document.getElementById('cursos');
     cursosSelect.addEventListener('change', exibirAlunosPorCurso);
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Coloca o código aqui dentro para garantir que o DOM esteja carregado
     document.querySelectorAll('.blocos_selecao select').forEach(select => {
         select.addEventListener('change', function() {
-            clearOtherSelects(this); // Limpa os outros selects ao selecionar uma opção
+            clearOtherSelects(this); 
         });
     });
 });
@@ -20,7 +19,7 @@ function clearOtherSelects(currentSelect) {
 
     selects.forEach(select => {
         if (select !== currentSelect) {
-            select.selectedIndex = 0; // Reseta o select para a primeira opção
+            select.selectedIndex = 0; 
         }
     });
 }
@@ -32,7 +31,7 @@ async function carregarCursos() {
         const data = await response.json();
 
         const cursosSelect = document.getElementById('cursos');
-        cursosSelect.innerHTML = '<option value="opc_cursos">Cursos</option>'; // Limpa opções existentes
+        cursosSelect.innerHTML = '<option value="opc_cursos">Cursos</option>'; 
 
         // Itera sobre os cursos e cria as opções
         for (const cursoId in data) {

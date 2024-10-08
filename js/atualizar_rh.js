@@ -1,7 +1,13 @@
-async function salvarMudancas(event) {
-    event.preventDefault(); // Evita o envio padrão do formulário
+import { obterMedalha } from './medalhas.js';
+window.atribuir = atribuir;
+window.salvarMudancas = salvarMudancas
+window.fazerLogout = fazerLogout
+window.editarPerfil = editarPerfil
+window.fecharFormulario = fecharFormulario
 
-    // Obtém os valores do formulário
+async function salvarMudancas(event) {
+    event.preventDefault(); 
+
     const novoPrimeiroNome = document.getElementById('novo_apelido').value;
     const novoSobrenome = document.getElementById('novo_sobrenome').value;
     const telefone = document.getElementById('novo_telefone').value;
@@ -9,16 +15,13 @@ async function salvarMudancas(event) {
     const novaSenha = document.getElementById('nova_senha').value;
     const confirmacaoSenha = document.getElementById('nova_senha_confirmacao').value;
 
-    // Verifica se as senhas coincidem
     if (novaSenha && novaSenha !== confirmacaoSenha) {
         alert('As senhas não coincidem.');
         return;
     }
 
-    // Construa o objeto de dados
     const dados = {};
 
-    // Atualiza o nome de usuário com base nas mudanças
     dados.nomeUsuario = `${novoPrimeiroNome || dadosUsuarioAtual.primeiroNome} ${novoSobrenome || dadosUsuarioAtual.sobrenome}`.trim();
 
     if (novoPrimeiroNome) dados.primeiroNome = novoPrimeiroNome;
@@ -27,12 +30,10 @@ async function salvarMudancas(event) {
     if (email) dados.email = email;
     if (novaSenha) dados.senha = novaSenha;
 
-    // Substitua `{id}` pelo ID real do usuário
-    const userId = 3; // Substitua pelo ID do usuário
+    const userId = 3; 
     const endpoint = `http://localhost:8080/usuarios/atualizar/${userId}`;
 
     try {
-        // Envia a requisição PATCH para o endpoint
         const response = await fetch(endpoint, {
             method: 'PATCH',
             headers: {
@@ -114,10 +115,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
             const data = await response.json();
-
+    
             const container = document.querySelector(".bloco_alunos_favoritos");
             container.innerHTML = ""; 
-
+    
             if (data.length === 0) {
                 const noFavoritesMessage = document.createElement("p");
                 noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
@@ -127,10 +128,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
-
+    
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
-
+    
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -138,25 +139,19 @@ document.addEventListener("DOMContentLoaded", async function () {
                             cursoComMaiorPontuacao = curso.nomeCurso;
                         }
                     }
-
-                    let medalhaTipo = 'bronze_medal'; 
-
-                    if (maxPontos > 600) {
-                        medalhaTipo = 'gold_medal';
-                    } else if (maxPontos > 500) {
-                        medalhaTipo = 'silver_medal';
-                    }
-
+    
+                    const medalhaTipo = obterMedalha(maxPontos);
+    
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno_favoritos";
-
+    
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
-                        <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                        <img src="../imgs/${medalhaTipo}" alt="medalha">
                         <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
                     `;
-
+    
                     container.appendChild(alunoDiv);
                 }
             }
@@ -169,10 +164,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
             const data = await response.json();
-
+    
             const container = document.querySelector(".bloco_alunos");
             container.innerHTML = ""; 
-
+    
             if (data.length === 0) {
                 const noInterestedMessage = document.createElement("p");
                 noInterestedMessage.textContent = "Não há alunos interessados no momento.";
@@ -182,10 +177,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
-
+    
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
-
+    
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -193,25 +188,19 @@ document.addEventListener("DOMContentLoaded", async function () {
                             cursoComMaiorPontuacao = curso.nomeCurso;
                         }
                     }
-
-                    let medalhaTipo = 'bronze_medal';
-
-                    if (maxPontos > 600) {
-                        medalhaTipo = 'gold_medal';
-                    } else if (maxPontos > 500) {
-                        medalhaTipo = 'silver_medal';
-                    }
-
+    
+                    const medalhaTipo = obterMedalha(maxPontos);
+    
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno";
-
+    
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a></span>
-                        <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                        <img src="../imgs/${medalhaTipo}" alt="medalha">
                         <button onclick="atribuir(${aluno.id})">Atribuir</button>
                     `;
-
+    
                     container.appendChild(alunoDiv);
                 }
             }
@@ -219,8 +208,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error("Erro ao buscar interessados:", error);
         }
     }
-
-
 
     window.desfavoritar = async function (idAluno) {
         try {
@@ -247,7 +234,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     listarFavoritos();
     listarInteressados();
+    window.formatDate = formatDate
 });
+
 
 document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(sessionStorage.getItem('user'));
@@ -370,24 +359,18 @@ async function listarContratados() {
                     }
                 }
 
-                let medalhaTipo = 'bronze_medal';
-
-                if (maxPontos > 600) {
-                    medalhaTipo = 'gold_medal';
-                } else if (maxPontos > 500) {
-                    medalhaTipo = 'silver_medal';
-                }
+                const medalhaTipo = obterMedalha(maxPontos);
 
                 const alunoDiv = document.createElement("div");
                 alunoDiv.className = "box_Aluno";
                 alunoDiv.style.backgroundColor = "#9ABE62";
                 alunoDiv.style.border = "3px solid #828282";
-                alunoDiv.style.color = "#363636"
+                alunoDiv.style.color = "#363636";
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
-                    <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                    <img src="../imgs/${medalhaTipo}" alt="medalha">
                 `;
 
                 container.appendChild(alunoDiv);
@@ -457,13 +440,7 @@ async function listarProcessoSeletivo() {
                     }
                 }
 
-                let medalhaTipo = 'bronze_medal';
-
-                if (maxPontos > 600) {
-                    medalhaTipo = 'gold_medal';
-                } else if (maxPontos > 500) {
-                    medalhaTipo = 'silver_medal';
-                }
+                const medalhaTipo = obterMedalha(maxPontos);
 
                 const alunoDiv = document.createElement("div");
                 alunoDiv.className = "box_Aluno";
@@ -474,7 +451,7 @@ async function listarProcessoSeletivo() {
                 alunoDiv.innerHTML = `
                     <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
-                    <img src="../imgs/${medalhaTipo}.png" alt="medalha">
+                    <img src="../imgs/${medalhaTipo}" alt="medalha">
                     <button onclick="atribuir(${aluno.id}, true)">Atribuir</button>
                 `;
 
@@ -523,9 +500,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Função para fechar a div de atribuição
 function fecharAtribuicao() {
     const atribuicaoDiv = document.getElementById("atribuicao");
-    atribuicaoDiv.style.display = "none"; // Oculta a div de atribuição
+    atribuicaoDiv.style.display = "none"; 
 }
 
