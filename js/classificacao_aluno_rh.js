@@ -1,3 +1,6 @@
+import { obterMedalha } from './medalhas.js';
+window.fazerLogout = fazerLogout
+
 document.addEventListener('DOMContentLoaded', function () {
     const filtroCursos = document.getElementById('courseFilter');
     const tabelaRanking = document.getElementById('rankingTable');
@@ -31,19 +34,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 tabelaRanking.innerHTML = '';
 
                 arrayRanking.forEach((entrada, index) => {
-                    let medalha = '';
-                    if (entrada.pontosTotais > 600) {
-                        medalha = 'gold_medal.png';
-                    } else if (entrada.pontosTotais > 500) {
-                        medalha = 'silver_medal.png';
-                    } else {
-                        medalha = 'bronze_medal.png';
-                    }
+                    
+                    const medalhaTipo = obterMedalha(entrada.pontosTotais);
 
                     const linha = document.createElement('tr');
                     linha.innerHTML = `
                         <td>
-                            <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
+                            <img src="/imgs/${medalhaTipo}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
                         </td>
 
                         <td>
@@ -121,39 +118,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     const response = await fetch('http://localhost:8080/pontuacoes/ranking');
                     if (!response.ok) throw new Error('Falha ao buscar o ranking por curso.');
-
+        
                     const dados = await response.json();
                     const dadosCurso = Object.values(dados).find(curso => curso.nomeCurso === this.value);
                     if (dadosCurso) {
                         const dadosRanking = dadosCurso.ranking || [];
                         tabelaRanking.innerHTML = '';
-
+        
                         dadosRanking.forEach((entrada, index) => {
-                            let medalha = '';
-                            if (entrada.pontosTotais > 600) {
-                                medalha = 'gold_medal.png';
-                            } else if (entrada.pontosTotais > 500) {
-                                medalha = 'silver_medal.png';
-                            } else {
-                                medalha = 'bronze_medal.png';
-                            }
 
+                            const medalhaTipo = obterMedalha(entrada.pontosTotais);
+        
                             const linha = document.createElement('tr');
                             linha.innerHTML = `
+                                <td>
+                                    <img src="/imgs/${medalhaTipo}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
+                                </td>
                                 <td>
                                     <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
                                     ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}<br>
                                     <small>${entrada.aluno.email}</small>
                                 </td>
                                 <td>
-                                    <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
-                                </td>
-                                <td>
-                                    ${entrada.pontosTotais} pontos
+                                    ${entrada.pontosTotais}
                                 </td>
                             `;
                             tabelaRanking.appendChild(linha);
-
+        
                             carregarImagemPerfil(entrada.aluno.id);
                         });
                     }
@@ -161,9 +152,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (error) {
                 console.error('Erro ao buscar o ranking por curso:', error);
             }
-        });
+        });        
 
-        // Chama as funções iniciais
         buscarEExibirRanking();
         popularFiltroCursos();
     } else {
