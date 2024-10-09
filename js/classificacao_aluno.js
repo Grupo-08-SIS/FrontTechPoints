@@ -1,3 +1,6 @@
+import { obterMedalha } from './medalhas.js';
+window.fazerLogout = fazerLogout
+
 document.addEventListener('DOMContentLoaded', function () {
     const filtroCursos = document.getElementById('courseFilter');
     const tabelaRanking = document.getElementById('rankingTable');
@@ -7,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 const response = await fetch('http://localhost:8080/pontuacoes/ranking');
                 if (!response.ok) throw new Error('Falha ao buscar o ranking.');
-
+        
                 const dados = await response.json();
                 const pontosTotais = {};
-
+        
                 Object.values(dados).forEach(dadosCurso => {
                     dadosCurso.ranking.forEach(entrada => {
                         const aluno = entrada.aluno;
@@ -25,21 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         pontosTotais[aluno.id].pontosTotais += entrada.pontosTotais;
                     });
                 });
-
+        
                 const arrayRanking = Object.values(pontosTotais).sort((a, b) => b.pontosTotais - a.pontosTotais);
-
+        
                 tabelaRanking.innerHTML = '';
-
+        
                 arrayRanking.forEach((entrada, index) => {
-                    let medalha = '';
-                    if (entrada.pontosTotais > 600) {
-                        medalha = 'gold_medal.png';
-                    } else if (entrada.pontosTotais > 500) {
-                        medalha = 'silver_medal.png';
-                    } else {
-                        medalha = 'bronze_medal.png';
-                    }
-
+                    const medalha = obterMedalha(entrada.pontosTotais); 
+        
                     const linha = document.createElement('tr');
                     linha.innerHTML = `
                         <td>
@@ -52,13 +48,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         </td>
                     `;
                     tabelaRanking.appendChild(linha);
-
+        
                     carregarImagemPerfil(entrada.id);
                 });
             } catch (error) {
                 console.error('Erro ao buscar o ranking:', error);
             }
-        }
+        }        
 
         async function carregarImagemPerfil(id) {
             const imgElement = document.getElementById(`img-${id}`);
@@ -72,14 +68,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         const imageUrl = URL.createObjectURL(imageBlob);
                         imgElement.src = imageUrl;
                     } else {
-                        imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                        imgElement.src = '/imgs/foto_padrao.png'; 
                     }
                 } else {
-                    imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                    imgElement.src = '/imgs/foto_padrao.png'; 
                 }
             } catch (error) {
                 console.error('Erro ao buscar a imagem do perfil:', error);
-                imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                imgElement.src = '/imgs/foto_padrao.png'; 
             }
 
             imgElement.style.width = '50px';
@@ -116,23 +112,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     const response = await fetch('http://localhost:8080/pontuacoes/ranking');
                     if (!response.ok) throw new Error('Falha ao buscar o ranking por curso.');
-
+        
                     const dados = await response.json();
                     const dadosCurso = Object.values(dados).find(curso => curso.nomeCurso === this.value);
                     if (dadosCurso) {
                         const dadosRanking = dadosCurso.ranking || [];
                         tabelaRanking.innerHTML = '';
-
+        
                         dadosRanking.forEach((entrada, index) => {
-                            let medalha = '';
-                            if (entrada.pontosTotais > 600) {
-                                medalha = 'gold_medal.png';
-                            } else if (entrada.pontosTotais > 500) {
-                                medalha = 'silver_medal.png';
-                            } else {
-                                medalha = 'bronze_medal.png';
-                            }
-
+                            const medalha = obterMedalha(entrada.pontosTotais); // Função para obter a medalha
+        
                             const linha = document.createElement('tr');
                             linha.innerHTML = `
                                 <td>
@@ -141,11 +130,11 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <small>${entrada.aluno.email}</small>
                                 </td>
                                 <td>
-                                <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
+                                    <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
                                 </td>
                             `;
                             tabelaRanking.appendChild(linha);
-
+        
                             carregarImagemPerfil(entrada.aluno.id);
                         });
                     }
@@ -153,9 +142,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (error) {
                 console.error('Erro ao buscar o ranking por curso:', error);
             }
-        });
+        });        
 
-        // Chama as funções iniciais
         buscarEExibirRanking();
         popularFiltroCursos();
     } else {
