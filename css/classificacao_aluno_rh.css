@@ -288,9 +288,20 @@ header .search-container input#searchInput {
     color: #FFFFFF;
 }
 
+.table td:first-child {
+    width: 10%; 
+    color: #FFFFFF;
+}
+
 .table th:nth-child(2),
 .table td:nth-child(2) {
-    width: 50%; 
+    width: auto;
+    color: #FFFFFF;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+    width: auto;
     color: #FFFFFF;
 }
 

@@ -38,10 +38,14 @@ document.addEventListener('DOMContentLoaded', function () {
         
                     const linha = document.createElement('tr');
                     linha.innerHTML = `
+
+                        <td style="text-align: right;">
+                        <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
+                        </td>
+
                         <td>
-                            <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
-                            ${entrada.nome}<br>
-                            <small>${entrada.email}</small>
+                            <span style="font-weight: 800;">${entrada.nome}</span> <br>
+                            <small style="font-weight: 200;">${entrada.email}</small>
                         </td>
                         <td>
                             <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
@@ -124,10 +128,13 @@ document.addEventListener('DOMContentLoaded', function () {
         
                             const linha = document.createElement('tr');
                             linha.innerHTML = `
-                                <td>
+                                <td style="text-align: right;">
                                     <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
-                                    ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}<br>
-                                    <small>${entrada.aluno.email}</small>
+                                </td>
+
+                                <td>
+                                    <span style="font-weight: 800;">${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}</span><br>
+                                    <small style="font-weight: 200;">${entrada.aluno.email}</small>
                                 </td>
                                 <td>
                                     <img src="/imgs/${medalha}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">

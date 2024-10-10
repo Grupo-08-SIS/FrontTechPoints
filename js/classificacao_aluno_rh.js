@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 tabelaRanking.innerHTML = '';
 
                 arrayRanking.forEach((entrada, index) => {
-                    
+
                     const medalhaTipo = obterMedalha(entrada.pontosTotais);
 
                     const linha = document.createElement('tr');
@@ -43,16 +43,19 @@ document.addEventListener('DOMContentLoaded', function () {
                             <img src="/imgs/${medalhaTipo}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
                         </td>
 
-                        <td>
+                         <td style="text-align: right;">
                             <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
-                            ${entrada.nome}<br>
-                            <small>${entrada.email}</small>
                         </td>
-                        
+
                         <td>
-                            ${entrada.pontosTotais}
+                            <span style="font-weight: 800;">${entrada.nome}</span> <br>
+                            <small style="font-weight: 200;">${entrada.email}</small>
                         </td>
-                    `;
+    
+                        <td>
+                            ${entrada.pontosTotais} 
+                        </td>
+                        `;
                     tabelaRanking.appendChild(linha);
 
                     carregarImagemPerfil(entrada.id);
@@ -74,14 +77,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         const imageUrl = URL.createObjectURL(imageBlob);
                         imgElement.src = imageUrl;
                     } else {
-                        imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                        imgElement.src = '/imgs/foto_padrao.png';
                     }
                 } else {
-                    imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                    imgElement.src = '/imgs/foto_padrao.png';
                 }
             } catch (error) {
                 console.error('Erro ao buscar a imagem do perfil:', error);
-                imgElement.src = '/imgs/foto_padrao.png'; // Foto padrão
+                imgElement.src = '/imgs/foto_padrao.png';
             }
 
             imgElement.style.width = '50px';
@@ -118,33 +121,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     const response = await fetch('http://localhost:8080/pontuacoes/ranking');
                     if (!response.ok) throw new Error('Falha ao buscar o ranking por curso.');
-        
+
                     const dados = await response.json();
                     const dadosCurso = Object.values(dados).find(curso => curso.nomeCurso === this.value);
                     if (dadosCurso) {
                         const dadosRanking = dadosCurso.ranking || [];
                         tabelaRanking.innerHTML = '';
-        
+
                         dadosRanking.forEach((entrada, index) => {
 
                             const medalhaTipo = obterMedalha(entrada.pontosTotais);
-        
+
                             const linha = document.createElement('tr');
                             linha.innerHTML = `
                                 <td>
                                     <img src="/imgs/${medalhaTipo}" alt="${entrada.pontosTotais} pontos" style="width: 40px; height: 40px;">
                                 </td>
+
+                                <td style="text-align: right;">
+                                <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
+                                </td>
+
                                 <td>
-                                    <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
-                                    ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}<br>
-                                    <small>${entrada.aluno.email}</small>
+                                    <span style="font-weight: 800;">${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}</span> <br>
+                                    <small style="font-weight: 200;">${entrada.aluno.email}</small>
                                 </td>
                                 <td>
                                     ${entrada.pontosTotais}
                                 </td>
                             `;
                             tabelaRanking.appendChild(linha);
-        
+
                             carregarImagemPerfil(entrada.aluno.id);
                         });
                     }
@@ -152,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (error) {
                 console.error('Erro ao buscar o ranking por curso:', error);
             }
-        });        
+        });
 
         buscarEExibirRanking();
         popularFiltroCursos();
