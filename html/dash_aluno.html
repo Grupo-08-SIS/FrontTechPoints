@@ -137,19 +137,65 @@
                                 <div class="day active" onclick="toggleDay(this)">Sex</div>
                                 <div class="day" onclick="toggleDay(this)">Sáb</div>
                             </div>
-                            <h3>Progresso atual</h3>
+                            <h4>Progresso atual</h4>
                             <p><strong>8 horas e 7 minutos</strong> foram concluídas da meta atual definida.</p>
-                            <div class="edit-goal">Editar Meta</div>
+                            <button class="edit-goal" onclick="openModal()">Editar Meta</button>
                         </div>
                     </section>
+                </div>
+                <!-- Modal -->
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <h4>Editar Meta de Estudo</h4>
+                        <p>Insira as horas de estudo para cada dia:</p>
+                        <div class="day-inputs">
+                            <div class="column">
+                                <label for="dom">Domingo:</label>
+                                <input type="number" id="dom" min="0" max="24" value="0"
+                                    oninput="updateWeeklyTotal()" />
+
+                                <label for="ter">Terça:</label>
+                                <input type="number" id="ter" min="0" max="24" value="0"
+                                    oninput="updateWeeklyTotal()" />
+
+                                <label for="qui">Quinta:</label>
+                                <input type="number" id="qui" min="0" max="24" value="0"
+                                    oninput="updateWeeklyTotal()" />
+                            </div>
+                            <div class="column">
+                                <label for="seg">Segunda:</label>
+                                <input type="number" id="seg" min="0" max="24" value="0"
+                                    oninput="updateWeeklyTotal()" />
+
+                                <label for="qua">Quarta:</label>
+                                <input type="number" id="qua" min="0" max="24" value="0"
+                                    oninput="updateWeeklyTotal()" />
+
+                                <label for="sex">Sexta:</label>
+                                <input type="number" id="sex" min="0" max="24" value="0"
+                                    oninput="updateWeeklyTotal()" />
+                            </div> 
+                            </div>
+                            <div class="single">
+                                <label for="sab">Sábado:</label>
+                                <input type="number" id="sab" min="0" max="24" value="0"
+                                    oninput="updateWeeklyTotal()" />
+                            </div>
+                        <p>Total semanal: <span id="weekly-total">0</span> horas</p>
+                        <button onclick="saveChanges()">Salvar</button>
+
+                    </div>
                 </div>
                 <div class="dash-atual">
                     <section class="course-section-2">
                         <div class="frase-dia">
                             <h2>Frase do Dia:</h2>
                             <p><b>Miyato Musashi</b></p>
-                            <p>“Tanto ao lutar quanto na vida cotidiana, você deve ser determinado, ainda que calmo. Vá
-                                de encontro à situação sem tensão, mas também sem desleixo, com o espírito estável, mas
+                            <p>“Tanto ao lutar quanto na vida cotidiana, você deve ser determinado, ainda que
+                                calmo. Vá
+                                de encontro à situação sem tensão, mas também sem desleixo, com o espírito
+                                estável, mas
                                 sem prejulgamentos.”</p>
                         </div>
                     </section>
@@ -218,7 +264,50 @@
 
                 window.location.href = '/login.html';
             }
-        }); 
+        });
+
+        function openModal() {
+            document.getElementById("modal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById("modal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function updateWeeklyTotal() {
+            const days = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+            let total = 0;
+
+            days.forEach(day => {
+                const value = parseFloat(document.getElementById(day).value);
+                total += isNaN(value) ? 0 : value;
+            });
+
+            document.getElementById("weekly-total").textContent = total;
+        }
+
+        function saveChanges() {
+            const days = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+            let studyPlan = {};
+
+            days.forEach(day => {
+                const value = parseFloat(document.getElementById(day).value);
+                studyPlan[day] = isNaN(value) ? 0 : value;
+            });
+
+            // Salvar o plano de estudo (pode ser feito com um envio para uma API ou armazenamento local)
+            console.log("Plano de estudo salvo:", studyPlan);
+
+            alert("Meta de estudo atualizada!");
+            closeModal();
+        }
     </script>
 </body>
 
