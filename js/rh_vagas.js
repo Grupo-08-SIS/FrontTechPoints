@@ -104,6 +104,11 @@ async function exibirAlunosPorCurso() {
         const contratadosData = await contratadosResponse.json();
         const contratadosSet = new Set(contratadosData.map(aluno => aluno.id));
 
+        // Fetch dos alunos favoritos
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+        const favoritosSet = new Set(favoritosData.map(aluno => aluno.id));
+
         const alunos = curso.ranking || [];
         const blocoAlunos = document.getElementById(`bloco_alunos_${cursoId}`);
         const mensagemDiv = document.getElementById(`mensagem_${cursoId}`);
@@ -149,6 +154,10 @@ async function exibirAlunosPorCurso() {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
 
+                if (favoritosSet.has(aluno.aluno.id)) {
+                    alunoDiv.style.border = '2px solid yellow'; 
+                }
+
                 const medalha = obterMedalha(aluno.pontosTotais);
 
                 alunoDiv.innerHTML = `
@@ -182,6 +191,10 @@ async function atualizarAlunos() {
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
         const idsContratados = contratadosData.map(aluno => aluno.id);
+
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+        const idsFavoritos = favoritosData.map(aluno => aluno.id);
 
         const cursosResponse = await fetch('http://localhost:8080/pontuacoes/alunos');
         const data = await cursosResponse.json();
@@ -228,9 +241,8 @@ async function atualizarAlunos() {
                 continue;
             }
 
-            const maxAlunos = 3;
-            let alunosExibidos = [];
-            let alunosParaExibir = [];
+            const alunosExibidos = [];
+            const alunosParaExibir = [];
 
             for (const aluno of alunos) {
                 if (!idsInteressados.includes(aluno.aluno.id) &&
@@ -241,23 +253,58 @@ async function atualizarAlunos() {
             }
 
             if (alunosParaExibir.length > 0) {
+                blocoAlunos.style.width = '70%';
+                blocoAlunos.style.minHeight = '100px';
+                blocoAlunos.style.display = 'flex';
+                blocoAlunos.style.flexWrap = 'nowrap';
+                blocoAlunos.style.justifyContent = 'center';
+                blocoAlunos.style.alignItems = 'center';
+                blocoAlunos.style.gap = '10px';
+                blocoAlunos.style.padding = '10px';
+
+                if (alunosParaExibir.length > 3) {
+                    blocoAlunos.style.overflowY = 'auto'; 
+                    blocoAlunos.style.maxHeight = '400vh'; 
+                    blocoAlunos.style.justifyContent = 'flex-start';
+                    blocoAlunos.style.alignItems = 'flex-start';
+                } else {
+                    blocoAlunos.style.overflowY = 'hidden';
+                    blocoAlunos.style.maxHeight = 'none';
+                }
+
                 for (const aluno of alunosParaExibir) {
-                    if (alunosExibidos.length < maxAlunos) {
-                        const alunoDiv = document.createElement('div');
-                        alunoDiv.className = 'box_Aluno';
+                    const alunoDiv = document.createElement('div');
+                    alunoDiv.className = 'box_Aluno';
 
-                        const medalhaTipo = obterMedalha(aluno.pontosTotais);
+                    alunoDiv.style.backgroundColor = '#ffffff';
+                    alunoDiv.style.border = '3px solid #ddd';
+                    alunoDiv.style.borderRadius = '10px';
+                    alunoDiv.style.boxShadow = '0 8px 8px rgba(0, 0, 0, 0.267)';
+                    alunoDiv.style.width = '250px';
+                    alunoDiv.style.flexShrink = '0'; 
+                    alunoDiv.style.padding = '20px';
+                    alunoDiv.style.margin = '10px';
+                    alunoDiv.style.display = 'flex';
+                    alunoDiv.style.flexDirection = 'column';
+                    alunoDiv.style.alignItems = 'center';
+                    alunoDiv.style.position = 'relative';
+                    alunoDiv.style.color = '#244aa5';
 
-                        alunoDiv.innerHTML = `
-                            <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
-                            <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
-                            <img src="../imgs/${medalhaTipo}" alt="medalha">
-                            <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
-                        `;
-
-                        blocoAlunos.appendChild(alunoDiv);
-                        alunosExibidos.push(aluno.aluno.id);
+                    if (idsFavoritos.includes(aluno.aluno.id)) {
+                        alunoDiv.style.border = '2px solid yellow';
                     }
+
+                    const medalhaTipo = obterMedalha(aluno.pontosTotais);
+
+                    alunoDiv.innerHTML = `
+                        <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
+                        <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
+                        <img src="../imgs/${medalhaTipo}" alt="medalha">
+                        <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
+                    `;
+
+                    blocoAlunos.appendChild(alunoDiv);
+                    alunosExibidos.push(aluno.aluno.id);
                 }
 
                 if (alunosExibidos.length === 0) {
@@ -287,6 +334,7 @@ async function atualizarAlunos() {
         console.error('Erro ao carregar os dados:', error);
     }
 }
+
 
 function shuffleArray(array) {
     let currentIndex = array.length, randomIndex;
@@ -410,11 +458,18 @@ async function favoritar(alunoId, favoritarButton) {
         if (response.ok) {
             favoritarButton.innerHTML = `Desfavoritar <img src="/imgs/coracao_favoritar.png" alt="Desfavoritar">`;
             favoritarButton.style.backgroundColor = 'red';
-            favoritarButton.style.width = '50%'
+            favoritarButton.style.width = '50%';
             favoritarButton.classList.add('favoritado');
             favoritarButton.onclick = () => desfavoritar(alunoId, favoritarButton);
+
+            // Pega a box do aluno e altera a borda
+            const boxAluno = document.querySelector(`.box_aluno[data-aluno-id="${alunoId}"]`);
+            console.log("box do aluno selecionado " + boxAluno); // Log para verificar se o box foi selecionado
+            if (boxAluno) {
+                boxAluno.style.border = '2px solid #FFBF00'; // Muda a cor da borda para amarelo
+            }
         } else {
-            alert('Falha ao favoritar o aluno.');
+            console.error(`Box do aluno com ID ${alunoId} não encontrada.`);
         }
     } catch (error) {
         console.error('Erro ao favoritar o aluno:', error);
@@ -431,9 +486,15 @@ async function desfavoritar(alunoId, favoritarButton) {
         if (response.ok) {
             favoritarButton.innerHTML = `Favoritar <img src="../imgs/coracao_favoritar.png" alt="Favoritar">`;
             favoritarButton.classList.remove('favoritado');
-            favoritarButton.style.width = '43%'
+            favoritarButton.style.width = '43%';
             favoritarButton.style.backgroundColor = '#244aa5';
             favoritarButton.onclick = () => favoritar(alunoId, favoritarButton);
+
+            // Pega a box do aluno e altera a borda de volta
+            const boxAluno = document.querySelector(`.box_aluno[data-aluno-id="${alunoId}"]`);
+            if (boxAluno) {
+                boxAluno.style.border = '2px solid #DDDDDD'; // Restaura a borda para a cor padrão
+            }
         } else {
             alert('Falha ao desfavoritar o aluno.');
         }
@@ -464,6 +525,9 @@ function getIdUsuarioLogado() {
 
 function fecharVerMais() {
     document.querySelector('.container_ver_mais').style.display = 'none';
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
 }
 
 async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
@@ -541,30 +605,32 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function exibirAlunosPorCidade(cidadeSelecionada) {
-    console.log('Cidade selecionada:', cidadeSelecionada); 
+    console.log('Cidade selecionada:', cidadeSelecionada);
     try {
-        const [pontuacoesResponse, usuariosResponse, interessadosResponse, contratadosResponse, processoSeletivoResponse] = await Promise.all([
+        const [pontuacoesResponse, usuariosResponse, interessadosResponse, contratadosResponse, processoSeletivoResponse, favoritosResponse] = await Promise.all([
             fetch(`http://localhost:8080/pontuacoes/ranking`),
             fetch('http://localhost:8080/usuarios/listar'),
             fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`),
             fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`),
-            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`)
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`),
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`) // Adicionado aqui
         ]);
 
-        const [pontuacoesData, usuariosData, interessadosData, contratadosData, processoSeletivoData] = await Promise.all([
+        const [pontuacoesData, usuariosData, interessadosData, contratadosData, processoSeletivoData, favoritosData] = await Promise.all([
             pontuacoesResponse.json(),
             usuariosResponse.json(),
             interessadosResponse.json(),
             contratadosResponse.json(),
-            processoSeletivoResponse.json()
+            processoSeletivoResponse.json(),
+            favoritosResponse.json() // Adicionado aqui
         ]);
 
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; 
-        containerCursos.style.display = 'block'; 
-        containerCursos.style.justifyContent = ''; 
-        containerCursos.style.alignItems = ''; 
-        containerCursos.style.height = ''; 
+        containerCursos.innerHTML = '';
+        containerCursos.style.display = 'block';
+        containerCursos.style.justifyContent = '';
+        containerCursos.style.alignItems = '';
+        containerCursos.style.height = '';
 
         const usuariosMap = usuariosData.reduce((map, usuario) => {
             if (usuario.tipoUsuario === "Aluno" && usuario.endereco) {
@@ -579,6 +645,7 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
         const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
         const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
+        const favoritosSet = new Set(favoritosData.map(favorito => favorito.id)); // Adicionado aqui
 
         const alunosPorCurso = Object.entries(pontuacoesData).reduce((acc, [cursoId, curso]) => {
             const alunosFiltrados = curso.ranking?.filter(aluno => {
@@ -635,10 +702,10 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
 
             const blocoAlunos = document.getElementById(`bloco_alunos_${curso}`);
             alunos.forEach(aluno => {
-                const medalha = obterMedalha(aluno.pontosTotais); 
+                const medalha = obterMedalha(aluno.pontosTotais);
 
                 const alunoDiv = document.createElement('div');
-                alunoDiv.className = 'box_Aluno';
+                alunoDiv.className = 'box_Aluno' + (favoritosSet.has(aluno.aluno.id) ? ' aluno-favorito' : ''); // Adicionado aqui
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
@@ -660,6 +727,15 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
         console.error('Erro ao carregar os dados dos alunos:', error);
     }
 }
+
+const style = document.createElement('style');
+style.innerHTML = `
+    .aluno-favorito {
+        border: 2px solid yellow; /* Define a borda amarela */
+        padding: 10px; /* Adiciona um pouco de espaço interno */
+    }
+`;
+document.head.appendChild(style);
 
 document.addEventListener('DOMContentLoaded', async function () {
     try {
@@ -700,25 +776,30 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
-    console.log('Escolaridade selecionada:', escolaridadeSelecionada); 
+    console.log('Escolaridade selecionada:', escolaridadeSelecionada);
 
     try {
         const containerCursos = document.getElementById('cursos_container');
-        
+
         while (containerCursos.firstChild) {
             containerCursos.removeChild(containerCursos.firstChild);
         }
 
-        containerCursos.style.display = 'block'; 
-        containerCursos.style.justifyContent = ''; 
-        containerCursos.style.alignItems = ''; 
-        containerCursos.style.height = ''; 
+        containerCursos.style.display = 'block';
+        containerCursos.style.justifyContent = '';
+        containerCursos.style.alignItems = '';
+        containerCursos.style.height = '';
 
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
 
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
+
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+
+        const favoritosSet = Array.isArray(favoritosData) ? new Set(favoritosData.map(aluno => aluno.id)) : new Set();
 
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
@@ -768,16 +849,16 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
             const noResultsMessage = document.createElement('div');
             noResultsMessage.innerText = `Nenhum aluno encontrado com a escolaridade ${escolaridadeSelecionada}.`;
             noResultsMessage.className = 'mensagem_nenhum_aluno';
-            noResultsMessage.style.textAlign = 'center'; 
-            noResultsMessage.style.margin = '20px 0'; 
+            noResultsMessage.style.textAlign = 'center';
+            noResultsMessage.style.margin = '20px 0';
             noResultsMessage.style.fontWeight = '800';
             noResultsMessage.style.fontSize = '20px';
             noResultsMessage.style.color = '#808080';
 
-            containerCursos.style.display = 'flex'; 
-            containerCursos.style.justifyContent = 'center'; 
-            containerCursos.style.alignItems = 'center'; 
-            containerCursos.style.height = '20vh'; 
+            containerCursos.style.display = 'flex';
+            containerCursos.style.justifyContent = 'center';
+            containerCursos.style.alignItems = 'center';
+            containerCursos.style.height = '20vh';
 
             containerCursos.appendChild(noResultsMessage);
             console.log(`Nenhum aluno encontrado com a escolaridade ${escolaridadeSelecionada}.`);
@@ -812,6 +893,10 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
             alunosPorCurso[curso].forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
+
+                if (favoritosSet.has(aluno.aluno.id)) {
+                    alunoDiv.style.border = '2px solid yellow'; 
+                }
 
                 const medalha = obterMedalha(aluno.pontosTotais);
 
@@ -872,6 +957,13 @@ async function exibirAlunosPorNome(nomeBuscado) {
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
         console.log('Dados de processo seletivo:', processoSeletivoData); 
+
+        // Buscar favoritos
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+        console.log('Dados de favoritos:', favoritosData); 
+
+        const favoritosSet = new Set(favoritosData.map(favorito => favorito.id));
 
         const containerCursos = document.getElementById('cursos_container');
         containerCursos.innerHTML = ''; 
@@ -952,6 +1044,10 @@ async function exibirAlunosPorNome(nomeBuscado) {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
 
+                if (favoritosSet.has(aluno.aluno.id)) {
+                    alunoDiv.style.border = '2px solid yellow';
+                }
+
                 const medalha = obterMedalha(aluno.pontosTotais);
 
                 alunoDiv.innerHTML = `
@@ -1003,9 +1099,15 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
         const interessadosData = await interessadosResponse.json();
         console.log('Dados de interessados:', interessadosData); 
 
+        // Adicionando chamada para obter os dados do processo seletivo
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
         console.log('Dados de processo seletivo:', processoSeletivoData); 
+
+        // Adicionando chamada para obter alunos favoritos
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+        console.log('Dados de favoritos:', favoritosData); 
 
         const containerCursos = document.getElementById('cursos_container');
         
@@ -1018,7 +1120,7 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             if (usuario.tipoUsuario === "Aluno" && usuario.etnia) {
                 usuariosMap[usuario.id] = {
                     etnia: usuario.etnia,
-                    nome: `${usuario.primeiroNome} ${usuario.sobrenome}`
+                    nome: `${usuario.primeiroNome} ${usuario.sobrenome}` 
                 }; 
             }
         });
@@ -1026,6 +1128,8 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
         const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
         const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
+
+        const favoritosSet = new Set(favoritosData.map(favorito => favorito.id));
 
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
@@ -1097,16 +1201,20 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             alunosPorCurso[curso].forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
-            
+
+                if (favoritosSet.has(aluno.aluno.id)) {
+                    alunoDiv.style.border = '2px solid yellow'; 
+                }
+
                 const medalha = obterMedalha(aluno.pontosTotais);
-            
+
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
                     <img src="../imgs/${medalha}" alt="medalha">
                     <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
                 `;
-            
+
                 blocoAlunos.appendChild(alunoDiv);
             });
 
@@ -1152,6 +1260,10 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
         console.log('Dados de processo seletivo:', processoSeletivoData);
+
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+        const favoritosIds = favoritosData.map(favorito => favorito.id);
 
         const containerCursos = document.getElementById('cursos_container');
         
@@ -1246,7 +1358,10 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
             alunosPorCurso[curso].forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
-        
+
+                const isFavorito = favoritosIds.includes(aluno.aluno.id);
+                alunoDiv.style.border = isFavorito ? '2px solid yellow' : 'none';
+
                 const medalha = obterMedalha(aluno.pontosTotais);
         
                 alunoDiv.innerHTML = `
