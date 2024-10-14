@@ -124,8 +124,9 @@
                                 </div>
                             </div>
                             <p>75% Completo</p>
-                            <p>Sua meta de estudo é <strong>1h e 30m</strong> por dia,<br> totalizando <strong>10h
-                                    50m</strong> por semana</p>
+                            <p>Sua meta de estudo é <strong>1h e 30m</strong> por dia,<br> totalizando
+                                <strong><span id="horas-na-semana">10h 50m</span></strong> por semana
+                            </p>
                             <div class="days">
                                 <div class="day" onclick="toggleDay(this)">Dom</div>
                                 <div class="day active" onclick="toggleDay(this)">Seg</div>
@@ -138,7 +139,7 @@
                                 <div class="day" onclick="toggleDay(this)">Sáb</div>
                             </div>
                             <h4>Progresso atual</h4>
-                            <p><strong>8 horas e 7 minutos</strong> foram concluídas da meta atual definida.</p>
+                            <p id="meta-estudo-semana"><strong></strong> foram concluídas da meta atual definida.</p>
                             <button class="edit-goal" onclick="openModal()">Editar Meta</button>
                         </div>
                     </section>
@@ -300,8 +301,6 @@
                 const value = parseFloat(document.getElementById(day).value);
                 studyPlan[day] = isNaN(value) ? 0 : value;
             });
-
-            // Salvar o plano de estudo (pode ser feito com um envio para uma API ou armazenamento local)
             console.log("Plano de estudo salvo:", studyPlan);
 
             alert("Meta de estudo atualizada!");
