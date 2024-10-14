@@ -175,14 +175,13 @@
                                 <label for="sex">Sexta:</label>
                                 <input type="number" id="sex" min="0" max="24" value="0"
                                     oninput="updateWeeklyTotal()" />
-                            </div> 
                             </div>
-                            <div class="single">
-                                <label for="sab">Sábado:</label>
-                                <input type="number" id="sab" min="0" max="24" value="0"
-                                    oninput="updateWeeklyTotal()" />
-                            </div>
-                        <p>Total semanal: <span id="weekly-total">0</span> horas</p>
+                        </div>
+                        <div class="single">
+                            <label for="sab">Sábado:</label>
+                            <input type="number" id="sab" min="0" max="24" value="0" oninput="updateWeeklyTotal()" />
+                        </div>
+                        <p class="total-modal">Total semanal: <span id="weekly-total">0</span> horas</p>
                         <button onclick="saveChanges()">Salvar</button>
 
                     </div>
