@@ -418,6 +418,7 @@ main {
 
 .gold-text {
   background: linear-gradient(90deg, #ffd700, #ff8c00);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
@@ -425,6 +426,7 @@ main {
 
 .silver-text {
   background: linear-gradient(90deg, #c0c0c0, #a0a0a0);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
@@ -432,6 +434,7 @@ main {
 
 .bronze-text {
   background: linear-gradient(90deg, #cd7f32, #b87333);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
@@ -646,14 +649,6 @@ main {
   border-radius: 10px;
   overflow: hidden;
   margin: 10px 0;
-}
-
-.progress-bar {
-  background-color: #ffffff;
-}
-
-.progress-bar-striped.progress-bar-animated {
-  background-color: #f7b700;
 }
 
 .days {
@@ -948,4 +943,25 @@ input[type="number"] {
 
 .single {
   width: 100%;
+}
+
+.bold-atual {
+  font-weight: bold;
+}
+
+.progress-bar {
+  background-color: #ffffff;
+}
+
+.progress-bar.meta-atingida {
+  background-color: #007bff;
+
+}
+
+.progress-bar.meta-nao-atingida {
+  background-color: red;
+}
+
+.progress-bar.meta-ultrapassada {
+  background-color: #f7b700;
 }

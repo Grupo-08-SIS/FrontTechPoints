@@ -41,8 +41,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     const topCurso = getTopCurso(pontosPorCursoData);
     updateTopCursoDisplay(topCurso);
 
-    const progressoAtualMetaEstudo = getProgressoAtualMetaEstudo();
-    atualizarElemento(progressoAtualMetaEstudo);
+    const progressoAtualMetaEstudo = await fetchData(
+      `http://localhost:8080/meta-de-estudo/${user.id}`
+    );
+    if (progressoAtualMetaEstudo) {
+      const progressoAtualMetaEstudo2 = getProgressoAtualMetaEstudo(
+        progressoAtualMetaEstudo
+      );
+      atualizarElemento(progressoAtualMetaEstudo2);
+    }
   } catch (error) {
     console.error("Erro:", error);
   }
@@ -325,82 +332,145 @@ document.addEventListener("DOMContentLoaded", async function () {
     )}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.7)`;
   }
 
-  function getProgressoAtualMetaEstudo() {
-    return fetch("http://localhost:8080/tempo_estudo/")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao buscar dados do back-end");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (
-          Array.isArray(data) &&
-          data.length > 0 &&
-          isValidProgressoDiario(data)
-        ) {
-          const horasTotalMeta = getHorasTotais(); // Supondo que essa função retorna a meta total de horas
-          return calcularProgresso(data, horasTotalMeta);
-        } else {
-          console.error(
-            "Estrutura de dados recebida é inválida ou está em um formato inesperado."
-          );
-          return null;
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar ou processar dados:", error);
-        return null;
-      });
+  async function fetchData(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados do back-end");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
-  function isValidProgressoDiario(data) {
-    return data.every(
-      (item) =>
-        item.hasOwnProperty("dia") &&
-        item.hasOwnProperty("horasCumpridas") &&
-        typeof item.dia === "string" &&
-        typeof item.horasCumpridas === "number"
+  function getProgressoAtualMetaEstudo(data) {
+    if (
+      data &&
+      data.diasAtivos &&
+      data.sessoes &&
+      isValidProgressoDiario(data.diasAtivos, data.sessoes)
+    ) {
+      const horasTotalMeta = data.horasTotal;
+      return calcularProgresso(data.diasAtivos, data.sessoes, horasTotalMeta);
+    } else {
+      console.error(
+        "Estrutura de dados recebida é inválida ou está em um formato inesperado."
+      );
+      return null;
+    }
+  }
+
+  function isValidProgressoDiario(diasAtivos, sessoes) {
+    return (
+      Array.isArray(diasAtivos) &&
+      diasAtivos.every(
+        (item) =>
+          item.hasOwnProperty("nomeDia") &&
+          item.hasOwnProperty("qtdTempoEstudo") &&
+          typeof item.nomeDia === "string" &&
+          !isNaN(parseFloat(item.qtdTempoEstudo))
+      ) &&
+      Array.isArray(sessoes) &&
+      sessoes.every(
+        (sessao) =>
+          sessao.hasOwnProperty("diaSessao") &&
+          sessao.hasOwnProperty("qtdTempoSessao") &&
+          typeof sessao.diaSessao === "string" &&
+          typeof sessao.qtdTempoSessao === "number"
+      )
     );
   }
 
-  function calcularProgresso(progressoDiario, horasTotalMeta) {
-    const horasCumpridasTotal = progressoDiario.reduce(
-      (acumulador, dia) => acumulador + dia.horasCumpridas,
-      0
-    );
+  function calcularProgresso(diasAtivos, sessoes, horasTotalMeta) {
+    const diasAtivosAtualizados = diasAtivos.map((dia) => {
+      const horasEstudadasNoDia = sessoes
+        .filter((sessao) => sessao.diaSessao === dia.nomeDia)
+        .reduce(
+          (acumulador, sessao) => acumulador + sessao.qtdTempoSessao,
+          parseFloat(dia.qtdTempoEstudo)
+        );
+
+      const metaAtingida = horasEstudadasNoDia >= horasTotalMeta;
+
+      return {
+        ...dia,
+        metaAtingida,
+      };
+    });
+
+    const horasCumpridasTotal =
+      diasAtivosAtualizados.reduce(
+        (acumulador, dia) => acumulador + parseFloat(dia.qtdTempoEstudo),
+        0
+      ) +
+      sessoes.reduce(
+        (acumulador, sessao) => acumulador + sessao.qtdTempoSessao,
+        0
+      );
+
     const progressoPercentual = (horasCumpridasTotal / horasTotalMeta) * 100;
 
     return {
+      diasAtivos: diasAtivosAtualizados,
       horasCumpridasTotal,
       progressoPercentual: progressoPercentual.toFixed(2),
+      horasTotalMeta,
     };
   }
 
-  function getHorasTotais() {
-    fetch("http://localhost:8080/meta_estudo/")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao buscar dados do back-end");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        return data;
-      });
+  function atualizarElemento(progressoAtualMetaEstudo) {
+    const horasNaSemana = document.getElementById("progress-meta-estudo");
+    horasNaSemana.innerHTML = `${progressoAtualMetaEstudo.progressoPercentual}%`;
+
+    const metaEstudoSemana = document.getElementById("meta-estudo-semana");
+    metaEstudoSemana.innerHTML = `<strong>${progressoAtualMetaEstudo.horasCumpridasTotal}</strong> horas foram concluídas da meta atual definida.`;
+
+    const progressoBarra = document.querySelector(".progress-bar");
+    progressoBarra.style.width = `${progressoAtualMetaEstudo.progressoPercentual}%`;
+
+    progressoBarra.classList.remove(
+      "meta-atingida",
+      "meta-nao-atingida",
+      "meta-ultrapassada"
+    );
+
+    if (progressoAtualMetaEstudo.progressoPercentual < 100) {
+      progressoBarra.classList.add("meta-nao-atingida");
+    } else if (progressoAtualMetaEstudo.progressoPercentual === 100) {
+      progressoBarra.classList.add("meta-atingida");
+    } else {
+      progressoBarra.classList.add("meta-ultrapassada");
+    }
+
+    const horasPorDia =
+      progressoAtualMetaEstudo.horasTotalMeta /
+      progressoAtualMetaEstudo.diasAtivos.length;
+    const horas = Math.floor(horasPorDia);
+    const minutos = Math.round((horasPorDia - horas) * 60);
+
+    document.getElementById(
+      "meta-estudo-diaria"
+    ).innerHTML = `Sua meta de estudo é <strong>${horas}h e ${minutos}m</strong> por dia,<br> totalizando  <strong>${progressoAtualMetaEstudo.horasTotalMeta} horas</strong> por semana.`;
+    atualizarDiasAtivos(progressoAtualMetaEstudo);
   }
 
-  function atualizarElemento() {
-    getProgressoAtualMetaEstudo().then((progressoAtualMetaEstudo) => {
-      if (progressoAtualMetaEstudo) {
-        const progressoAtual = document.getElementById("progresso-atual");
-        progressoAtual.innerText = `${progressoAtualMetaEstudo.horasCumpridasTotal} horas`;
+  function atualizarDiasAtivos(progressoAtualMetaEstudo) {
+    const dias = document.querySelectorAll(".day");
 
-        const horasNaSemana = document.getElementById("horas-na-semana");
-        horasNaSemana.innerText = `${progressoAtualMetaEstudo.progressoPercentual}%`;
+    dias.forEach((elementoDia) => {
+      const nomeDia = elementoDia.getAttribute("data-dia");
 
-        const metaEstudoSemana = document.getElementById("meta-estudo-semana");
-        metaEstudoSemana.innerText = `${progressoAtualMetaEstudo.horasCumpridasTotal} horas foram concluídas da meta atual definida.`;
+      const diaAtivo = progressoAtualMetaEstudo.diasAtivos.find(
+        (dia) => dia.nomeDia === nomeDia
+      );
+
+      if (diaAtivo && diaAtivo.metaAtingida) {
+        elementoDia.classList.add("active");
+      } else {
+        elementoDia.classList.remove("active");
       }
     });
   }
