@@ -112,117 +112,204 @@ a {
     opacity: 1; /* Torna o conteúdo opaco */
 }
 
-
-.geral-container {
-    display: flex;
-    flex-direction: row;
+h3, h4 {
+    color: #007bff;
+    margin-bottom: 15px;
 }
 
-.notifications .bi, .menu .bi {
-    font-size: 24px;
-    cursor: pointer;
-}
-
-.user-profile img {
-    cursor: pointer;
-}
-.perfil-imagem {
-    border-radius: 50%
-}
-.notifications-dropdown, .user-details {
-    top: 50px;
-    right: 0;
-    display: none;
-    z-index: 1;
-    width: 200px;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-main {
+/* Container Principal */
+.container {
+    max-width: 1200px;
+    margin: auto;
     padding: 20px;
-}
-
-.logo img {
-   width: 50%;
-   margin-left: 40px;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-}
-
-.menu {
-    margin-right: 20px;
-    cursor: pointer;
-}
-
-.notifications, .user-profile {
-    position: relative;
-    cursor: pointer;
-}
-
-.notifications .bi, .menu .bi, .user-profile img {
-    width: 24px;
-    height: 24px;
-}
-
-.user-profile span {
-    font-size: 16px;
-    color: #333;
-    margin-left: 10px;
-}
-
-/* .notifications-dropdown, .user-details {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 0;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
     border-radius: 8px;
-    z-index: 1;
-    animation: fadeIn 0.3s ease-in-out;
-    width: 200px;
-} */
-
-.notifications-dropdown p, .user-details p {
-    margin: 0;
-    padding: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-
-.user-details {
-    flex-direction: column;
-    align-items: center;
+/* Inputs e Selects */
+label {
+    font-weight: bold;
+    color: #495057;
 }
 
-.user-details img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
-
-.user-details span {
-    margin-top: 10px;
+input.form-control, select.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
     font-size: 16px;
+}
+
+input.form-control:focus, select.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Tabelas */
+.table-responsive {
+    margin-top: 20px;
+}
+
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table.table th, table.table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+table.table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+table.table-striped tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+tbody tr td {
+    vertical-align: middle;
+}
+
+/* Canvases for Charts */
+canvas {
+    display: block; /* Garante que os canvases se comportem como blocos */
+    margin: 0 auto; /* Centraliza os gráficos */
+}
+
+/* Espaçamento entre os gráficos */
+.row > div {
+    padding: 10px; /* Ajuste o valor conforme necessário */
+}
+
+/* Opcional: ajustando o espaço entre os gráficos */
+.col-md-4 {
+    margin-bottom: 20px; /* Espaçamento entre os gráficos de rosca */
+}
+
+.grafico-container {
+    border: 2px solid #6060601f; /* Cor e espessura da borda */
+    border-radius: 10px; /* Bordas arredondadas (opcional) */
+    padding: 10px; /* Espaçamento interno */
+    background-color: #f9f9f9; /* Cor de fundo (opcional) */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra (opcional) */
+}
+
+/* Section Titles */
+.d-flex.justify-content-between {
+    margin-top: 40px;
+}
+
+h3 {
+    margin-top: 30px;
+}
+
+/* Responsividade */
+@media (max-width <= 768px) {
+    .container {
+        margin: auto;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    .col-md-6,
+    .col-md-4,
+    .col-12 {
+        width: 100%; /* Força as colunas a ocupar a largura total em telas menores */
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column; /* Coloca os itens em coluna */
+        align-items: flex-start; /* Alinha os itens ao início */
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Permite rolagem horizontal em telas pequenas */
+    }
+
+    table.table {
+        white-space: nowrap; /* Mantém as tabelas em uma linha sem quebra de texto */
+    }
+}
+
+/* Estilos gerais */
+.grafico-container {
+    border: 2px solid #6060601f; /* Cor e espessura da borda */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 10px; /* Espaçamento interno */
+    display: flex;
+    justify-content: center; /* Centraliza os gráficos dentro do contêiner */
+    align-items: center; /* Centraliza verticalmente */
+    background-color: #f9f9f9; /* Cor de fundo clara para o contêiner dos gráficos */
+}
+
+h3 {
+    font-size: 1.5rem; /* Tamanho do título principal */
+    color: #333; /* Cor do texto */
+}
+
+h4 {
+    font-size: 1.25rem; /* Tamanho do título secundário */
+    color: #333; /* Cor do texto */
+    margin-top: 20px; /* Espaço superior para separar dos outros elementos */
+}
+
+.mb-3 {
+    margin-bottom: 1rem; /* Margem inferior para separação entre elementos */
+}
+
+.mt-4 {
+    margin-top: 2rem; /* Margem superior para separação entre elementos */
+}
+
+.row {
+    margin: 0; /* Remove margens padrão das linhas */
+}
+
+.col-md-4,
+.col-md-6 {
+    padding: 0.5rem; /* Adiciona espaçamento entre as colunas */
+}
+
+/* Ajuste do canvas para responsividade */
+canvas {
+    max-width: 100%; /* Garante que os gráficos não ultrapassem a largura do contêiner */
+    height: auto; /* Mantém a proporção dos gráficos */
+}
+
+/* Custom Styling for Different Components */
+.table th {
+    text-align: center;
+    font-size: 14px;
+}
+
+.table td {
+    text-align: center;
+    font-size: 14px;
+}
+
+#total-alunos {
+    font-size: 24px;
+    color: #28a745;
+    font-weight: bold;
+}
+
+select.form-control {
+    background-color: #fff;
     color: #333;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-main {
-    padding: 20px;
-
+    cursor: pointer;
 }
 
 

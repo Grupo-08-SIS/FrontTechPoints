@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard do Administrador - Arrastart</title>
     <link rel="stylesheet" href="../css/dash_adm.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../imgs/logo-arrastao.png">
@@ -18,14 +19,7 @@
             <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
             <div class="drop_down" onclick="toggleDropdown()">
                 <div class="container_nome_usuario">
-                     <h1 id="id_nome_usuario">Nome do Usuário</h1>
-                    <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
-                </div>
-                <div id="dropdown-content" class="dropdown_content">
-                    <a href="#">Dashboard</a>
-                    <a href="classificacao_aluno.html">Classificação</a>
-                    <a href="edicao_perfil_aluno.html">Editar Perfil</a>
-                    <a href="#" onclick="fazerLogout()">Sair</a>
+                    <h1 id="id_nome_usuario">Administrador</h1>
                 </div>
             </div>
         </div>
@@ -53,7 +47,7 @@
                 <div class="col-md-6">
                     <label for="selectEmpresas">Selecione uma Empresa</label>
                     <select id="selectEmpresas" class="form-control">
-                
+
                     </select>
                 </div>
             </div>
@@ -65,42 +59,57 @@
             </div>
             <div class="row mt-4">
                 <div class="col-md-4">
-                    <canvas id="distribuicaoPorSexoListas" width="100" height="100"></canvas>
+                    <div class="grafico-container">
+                    <canvas id="distribuicaoPorSexoListas" width="250" height="250"></canvas>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <canvas id="distribuicaoPorEtniaListas" width="100" height="100"></canvas>
+                    <div class="grafico-container">
+                    <canvas id="distribuicaoPorEtniaListas" width="250" height="250"></canvas>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <canvas id="distribuicaoPorEscolaridadeListas" width="100" height="100"></canvas>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <canvas id="CursosLista" width="1200" height="500"></canvas>
+                    <div class="grafico-container">
+                    <canvas id="distribuicaoPorEscolaridadeListas" width="250" height="250"></canvas>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
-                        <canvas id="alunosPorCidade" width="1200" height="500"></canvas>
+                    <div class="col-md-6">
+                        <div class="grafico-container"> 
+                            <canvas id="CursosLista" width="500" height="350"></canvas>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-md-6">
+                        <div class="grafico-container">
+                            <canvas id="alunosPorCidade" width="500" height="350"></canvas>
+                        </div>
+                    </div>
+                </div>                             
             </div>
+            
             <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
                 <h3>Perfil dos alunos cadastrados:</h3>
             </div>
             <div class="row">
                 <div class="col-12">
                     <h4>Alunos por Curso</h4>
-                    <canvas id="alunosPorCurso" width="1200" height="500"></canvas>
+                    <div class="grafico-container">
+                    <canvas id="alunosPorCurso" width="1000" height="450"></canvas>
+                    </div>
                 </div>
             </div>
             <div class="row mt-4">
                 <div class="col-md-6">
                     <h4>Distribuição por Sexo</h4>
-                    <canvas id="distribuicaoPorSexo" width="200" height="200"></canvas>
+                    <div class="grafico-container">
+                    <canvas id="distribuicaoPorSexo" width="350" height="250"></canvas>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <h4>Distribuição por Etnia</h4>
-                    <canvas id="distribuicaoPorEtnia" width="200" height="200"></canvas>
+                    <div class="grafico-container">
+                    <canvas id="distribuicaoPorEtnia" width="350" height="250"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -219,4 +228,5 @@
     <script src="../js/dashAdm/dash_adm_alunos.js"></script>
     <script src="../js/dashAdm/dash_adm_demografia_listas.js"></script>
 </body>
+
 </html>

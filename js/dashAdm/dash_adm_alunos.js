@@ -16,6 +16,7 @@ async function carregarAlunos() {
             const selectEscolaridade = document.getElementById('select-escolaridade')
 
             totalAlunosElement.textContent = alunos.length
+            sessionStorage.setItem('totalAlunos', alunos.length);
 
             alunos.sort((a, b) => a.id - b.id)
 
@@ -131,6 +132,7 @@ async function carregarImagemPerfil(id) {
 
 function gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos, coresCursos) {
     const ctxCursos = document.getElementById('alunosPorCurso').getContext('2d')
+    const totalAlunosSalvo = parseInt(sessionStorage.getItem('totalAlunos'), 10);
 
     new Chart(ctxCursos, {
         type: 'bar',
@@ -156,7 +158,8 @@ function gerarGraficoAlunosPorCurso(nomeCursos, quantidadeAlunos, coresCursos) {
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    max: totalAlunosSalvo
                 }
             }
         }
