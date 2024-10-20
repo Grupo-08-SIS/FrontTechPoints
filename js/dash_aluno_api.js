@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   try {
+    window.onload = atualizarFraseDoDia();
+
     const atividadesData = await fetchData(
       `http://localhost:8080/pontuacoes/kpi-entregas/${user.id}`
     );
@@ -474,4 +476,416 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     });
   }
+
+  function atualizarFraseDoDia() {
+    const fila = carregarFilaDoLocalStorage();
+    const fraseAtual = fila.shift();
+
+    document.getElementById("autor").innerText = fraseAtual.autor;
+    document.getElementById("conteudo-frase").innerText = fraseAtual.frase;
+
+    fila.push(fraseAtual);
+    salvarFilaNoLocalStorage(fila);
+  }
+
+  function salvarFilaNoLocalStorage(fila) {
+    localStorage.setItem("filaFrases", JSON.stringify(fila));
+  }
+
+  function carregarFilaDoLocalStorage() {
+    const filaSalva = localStorage.getItem("filaFrases");
+    if (filaSalva) {
+      const fila = JSON.parse(filaSalva);
+      if (Array.isArray(fila) && Array.isArray(fila[0])) {
+        return fila[0];
+      }
+      return fila;
+    }
+    return frases;
+  }
 });
+
+let frases = [
+  {
+    autor: "Miyamoto Musashi",
+    frase:
+      "Tanto ao lutar quanto na vida cotidiana, você deve ser determinado, ainda que calmo. Vá de encontro à situação sem tensão, mas também sem desleixo, com o espírito estável, mas sem prejulgamentos.",
+  },
+  {
+    autor: "Sun Tzu",
+    frase: "A suprema arte da guerra é derrotar o inimigo sem lutar.",
+  },
+  {
+    autor: "Bruce Lee",
+    frase:
+      "Não reze por uma vida fácil, reze por forças para suportar uma difícil.",
+  },
+  {
+    autor: "Albert Einstein",
+    frase:
+      "A vida é como andar de bicicleta. Para manter o equilíbrio, você deve continuar se movendo.",
+  },
+  {
+    autor: "Confúcio",
+    frase:
+      "A maior glória não é ficar de pé, mas levantar-se cada vez que caímos.",
+  },
+  {
+    autor: "Miyamoto Musashi",
+    frase:
+      "A vitória é reservada para aqueles que estão dispostos a pagar o preço.",
+  },
+  {
+    autor: "Marco Aurélio",
+    frase:
+      "Você tem poder sobre sua mente, não sobre eventos externos. Perceba isso, e você encontrará força.",
+  },
+  {
+    autor: "Naruto Uzumaki",
+    frase:
+      "Não importa o quão forte você se torne, nunca tente fazer tudo sozinho. Caso contrário, você certamente falhará.",
+  },
+  {
+    autor: "Monkey D. Luffy",
+    frase:
+      "Eu não vou parar até alcançar meu objetivo. Se eu desistir, quem vai acreditar em mim?",
+  },
+  {
+    autor: "Jesus Cristo",
+    frase: "No mundo tereis aflições, mas tende bom ânimo; eu venci o mundo.",
+  },
+  {
+    autor: "David Goggins",
+    frase:
+      "O sofrimento é o verdadeiro teste de resistência. Se você pode suportar a dor, você pode alcançar qualquer coisa.",
+  },
+  {
+    autor: "Chris Bumstead",
+    frase:
+      "É sobre disciplina, é sobre fazer o que você disse que faria, mesmo quando não há ninguém olhando.",
+  },
+  {
+    autor: "Albert Einstein",
+    frase: "Não tentes ser bem-sucedido, tenta antes ser um Homem de valor..",
+  },
+  {
+    autor: "Thomas Edison",
+    frase:
+      "Nossa maior fraqueza está em desistir. O caminho mais certo de vencer é tentar mais uma vez.",
+  },
+  {
+    autor: "Sun Tzu",
+    frase:
+      "A vitória está reservada para aqueles que estão dispostos a pagar o preço.",
+  },
+  {
+    autor: "Vegeta",
+    frase:
+      "Eu não vou me desculpar por ser o mais forte. Vou apenas continuar treinando até que ninguém possa me superar.",
+  },
+  {
+    autor: "Goku",
+    frase:
+      "Não importa o quão forte você seja, sempre haverá alguém mais forte. O verdadeiro desafio é nunca desistir.",
+  },
+  {
+    autor: "All Might",
+    frase:
+      "Quando não houver mais esperança, o que resta é continuar lutando com todo o seu ser.",
+  },
+  {
+    autor: "Rock Lee",
+    frase:
+      "Eu não sou um gênio, mas trabalho duro pode superar qualquer obstáculo.",
+  },
+  {
+    autor: "Rengoku",
+    frase:
+      "Queime seu coração com paixão e avance, não importa o que aconteça.",
+  },
+  {
+    autor: "Marco Aurélio",
+    frase:
+      "A alma se torna tingida pela cor dos seus pensamentos. Escolha os seus com sabedoria.",
+  },
+  {
+    autor: "David Goggins",
+    frase:
+      "A única coisa que separa você de todos os outros é sua mente. Mantenha-se focado e você vencerá.",
+  },
+  {
+    autor: "Naruto Uzumaki",
+    frase: "Nunca volte atrás em sua palavra, porque esse é o meu jeito ninja!",
+  },
+  { autor: "Sun Tzu", frase: "Em meio ao caos, há também oportunidade." },
+  {
+    autor: "Chris Bumstead",
+    frase:
+      "Todo mundo quer ser campeão, mas poucos querem fazer o que é necessário para se tornar um.",
+  },
+  {
+    autor: "Jesus Cristo",
+    frase: "Seja luz no mundo e nunca se esconda nas sombras da dúvida.",
+  },
+  {
+    autor: "Monkey D. Luffy",
+    frase:
+      "Eu não tenho medo de arriscar tudo. O medo não me impede de alcançar meus sonhos.",
+  },
+  {
+    autor: "Thomas Edison",
+    frase: "Gênio é 1% inspiração e 99% transpiração.",
+  },
+  {
+    autor: "Vegeta",
+    frase:
+      "Eu nasci príncipe, mas a força que eu tenho hoje veio do meu treinamento e da minha determinação.",
+  },
+  {
+    autor: "Goku",
+    frase:
+      "Se você treinar duro e nunca desistir, você sempre encontrará um caminho para vencer.",
+  },
+  {
+    autor: "All Might",
+    frase:
+      "Se você quer salvar as pessoas, tem que estar preparado para sacrificar tudo.",
+  },
+  {
+    autor: "Rock Lee",
+    frase:
+      "Para se tornar forte, você deve acreditar que é forte, mesmo quando todos ao seu redor duvidam.",
+  },
+  {
+    autor: "Rengoku",
+    frase:
+      "Mesmo quando as chamas da batalha queimam, continue lutando com tudo que tem.",
+  },
+  {
+    autor: "Albert Einstein",
+    frase: "O único lugar onde sucesso vem antes do trabalho é no dicionário.",
+  },
+  {
+    autor: "Bruce Lee",
+    frase: "O Homem que tem confiança em si ganha a confiança dos outros.",
+  },
+  {
+    autor: "Bruce Lee",
+    frase:
+      "Não se coloque dentro de uma forma, se adapte e construa sua própria, e deixa-a expandir, como a água. Se colocarmos a água num copo, ela se torna o copo; se você colocar água numa garrafa ela se torna a garrafa. A água pode fluir ou pode colidir. Seja água, meu amigo.",
+  },
+  {
+    autor: "Santo Agostinho",
+    frase:
+      "A fé é para acreditarmos no que não vemos; e a recompensa desta fé é vermos o que acreditamos.",
+  },
+  {
+    autor: "Santo Agostinho",
+    frase:
+      "A paciência é o complemento da sabedoria. Aprender a esperar é uma das grandes lições da vida.",
+  },
+  {
+    autor: "Santo Agostinho",
+    frase:
+      "A esperança tem duas filhas lindas, a indignação e a coragem; a indignação nos ensina a não aceitar as coisas como estão; a coragem, a mudá-las.",
+  },
+  {
+    autor: "Santo Agostinho",
+    frase:
+      "A fé é a força da vida. Se o Homem vive é porque acredita em alguma coisa.",
+  },
+  {
+    autor: "Maquiavel",
+    frase:
+      "Onde há uma grande vontade, não podem existir grandes dificuldades.",
+  },
+  {
+    autor: "FalleN (Gabriel Toledo)",
+    frase:
+      "Acredite em você mesmo e no seu potencial. Se você não acreditar, quem vai?",
+  },
+  {
+    autor: "FalleN (Gabriel Toledo)",
+    frase:
+      "A cada derrota, há uma lição. É importante aprender, evoluir e seguir em frente.",
+  },
+  {
+    autor: "Yoda (Mestre Jedi)",
+    frase: "Faça ou não faça. Tentativa não há.",
+  },
+  {
+    autor: "Gandalf (Senhor dos Anéis)",
+    frase:
+      "Tudo o que temos de decidir é o que fazer com o tempo que nos é dado.",
+  },
+  {
+    autor: "Aslan (Crônicas de Nárnia)",
+    frase:
+      "Você nunca vai saber o que pode fazer se não tentar. Acredite em si mesmo.",
+  },
+  {
+    autor: "Aslan (Crônicas de Nárnia)",
+    frase: "Coragem, querido coração.",
+  },
+  {
+    autor: "Dumbledore (Harry Potter)",
+    frase:
+      "São as nossas escolhas que revelam o que realmente somos, muito mais do que as nossas qualidades.",
+  },
+  {
+    autor: "Gaulês (Alexandre Borba Chiqueta)",
+    frase:
+      "Não importa quantas vezes você caia, o que importa é quantas vezes você se levanta.",
+  },
+  {
+    autor: "Faker (Lee Sang-hyeok)",
+    frase:
+      "A chave para o sucesso é a prática e a determinação. Se você não está disposto a se esforçar, não há como alcançar o topo.",
+  },
+  {
+    autor: "Faker (Lee Sang-hyeok)",
+    frase:
+      "Se você quer ser o melhor, precisa se dedicar mais do que qualquer outra pessoa.",
+  },
+  {
+    autor: "Faker (Lee Sang-hyeok)",
+    frase:
+      "Se você quiser ser o melhor, esteja disposto a sacrificar tudo o que for necessário.",
+  },
+  {
+    autor: "Bruce Lee",
+    frase:
+      "Não reze por uma vida fácil, reze por forças para suportar uma difícil.",
+  },
+  { autor: "Santo Agostinho", frase: "A medida do amor é amar sem medida." },
+  {
+    autor: "Maquiavel",
+    frase:
+      "Os obstáculos não devem te parar. Se você encontrar uma parede, não desista. Descubra como escalá-la, atravessá-la ou dar a volta por cima.",
+  },
+  {
+    autor: "FalleN (Gabriel Toledo)",
+    frase:
+      "A verdadeira força vem da persistência e do trabalho duro, não dos atalhos.",
+  },
+  { autor: "Yoda", frase: "Melhor professor, o fracasso é." },
+  {
+    autor: "Gandalf (Senhor dos Anéis)",
+    frase:
+      "Você pode encontrar as coisas que perdeu, mas nunca as que abandonou.",
+  },
+  {
+    autor: "Aslan (Crônicas de Nárnia)",
+    frase: "Você duvida de seu valor; não fuja de quem você é.",
+  },
+  {
+    autor: "Harry Potter",
+    frase:
+      "A felicidade pode ser encontrada mesmo nas horas mais difíceis, se você se lembrar de acender a luz.",
+  },
+  {
+    autor: "Gaulês (Alexandre Borba Chiqueta)",
+    frase:
+      "A vida é um round eterno, e você precisa estar preparado para a próxima batalha.",
+  },
+  {
+    autor: "Faker (Lee Sang-hyeok)",
+    frase:
+      "Ser o melhor não é um destino, é um caminho que você escolhe trilhar todos os dias.",
+  },
+  {
+    autor: "Jiraiya",
+    frase:
+      "Não importa o quão duro o caminho seja, se você desistir, nunca saberá se poderia ter vencido.",
+  },
+  {
+    autor: "Minato Namikaze",
+    frase: "Acredite na sua força e no potencial que há em você.",
+  },
+  {
+    autor: "Bruce Lee",
+    frase:
+      "Adapte o que é útil, rejeite o que é inútil e acrescente o que é unicamente seu.",
+  },
+  {
+    autor: "Jesus Cristo",
+    frase:
+      "Ame seus inimigos, faça o bem para aqueles que te odeiam, abençoe aqueles que te amaldiçoam, reze por aqueles que te maltratam. Se alguém te bater no rosto, ofereça a outra face.",
+  },
+  {
+    autor: "Platão",
+    frase:
+      "Nunca desencoraje ninguém que faz progressos continuamente, não importa o quão lento.",
+  },
+  {
+    autor: "David Goggins",
+    frase:
+      "Seja o mais duro de todos os tempos, e quando a dor chegar, continue andando.",
+  },
+  {
+    autor: "Marco Aurélio",
+    frase:
+      "A felicidade da sua vida depende da qualidade dos seus pensamentos.",
+  },
+  {
+    autor: "Jiraiya",
+    frase:
+      "Eu amo uma mulher, mas não vou obrigá-la a me amar, vou cercá-la com meu amor enquanto... rezo por sua felicidade.",
+  },
+  {
+    autor: "Monkey D. Luffy",
+    frase:
+      "Não me importo se eu morrer tentando. O importante é seguir em frente!",
+  },
+  {
+    autor: "Vegeta",
+    frase:
+      "Somente o trabalho duro e a determinação transformam um guerreiro em um verdadeiro vencedor.",
+  },
+  {
+    autor: "Goku",
+    frase:
+      "Não importa o quão forte o inimigo seja, sempre há um jeito de superar.",
+  },
+  {
+    autor: "All Might",
+    frase:
+      "Mesmo que você ache que está no fim, lembre-se de que ainda existe uma chance de brilhar mais uma vez.",
+  },
+  {
+    autor: "Rengoku",
+    frase:
+      "Viva com orgulho. Se sua fraqueza o dominar, aqueça seu coração, cerre os dentes e siga em frente. Mesmo que sua covardia o retarde, não impedirá a passagem do tempo.",
+  },
+  {
+    autor: "Chris Bumstead",
+    frase: "Disciplina é a ponte entre as metas e os resultados.",
+  },
+  {
+    autor: "Albert Einstein",
+    frase: "No meio da dificuldade encontra-se a oportunidade.",
+  },
+  {
+    autor: "Thomas Edison",
+    frase:
+      "Nossa maior fraqueza está em desistir. O caminho mais certo de vencer é tentar mais uma vez.",
+  },
+  {
+    autor: "Rock Lee",
+    frase: "O esforço é o único caminho para vencer a verdadeira batalha.",
+  },
+  {
+    autor: "Miyamoto Musashi",
+    frase:
+      "A derrota é um estado de espírito; nenhum Homem está derrotado até que aceite a derrota como realidade.",
+  },
+  {
+    autor: "Jiraiya",
+    frase:
+      "Ser rejeitado sempre fortalece um Homem. E se ele não experimentou isso o bastante para conseguir rir e fizer piadas disso, ou ao menos usar isso como material, ele não pode cumprir seus deveres como Homem.",
+  },
+  {
+    autor: "Platão",
+    frase: "O início é a parte mais importante do trabalho.",
+  },
+];
