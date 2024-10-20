@@ -31,7 +31,7 @@ async function listarEmpresas() {
 }
 
 function preencherEmpresa(selectElement, dadosEmpresa) {
-    selectElement.innerHTML = '<option value="">Todos</option>'
+    selectElement.innerHTML = '<option value="">Incluir todas</option>'
     dadosEmpresa.forEach(empresa => {
         const option = document.createElement('option')
         option.value = empresa.id
@@ -61,6 +61,29 @@ async function buscarDados() {
         return dados
     } catch (erro) {
         console.error('Erro ao buscar os dados de demografia:', erro)
+        return null
+    }
+}
+async function gerarRelatorioEmpresas() {
+    try {
+        const selectElementEmpresa = document.getElementById('selectEmpresas')
+        const empresaId = selectElementEmpresa.value
+        const selectLista = document.getElementById('selectListas')
+        const tipoLista = selectLista.value
+
+        let url = `http://localhost:8080/dashboardAdm/relatorio-demografia-listas?tipoLista=${tipoLista}`
+
+        if (empresaId) {
+            url += `&idEmpresa=${empresaId}`
+        }
+
+        const resposta = await fetch(url)
+        if (!resposta.ok) {
+            throw new Error('Erro ao buscar o csv de demografia')
+        }
+        window.location.href = url;
+    } catch (erro) {
+        console.error('Erro ao buscar o csv de demografia:', erro)
         return null
     }
 }
