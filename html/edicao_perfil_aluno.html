@@ -19,6 +19,13 @@
 <script src="../js/buscar_foto_perfil.js"></script>
 
 <body>
+        <!-- Container do VLibras Widget -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
     <!-- Header -->
     <header>
         <div class="header-content">
@@ -206,6 +213,11 @@
     <script src="../js/rh_exclusao_perfil.js"></script>
     <script src="../js/editar_perfil_aluno.js"></script>
     <script src="../js/editar_foto.js"></script>
+
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script> 
 
 </body>
 

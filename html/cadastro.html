@@ -11,6 +11,13 @@
 </head>
 
 <body>
+       <!-- Container do VLibras Widget -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
     <header class="header">
         <img src="../imgs/logo-techJobs.JPG" alt="Logo" class="logo">
         <button onclick="window.location.href = 'home.html'" type="button" class="back-btn-top">Voltar</button>
@@ -208,6 +215,11 @@
     </main>
     <script src="/js/script.js"></script>
     <script src="/js/script_api.js"></script>
+
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script> 
 </body>
 
 </html>
