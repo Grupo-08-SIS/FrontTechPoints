@@ -665,8 +665,8 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f7e387;
-  color: #fff;
+  background-color: #EEAD2D;
+  color: #244AA5;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;

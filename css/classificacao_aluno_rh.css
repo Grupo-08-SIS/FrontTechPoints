@@ -285,7 +285,7 @@ header .search-container input#searchInput {
 .table th:first-child,
 .table td:first-child {
     width: 10%; 
-    color: #FFFFFF;
+    color: #244AA5;
 }
 
 .table td:first-child {
@@ -296,7 +296,7 @@ header .search-container input#searchInput {
 .table th:nth-child(2),
 .table td:nth-child(2) {
     width: auto;
-    color: #FFFFFF;
+    color: #244AA5;
 }
 
 .table th:nth-child(3),
@@ -308,7 +308,7 @@ header .search-container input#searchInput {
 .table th:last-child,
 .table td:last-child {
     width: 20%;
-    color: #FFFFFF;
+    color: #244AA5;
 }
 
 /* Footer */

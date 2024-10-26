@@ -36,7 +36,8 @@ a {
 
 .login-buttons .login-btn,
 .register-btn {
-    background-color: #f1c40f;
+    background-color: #EEAD2D;
+    color: black;
     border: none;
     padding: 10px 20px;
     margin: 0 10px;
@@ -45,7 +46,8 @@ a {
 }
 
 .register-btn {
-    background-color: #f39c12;
+    background-color: #EEAD2D;
+    color: black;
     z-index: 5;
 }
 
@@ -53,7 +55,7 @@ a {
 .login-buttons .login-btn:hover,
 .register-btn:hover {
     transform: scale(1.05);
-    background-color: #e1b10d; 
+    background-color: #EEAD2D; 
 }
 
 .intro-container {
@@ -123,8 +125,8 @@ a {
     height: 75px;
     font-size: 22px;
     border-radius: 30px;
-    background-color: #FABC09;
-    color: white;
+    background-color: #EEAD2D;
+    color: black;
     z-index: 5;
     font-family: Inter;
     transition: transform 0.3s ease, background-color 0.3s ease;
@@ -297,4 +299,46 @@ justify-content: space-between;
     bottom: 10px;
     position: relative;
     font-size: 30px;
+}
+
+/* Estilo do botão de alternância do modo escuro */
+.dark-mode-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.dark-mode-btn:hover {
+    background-color: #555;
+}
+
+/* Estilos para o Modo Escuro */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+header.dark-mode {
+    background-color: #1e1e1e;
+}
+
+.intro-container.dark-mode {
+    color: #e0e0e0;
+}
+
+.value-item.dark-mode {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+.footer-content.dark-mode {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
 }

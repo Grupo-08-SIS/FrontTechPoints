@@ -271,7 +271,7 @@ header .search-container input#searchInput {
 .table th:first-child,
 .table td:first-child {
     width: 10%; 
-    color: #FFFFFF;
+    color: #244AA5;
 }
 
 .table th:nth-child(2),
@@ -283,7 +283,7 @@ header .search-container input#searchInput {
 .table th:last-child,
 .table td:last-child {
     width: 20%;
-    color: #FFFFFF;
+    color: #244AA5;
 }
 
 /* Footer */
@@ -398,5 +398,3 @@ footer {
     position: relative;
     font-size: 30px;
 }
-
-

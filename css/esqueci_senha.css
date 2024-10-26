@@ -43,7 +43,8 @@
 
     .login-buttons .login-btn,
     .register-btn {
-        background-color: #f1c40f;
+        background-color: #EEAD2D;
+        color:#254aa5;
         border: none;
         padding: 10px 20px;
         margin: 0 10px;

@@ -180,7 +180,7 @@ a {
     padding: 10px 20px;
     border-radius: 10px;
     margin-bottom: 6vh;
-    color: white;
+    color: #244AA5;
     text-shadow: 2px 2px 4px #0000007c;
     font-size: 10px;
 }
@@ -436,9 +436,9 @@ a {
 }
 
 .box_Aluno_favoritos button {
-    background-color: #ed1b24;
+    background-color: #FF4D4D;
     border: none;
-    color: #ffffff;
+    color: black;
     padding: 5px 10px;
     font-size: 0.75rem;
     border-radius: 5px;
@@ -601,9 +601,9 @@ a {
 
 .upload_button:hover,
 .upload_label:hover {
-    background-color: #fabc09;
-    color: #ffffff;
-    border-color: #fabc09;
+    background-color: #EEAD2D;
+    color: #244AA5;
+    border-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: translateY(-3px);
 }
@@ -686,8 +686,8 @@ a {
 .container_exclusao button {
     width: 50vh;
     height: 6vh;
-    background-color: #ed1b24;
-    color: #ffffff;
+    background-color: #FF4D4D;
+    color: black;
     border: none;
     border-radius: 5px;
     font-size: 20px;
@@ -696,7 +696,7 @@ a {
 }
 
 .container_exclusao button:hover {
-    background-color: #c3000a;
+    background-color: #FF4D4D;
 }
 
 .info_icon {

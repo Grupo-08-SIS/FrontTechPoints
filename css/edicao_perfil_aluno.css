@@ -311,9 +311,9 @@ a {
 
 .upload_button:hover,
 .upload_label:hover {
-    background-color: #fabc09;
-    color: #ffffff;
-    border-color: #fabc09;
+    background-color: #EEAD2D;
+    color: #244AA5;
+    border-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: translateY(-3px);
 }
@@ -453,8 +453,8 @@ input[type="password"]:focus {
 .container_exclusao button {
     width: 35vh;
     height: 5vh;
-    background-color: #ed1b24;
-    color: #ffffff;
+    background-color: #FF4D4D;
+    color: black;
     border: none;
     border-radius: 5px;
     font-size: 15px;
@@ -463,7 +463,7 @@ input[type="password"]:focus {
 }
 
 .container_exclusao button:hover {
-    background-color: #c3000a;
+    background-color: #FF4D4D;
 }
 
 .info_icon {

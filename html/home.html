@@ -24,10 +24,11 @@
             </div>
         </div>
     </header>
+    <button id="toggle-dark-mode" class="dark-mode-btn">Alternar Modo</button>
     <main>
         <div class="intro-container">
             <div class="intro-text">
-                <p id="titulos" style="color: #244AA5;">Alunos <span style="color: #FABC09;">monitoram</span> e </p>
+                <p id="titulos" style="color: #244AA5;">Alunos <span style="color: #244AA5;">monitoram</span> e </p>
                 <p id="titulos" style="color: #ED1B24;">Empresas contratam</p>
                 <p id="titulos">Conecte-se e cresça conosco!</p>
                 <p id="texto">Conecte-se e cresça conosco! Uma plataforma personalizada, baseada em dados,
@@ -92,5 +93,35 @@
 <script>
   new window.VLibras.Widget('https://vlibras.gov.br/app');
 </script> 
+
+<script>
+    // Seleciona o botão e o body
+const toggleButton = document.getElementById("toggle-dark-mode");
+const body = document.body;
+
+// Alterna o modo escuro ao clicar no botão
+toggleButton.addEventListener("click", () => {
+  body.classList.toggle("dark-mode");
+  document.querySelector("header").classList.toggle("dark-mode");
+  document.querySelector(".intro-container").classList.toggle("dark-mode");
+  document.querySelector(".footer-content").classList.toggle("dark-mode");
+
+  // Salva a preferência do tema
+  const theme = body.classList.contains("dark-mode") ? "dark" : "light";
+  localStorage.setItem("theme", theme);
+});
+
+// Carrega o tema salvo ao iniciar a página
+window.addEventListener("DOMContentLoaded", () => {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    body.classList.add("dark-mode");
+    document.querySelector("header").classList.add("dark-mode");
+    document.querySelector(".intro-container").classList.add("dark-mode");
+    document.querySelector(".footer-content").classList.add("dark-mode");
+  }
+});
+
+</script>
 
 </html>
