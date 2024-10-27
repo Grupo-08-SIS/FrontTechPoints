@@ -11,11 +11,11 @@ window.exibirAlunosPorSexo = exibirAlunosPorSexo
 window.exibirAlunosPorEtnia = exibirAlunosPorEtnia
 
 document.addEventListener('DOMContentLoaded', async function () {
-    await carregarCursos(); 
+    await carregarCategorias(); 
     await atualizarAlunos(); 
 
     const cursosSelect = document.getElementById('cursos');
-    cursosSelect.addEventListener('change', exibirAlunosPorCurso);
+    cursosSelect.addEventListener('change', exibirCursosPorCategoria);
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -37,140 +37,142 @@ function clearOtherSelects(currentSelect) {
 }
 
 
-async function carregarCursos() {
+async function carregarCategorias() {
     try {
-        const response = await fetch('http://localhost:8080/pontuacoes/ranking');
+        const response = await fetch('http://localhost:8080/dashboardRecrutador/listar');
         const data = await response.json();
 
-        const cursosSelect = document.getElementById('cursos');
-        cursosSelect.innerHTML = '<option value="opc_cursos">Cursos</option>'; 
+        const categoriasSet = new Set();
 
-        for (const cursoId in data) {
-            const nomeCurso = data[cursoId].nomeCurso;
+        data.forEach(curso => {
+            curso.categoria.forEach(cat => categoriasSet.add(cat)); 
+        });
+
+        const categoriasSelect = document.getElementById('cursos');
+        categoriasSelect.innerHTML = '<option value="opc_categorias">Categorias</option>'; 
+
+        categoriasSet.forEach(categoria => {
             const option = document.createElement('option');
-            option.value = cursoId; 
-            option.textContent = nomeCurso; 
-            cursosSelect.appendChild(option); 
-        }
+            option.value = categoria;
+            option.textContent = categoria;
+            categoriasSelect.appendChild(option);
+        });
     } catch (error) {
-        console.error('Erro ao carregar os dados dos cursos:', error);
+        console.error('Erro ao carregar as categorias:', error);
     }
 }
 
-async function exibirAlunosPorCurso() {
-    const cursoId = this.value;
+async function exibirCursosPorCategoria() { 
+    const categoria = this.value;
 
-    if (cursoId === 'opc_cursos') {
-        location.reload();
+    if (categoria === 'opc_categorias') {
+        location.reload(); 
+        return;
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/pontuacoes/alunos`);
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/listar?categoria=${categoria}`);
         const data = await response.json();
 
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = '';
+        containerCursos.innerHTML = ''; 
 
-        const curso = data[cursoId];
-        if (!curso) {
-            console.error(`Curso com ID ${cursoId} não encontrado.`);
-            return;
-        }
-
-        const cursoDiv = document.createElement('div');
-
-        cursoDiv.innerHTML = `
-            <div class="container_fundo_aluno">
-                <div id="bloco_alunos_${cursoId}" class="bloco_alunos">
-                    <!-- Alunos serão adicionados aqui -->
-                </div>
-                <div id="mensagem_${cursoId}" class="mensagem" style="display: none;">
-                    Nenhum aluno disponível no curso "${curso.nomeCurso}".
-                </div>
-            </div>
-        `;
-
-        containerCursos.appendChild(cursoDiv);
-
-        const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
-        const interessadosData = await interessadosResponse.json();
-        const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
-
-        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
-        const processoSeletivoData = await processoSeletivoResponse.json();
-        const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
-
-        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
-        const contratadosData = await contratadosResponse.json();
-        const contratadosSet = new Set(contratadosData.map(aluno => aluno.id));
-
-        // Fetch dos alunos favoritos
-        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
-        const favoritosData = await favoritosResponse.json();
-        const favoritosSet = new Set(favoritosData.map(aluno => aluno.id));
-
-        const alunos = curso.ranking || [];
-        const blocoAlunos = document.getElementById(`bloco_alunos_${cursoId}`);
-        const mensagemDiv = document.getElementById(`mensagem_${cursoId}`);
-
-        if (!blocoAlunos) {
-            console.error(`Bloco de alunos para o curso ${cursoId} não encontrado.`);
-            return;
-        }
-
-        const alunosFiltrados = alunos.filter(aluno =>
-            !interessadosSet.has(aluno.aluno.id) &&
-            !processoSeletivoSet.has(aluno.aluno.id) &&
-            !contratadosSet.has(aluno.aluno.id)
-        );
-
-        if (alunosFiltrados.length === 0) {
-            mensagemDiv.style.display = 'block';
-
-            containerCursos.style.display = 'flex';
-            containerCursos.style.justifyContent = 'center';
-            containerCursos.style.alignItems = 'center';
-            containerCursos.style.height = '20vh';
-            containerCursos.style.fontWeight = '800';
-            containerCursos.style.fontSize = '20px';
-            containerCursos.style.color = '#808080';
-        } else {
-            mensagemDiv.style.display = 'none';
-
-            const tituloCurso = document.createElement('div');
-            tituloCurso.innerHTML = `
+        for (const curso of data) {
+            const cursoDiv = document.createElement('div');
+            cursoDiv.innerHTML = `
                 <div class="container_curso_imagem_nome">
                     <div class="bloco_nome_imagem_curso">
-                        <h1 id="nome_curso_${cursoId}">${curso.nomeCurso}</h1>
+                        <h1 id="nome_curso_${curso.id}">${curso.nome}</h1>
                     </div>
                 </div>
+                <div id="bloco_alunos_${curso.id}" class="bloco_alunos"></div>
+                <div id="mensagem_${curso.id}" class="mensagem">Nenhum aluno disponível</div>
             `;
-            containerCursos.insertBefore(tituloCurso, cursoDiv);
 
-            containerCursos.style.display = 'block';
-            containerCursos.style.height = 'auto';
-
-            alunosFiltrados.forEach(aluno => {
-                const alunoDiv = document.createElement('div');
-                alunoDiv.className = 'box_Aluno';
-
-                if (favoritosSet.has(aluno.aluno.id)) {
-                    alunoDiv.style.border = '2px solid yellow'; 
-                }
-
-                const medalha = obterMedalha(aluno.pontosTotais);
-
-                alunoDiv.innerHTML = `
-                    <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
-                    <span>Aluno do projeto arrastão, finalizou curso <a>${curso.nomeCurso}</a> com ${aluno.pontosTotais} pontos</span>
-                    <img src="../imgs/${medalha}" alt="medalha">
-                    <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
-                `;
-
-                blocoAlunos.appendChild(alunoDiv);
-            });
+            containerCursos.appendChild(cursoDiv);
+            await exibirAlunosDoCurso(curso); 
         }
 
+    } catch (error) {
+        console.error('Erro ao carregar os cursos por categoria:', error);
+    }
+}
+
+async function exibirAlunosDoCurso(curso) {
+    try {
+        // Fetch dos alunos do curso
+        const alunosResponse = await fetch(`http://localhost:8080/pontuacoes/alunos`);
+        const dadosAlunos = await alunosResponse.json();
+        const alunosCurso = dadosAlunos[curso.id]?.ranking || [];
+
+        // Obtendo o ID do usuário logado
+        const idUsuarioLogado = getIdUsuarioLogado();
+
+        // Fetch de listas adicionais
+        const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/interessados`);
+        const interessadosData = await interessadosResponse.json();
+        const idsInteressados = interessadosData.map(aluno => aluno.id);
+
+        const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/processoSeletivo`);
+        const processoSeletivoData = await processoSeletivoResponse.json();
+        const idsProcessoSeletivo = processoSeletivoData.map(aluno => aluno.id);
+
+        const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/contratados`);
+        const contratadosData = await contratadosResponse.json();
+        const idsContratados = contratadosData.map(aluno => aluno.id);
+
+        const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/favoritos`);
+        const favoritosData = await favoritosResponse.json();
+        const idsFavoritos = favoritosData.map(aluno => aluno.id);
+
+        const blocoAlunos = document.getElementById(`bloco_alunos_${curso.id}`);
+        const mensagemDiv = document.getElementById(`mensagem_${curso.id}`);
+
+        // Aplicando estilos ao contêiner dos alunos
+        blocoAlunos.style.display = 'flex';
+        blocoAlunos.style.alignItems = 'center';
+        blocoAlunos.style.justifyContent = 'center';
+        blocoAlunos.style.margin = '0 auto';
+
+        if (alunosCurso.length === 0) {
+            mensagemDiv.style.display = 'block';
+            return;
+        } else {
+            mensagemDiv.style.display = 'none';
+        }
+
+        for (const alunoObj of alunosCurso) {
+            const aluno = alunoObj.aluno;
+
+            // Verificação se o aluno está em uma das listas
+            const isInterested = idsInteressados.includes(aluno.id);
+            const isHired = idsContratados.includes(aluno.id);
+            const isInProcess = idsProcessoSeletivo.includes(aluno.id);
+            const isFavorite = idsFavoritos.includes(aluno.id);
+
+            // Se o aluno estiver em interessados, contratados ou processo seletivo, não exibir
+            if (isInterested || isHired || isInProcess) {
+                continue; // Pula para o próximo aluno
+            }
+
+            const medalha = obterMedalha(alunoObj.pontosTotais);
+            const alunoDiv = document.createElement('div');
+            alunoDiv.className = 'box_Aluno';
+
+            // Aplica borda amarela se o aluno for favorito
+            if (isFavorite) {
+                alunoDiv.style.border = '2px solid yellow'; // Adiciona borda amarela
+            }
+
+            alunoDiv.innerHTML = `
+                <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
+                <span>Aluno finalizou curso <a>${curso.nome}</a> com ${alunoObj.pontosTotais} pontos</span>
+                <img src="../imgs/${medalha}" alt="medalha">
+                <button onclick="verMais(${aluno.id})">Ver mais</button>
+            `;
+
+            blocoAlunos.appendChild(alunoDiv);
+        }
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
     }
