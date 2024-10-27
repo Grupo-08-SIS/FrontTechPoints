@@ -111,55 +111,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const idUsuario = user.id;
 
-    async function listarFavoritos() {
-        try {
-            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
-            const data = await response.json();
-    
-            const container = document.querySelector(".bloco_alunos_favoritos");
-            container.innerHTML = ""; 
-    
-            if (data.length === 0) {
-                const noFavoritesMessage = document.createElement("p");
-                noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
-                noFavoritesMessage.className = "no-alunos-message";
-                container.appendChild(noFavoritesMessage);
-            } else {
-                for (const aluno of data) {
-                    const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
-                    const pontosData = await pontosResponse.json();
-    
-                    let maxPontos = -1;
-                    let cursoComMaiorPontuacao = '';
-    
-                    for (const key in pontosData) {
-                        const curso = pontosData[key];
-                        if (curso.pontosTotais > maxPontos) {
-                            maxPontos = curso.pontosTotais;
-                            cursoComMaiorPontuacao = curso.nomeCurso;
-                        }
-                    }
-    
-                    const medalhaTipo = obterMedalha(maxPontos);
-    
-                    const alunoDiv = document.createElement("div");
-                    alunoDiv.className = "box_Aluno_favoritos";
-    
-                    alunoDiv.innerHTML = `
-                        <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
-                        <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
-                        <img src="../imgs/${medalhaTipo}" alt="medalha">
-                        <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
-                    `;
-    
-                    container.appendChild(alunoDiv);
-                }
-            }
-        } catch (error) {
-            console.error("Erro ao buscar alunos favoritos:", error);
-        }
-    }
-
     async function listarInteressados() {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
@@ -211,15 +162,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     window.desfavoritar = async function (idAluno) {
         try {
-            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/favoritos/${idAluno}`, {
-                method: 'DELETE',
+            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/cancelados/${idAluno}`, {
+                method: 'POST',
             });
 
             if (response.ok) {
-                console.log(`Aluno com ID ${idAluno} desfavoritado.`);
-                listarFavoritos(); 
+                console.log(`Aluno com ID ${idAluno} cancelado.`);
             } else {
-                console.error('Erro ao desfavoritar o aluno.');
+                console.error('Erro ao cancelar o aluno.');
             }
         } catch (error) {
             console.error('Erro:', error);
@@ -232,7 +182,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         return date.toLocaleDateString('pt-BR', options);
     }
 
-    listarFavoritos();
     listarInteressados();
     window.formatDate = formatDate
 });

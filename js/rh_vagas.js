@@ -100,15 +100,12 @@ async function exibirCursosPorCategoria() {
 
 async function exibirAlunosDoCurso(curso) {
     try {
-        // Fetch dos alunos do curso
         const alunosResponse = await fetch(`http://localhost:8080/pontuacoes/alunos`);
         const dadosAlunos = await alunosResponse.json();
         const alunosCurso = dadosAlunos[curso.id]?.ranking || [];
 
-        // Obtendo o ID do usuário logado
         const idUsuarioLogado = getIdUsuarioLogado();
 
-        // Fetch de listas adicionais
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
         const idsInteressados = interessadosData.map(aluno => aluno.id);
@@ -128,7 +125,6 @@ async function exibirAlunosDoCurso(curso) {
         const blocoAlunos = document.getElementById(`bloco_alunos_${curso.id}`);
         const mensagemDiv = document.getElementById(`mensagem_${curso.id}`);
 
-        // Aplicando estilos ao contêiner dos alunos
         blocoAlunos.style.display = 'flex';
         blocoAlunos.style.alignItems = 'center';
         blocoAlunos.style.justifyContent = 'center';
@@ -144,24 +140,21 @@ async function exibirAlunosDoCurso(curso) {
         for (const alunoObj of alunosCurso) {
             const aluno = alunoObj.aluno;
 
-            // Verificação se o aluno está em uma das listas
             const isInterested = idsInteressados.includes(aluno.id);
             const isHired = idsContratados.includes(aluno.id);
             const isInProcess = idsProcessoSeletivo.includes(aluno.id);
             const isFavorite = idsFavoritos.includes(aluno.id);
 
-            // Se o aluno estiver em interessados, contratados ou processo seletivo, não exibir
             if (isInterested || isHired || isInProcess) {
-                continue; // Pula para o próximo aluno
+                continue; 
             }
 
             const medalha = obterMedalha(alunoObj.pontosTotais);
             const alunoDiv = document.createElement('div');
             alunoDiv.className = 'box_Aluno';
 
-            // Aplica borda amarela se o aluno for favorito
             if (isFavorite) {
-                alunoDiv.style.border = '2px solid yellow'; // Adiciona borda amarela
+                alunoDiv.style.border = '2px solid yellow'; 
             }
 
             alunoDiv.innerHTML = `
@@ -540,8 +533,6 @@ async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
         });
 
         if (response.ok) {
-            fecharVerMais();
-
             const containerInteresse = document.querySelector(".container_interesse");
             const nomeAlunoSpan = document.querySelector(".nome_do_aluno_mensagem");
 
