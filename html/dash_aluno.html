@@ -159,35 +159,35 @@
                         <p>Insira as horas de estudo para cada dia:</p>
                         <div class="day-inputs">
                             <div class="column">
-                                <label for="dom">Domingo:</label>
-                                <input type="number" id="dom" min="0" max="24" value="0"
+                                <label for="domingo">Domingo:</label>
+                                <input type="number" id="domingo" min="0" max="24" value="0"
                                     oninput="updateWeeklyTotal()" />
 
-                                <label for="ter">Terça:</label>
-                                <input type="number" id="ter" min="0" max="24" value="0"
+                                <label for="terça">Terça:</label>
+                                <input type="number" id="terça" min="0" max="24" value="0"
                                     oninput="updateWeeklyTotal()" />
 
-                                <label for="qui">Quinta:</label>
-                                <input type="number" id="qui" min="0" max="24" value="0"
+                                <label for="quinta">Quinta:</label>
+                                <input type="number" id="quinta" min="0" max="24" value="0"
                                     oninput="updateWeeklyTotal()" />
                             </div>
                             <div class="column">
-                                <label for="seg">Segunda:</label>
-                                <input type="number" id="seg" min="0" max="24" value="0"
+                                <label for="segunda">Segunda:</label>
+                                <input type="number" id="segunda" min="0" max="24" value="0"
                                     oninput="updateWeeklyTotal()" />
 
-                                <label for="qua">Quarta:</label>
-                                <input type="number" id="qua" min="0" max="24" value="0"
+                                <label for="quarta">Quarta:</label>
+                                <input type="number" id="quarta" min="0" max="24" value="0"
                                     oninput="updateWeeklyTotal()" />
 
-                                <label for="sex">Sexta:</label>
-                                <input type="number" id="sex" min="0" max="24" value="0"
+                                <label for="sexta">Sexta:</label>
+                                <input type="number" id="sexta" min="0" max="24" value="0"
                                     oninput="updateWeeklyTotal()" />
                             </div>
                         </div>
                         <div class="single">
-                            <label for="sab">Sábado:</label>
-                            <input type="number" id="sab" min="0" max="24" value="0" oninput="updateWeeklyTotal()" />
+                            <label for="sábado">Sábado:</label>
+                            <input type="number" id="sábado" min="0" max="24" value="0" oninput="updateWeeklyTotal()" />
                         </div>
                         <p class="total-modal">Total semanal: <span id="weekly-total">0</span> horas</p>
                         <button onclick="saveChanges()">Salvar</button>
@@ -263,10 +263,10 @@
                 userNameElements.forEach(element => {
                     element.innerHTML = user.nomeUsuario;
                 });
-            } else {
+            }// else {
 
-                window.location.href = '/login.html';
-            }
+              //  window.location.href = '/login.html';
+           // }
         });
 
         function openModal() {
@@ -285,7 +285,7 @@
         }
 
         function updateWeeklyTotal() {
-            const days = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+            const days = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo'];
             let total = 0;
 
             days.forEach(day => {
@@ -297,16 +297,14 @@
         }
 
         function saveChanges() {
-            const days = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+            const days = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo'];
             let studyPlan = {};
 
             days.forEach(day => {
                 const value = parseFloat(document.getElementById(day).value);
                 studyPlan[day] = isNaN(value) ? 0 : value;
             });
-            console.log("Plano de estudo salvo:", studyPlan);
-
-            alert("Meta de estudo atualizada!");
+            cadastrarMetaEstudo(studyPlan, days)
             closeModal();
         }
     </script>

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (!user || !user.id) {
     console.error("Usuário não encontrado ou ID inválido.");
-    window.location.href = "login.html";
+    // window.location.href = "login.html";
     return;
   }
 
@@ -889,3 +889,34 @@ let frases = [
     frase: "O início é a parte mais importante do trabalho.",
   },
 ];
+
+async function cadastrarMetaEstudo(studyPlan, days) {
+  let i = 0;
+  while (i < days.length) {
+    const data = {
+      metaEstudoSemanaId: user.id,
+      nomeDia: days[i],
+      qtdTempoEstudo: studyPlan[days[i]],
+      ativado: true,
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:8080/meta-de-estudo/cadastro",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao cadastrar dia de estudo");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    i++;
+  }
+}
