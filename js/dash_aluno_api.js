@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (!user || !user.id) {
     console.error("Usuário não encontrado ou ID inválido.");
-    // window.location.href = "login.html";
+    window.location.href = "login.html";
     return;
   }
 

@@ -321,17 +321,18 @@ main {
 
 .welcome-text {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 3%;
+  left: 6.8%;
   transform: translate(-50%, -50%);
-  margin-left: 20%;
+  margin-left: 13.2%;
   z-index: 99;
 }
 
-.welcome-section h1 {
+.welcome-text h1 {
   margin: 0;
-  font-size: 40px;
   z-index: 99;
+  font-size: 1.5rem;
+  background-color: #244aa5;
 }
 
 .welcome-section button {
@@ -346,6 +347,10 @@ main {
   color: rgb(0, 0, 0);
   width: 300px;
   z-index: 99;
+}
+
+.welcome-section .table-responsive {
+  width: 80%;
 }
 
 .course-section {
@@ -665,8 +670,8 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #EEAD2D;
-  color: #244AA5;
+  background-color: #eead2d;
+  color: #244aa5;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -723,13 +728,13 @@ footer {
   position: relative;
 }
 
-.footer-content>div {
+.footer-content > div {
   flex: 1;
   padding: 10px;
   position: relative;
 }
 
-.footer-content>div:nth-child(1)::after {
+.footer-content > div:nth-child(1)::after {
   content: "";
   position: absolute;
   top: 10%;
@@ -739,7 +744,7 @@ footer {
   background-color: yellow;
 }
 
-.footer-content>div:nth-child(2)::after {
+.footer-content > div:nth-child(2)::after {
   content: "";
   position: absolute;
   top: 10%;
@@ -955,7 +960,6 @@ input[type="number"] {
 
 .progress-bar.meta-atingida {
   background-color: #007bff;
-
 }
 
 .progress-bar.meta-nao-atingida {
