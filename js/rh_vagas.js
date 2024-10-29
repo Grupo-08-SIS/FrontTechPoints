@@ -4,11 +4,14 @@ window.fazerLogout = fazerLogout
 window.desfavoritar = desfavoritar
 window.tenhoInteresse = tenhoInteresse
 window.fecharVerMais = fecharVerMais 
+window.fecharVerMais_img = fecharVerMais_img
 window.fecharNotificacao = fecharNotificacao 
 window.alunoRemovido = alunoRemovido
 window.buscarAlunoPorNome = buscarAlunoPorNome
 window.exibirAlunosPorSexo = exibirAlunosPorSexo
 window.exibirAlunosPorEtnia = exibirAlunosPorEtnia
+
+sessionStorage.removeItem('itemStatus');
 
 document.addEventListener('DOMContentLoaded', async function () {
     await carregarCategorias(); 
@@ -77,7 +80,19 @@ async function exibirCursosPorCategoria() {
         const containerCursos = document.getElementById('cursos_container');
         containerCursos.innerHTML = ''; 
 
-        for (const curso of data) {
+        const cursosEmbaralhados = shuffleArray(data); // Embaralha o array de cursos
+
+        cursosEmbaralhados.forEach(async (curso, index) => {
+            // Adiciona o espaçamento antes de cada curso, exceto antes do primeiro
+            if (index > 0) {
+                const espacoDiv = document.createElement('div');
+                espacoDiv.className = 'container_espacamento';
+                espacoDiv.innerHTML = `
+                    <div class="bloco_espacamento"></div>
+                `;
+                containerCursos.appendChild(espacoDiv);
+            }
+
             const cursoDiv = document.createElement('div');
             cursoDiv.innerHTML = `
                 <div class="container_curso_imagem_nome">
@@ -86,12 +101,12 @@ async function exibirCursosPorCategoria() {
                     </div>
                 </div>
                 <div id="bloco_alunos_${curso.id}" class="bloco_alunos"></div>
-                <div id="mensagem_${curso.id}" class="mensagem">Nenhum aluno disponível</div>
             `;
 
             containerCursos.appendChild(cursoDiv);
             await exibirAlunosDoCurso(curso); 
-        }
+
+        });
 
     } catch (error) {
         console.error('Erro ao carregar os cursos por categoria:', error);
@@ -123,19 +138,33 @@ async function exibirAlunosDoCurso(curso) {
         const idsFavoritos = favoritosData.map(aluno => aluno.id);
 
         const blocoAlunos = document.getElementById(`bloco_alunos_${curso.id}`);
-        const mensagemDiv = document.getElementById(`mensagem_${curso.id}`);
 
         blocoAlunos.style.display = 'flex';
         blocoAlunos.style.alignItems = 'center';
         blocoAlunos.style.justifyContent = 'center';
         blocoAlunos.style.margin = '0 auto';
 
+        let mensagemDiv = blocoAlunos.querySelector('.mensagem');
+        if (!mensagemDiv) {
+            mensagemDiv = document.createElement('div');
+            mensagemDiv.className = 'mensagem';
+            mensagemDiv.style.margin = '20px 0';
+            mensagemDiv.style.fontWeight = 800;
+            mensagemDiv.style.fontSize = '20px';
+            mensagemDiv.style.color = '#808080';
+            mensagemDiv.style.display = 'none';
+            blocoAlunos.appendChild(mensagemDiv);
+        }
+
         if (alunosCurso.length === 0) {
-            mensagemDiv.style.display = 'block';
+            mensagemDiv.textContent = 'Não há alunos para exibir neste curso.';
+            mensagemDiv.style.display = 'flex';
             return;
         } else {
             mensagemDiv.style.display = 'none';
         }
+
+        let alunosExibidos = 0;
 
         for (const alunoObj of alunosCurso) {
             const aluno = alunoObj.aluno;
@@ -149,6 +178,7 @@ async function exibirAlunosDoCurso(curso) {
                 continue; 
             }
 
+            alunosExibidos++;
             const medalha = obterMedalha(alunoObj.pontosTotais);
             const alunoDiv = document.createElement('div');
             alunoDiv.className = 'box_Aluno';
@@ -166,6 +196,12 @@ async function exibirAlunosDoCurso(curso) {
 
             blocoAlunos.appendChild(alunoDiv);
         }
+
+        if (alunosExibidos === 0) {
+            mensagemDiv.textContent = 'Todos os alunos deste curso já foram visualizados.';
+            mensagemDiv.style.display = 'flex';
+        }
+
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
     }
@@ -451,13 +487,13 @@ async function favoritar(alunoId, favoritarButton) {
         });
 
         if (response.ok) {
+            sessionStorage.setItem('itemStatus', 'favoritado');
             favoritarButton.innerHTML = `Desfavoritar <img src="/imgs/coracao_favoritar.png" alt="Desfavoritar">`;
             favoritarButton.style.backgroundColor = 'red';
             favoritarButton.style.width = '50%';
             favoritarButton.classList.add('favoritado');
             favoritarButton.onclick = () => desfavoritar(alunoId, favoritarButton);
 
-            // Pega a box do aluno e altera a borda
             const boxAluno = document.querySelector(`.box_aluno[data-aluno-id="${alunoId}"]`);
             console.log("box do aluno selecionado " + boxAluno); // Log para verificar se o box foi selecionado
             if (boxAluno) {
@@ -479,6 +515,7 @@ async function desfavoritar(alunoId, favoritarButton) {
         });
 
         if (response.ok) {
+            sessionStorage.setItem('itemStatus', 'desfavoritado');
             favoritarButton.innerHTML = `Favoritar <img src="../imgs/coracao_favoritar.png" alt="Favoritar">`;
             favoritarButton.classList.remove('favoritado');
             favoritarButton.style.width = '43%';
@@ -520,9 +557,22 @@ function getIdUsuarioLogado() {
 
 function fecharVerMais() {
     document.querySelector('.container_ver_mais').style.display = 'none';
-    setTimeout(() => {
-        location.reload();
-    }, 1000);
+}
+
+function fecharVerMais_img() {
+    document.querySelector('.container_ver_mais').style.display = 'none';
+
+    const itemStatus = sessionStorage.getItem('itemStatus');
+
+    if (itemStatus) {
+        console.log(`Status do item: ${itemStatus}`);
+        sessionStorage.removeItem('itemStatus');
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+    } else {
+        console.log("Nenhum status encontrado.");
+    }
 }
 
 async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
@@ -538,6 +588,7 @@ async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
 
             if (containerInteresse && nomeAlunoSpan) {
                 if (nomeAluno) {
+                    fecharVerMais()
                     nomeAlunoSpan.textContent = nomeAluno; 
                     containerInteresse.style.display = 'block';
                 } else {
