@@ -18,12 +18,16 @@ document.addEventListener("DOMContentLoaded", function () {
             const response = await fetch(`http://localhost:8080/usuarios/imagem/${userId}`);
             if (response.ok) {
                 const imageBlob = await response.blob();
-                
+
                 // Verifica se o Blob tem conteúdo (não é vazio)
                 if (imageBlob.size > 0) {
                     const imageUrl = URL.createObjectURL(imageBlob);
                     profileImageHeader.src = imageUrl; // Aplica no header
                     profileImage.src = imageUrl; // Aplica na seção
+
+                    // Remove o desfoque após a imagem ser carregada
+                    profileImageHeader.classList.remove('blur');
+                    profileImage.classList.remove('blur');
                 } else {
                     profileImageHeader.src = defaultImageUrl; // Imagem padrão no header
                     profileImage.src = defaultImageUrl; // Imagem padrão na seção
@@ -43,6 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Lógica para o upload da nova imagem de perfil
     uploadButton.addEventListener('click', async function () {
         const file = fileInput.files[0];
+
+        // Verifica se há um novo arquivo selecionado
         if (file) {
             const formData = new FormData();
             formData.append('imagemPerfil', file); // Nome do campo ajustado para o esperado pelo backend
@@ -57,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.ok) {
                     console.log('Imagem enviada com sucesso!');
                     await fetchProfileImage(); // Recarrega a imagem de perfil após o upload
+                    uploadButton.classList.remove('piscando'); // Remove a classe de piscar
                 } else {
                     console.error('Falha ao enviar a imagem.');
                 }
@@ -65,6 +72,21 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         } else {
             console.error('Nenhum arquivo selecionado.');
+        }
+    });
+
+    // Adiciona evento para que ao selecionar um novo arquivo, a imagem apareça com blur e pisca no botão
+    fileInput.addEventListener('change', function () {
+        const file = fileInput.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            profileImage.src = imageUrl; // Aplica a nova imagem
+            profileImage.classList.add('blur'); // Aplica o desfoque
+            profileImageHeader.src = imageUrl; // Aplica a nova imagem no header
+            profileImageHeader.classList.add('blur'); // Aplica o desfoque no header
+
+            // Adiciona a classe que faz o botão piscar
+            uploadButton.classList.add('piscando');
         }
     });
 

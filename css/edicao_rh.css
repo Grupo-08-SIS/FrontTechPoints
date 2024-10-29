@@ -1225,3 +1225,21 @@ label {
     height: 6vh;
     font-size: 10px;
 }
+
+.piscando {
+    animation: piscar 0.5s infinite alternate;
+}
+
+@keyframes piscar {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.blur {
+    filter: blur(5px); /* Ajuste a intensidade do desfoque conforme necessário */
+    transition: filter 0.3s ease; /* Transição suave ao aplicar ou remover o desfoque */
+}

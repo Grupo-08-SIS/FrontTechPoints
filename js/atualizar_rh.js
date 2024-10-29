@@ -5,6 +5,13 @@ window.fazerLogout = fazerLogout
 window.editarPerfil = editarPerfil
 window.fecharFormulario = fecharFormulario
 
+function getIdUsuarioLogado() {
+    const data = JSON.parse(sessionStorage.getItem('user'))
+
+    console.log(data)
+    return data.id;
+}
+
 async function salvarMudancas(event) {
     event.preventDefault(); 
 
@@ -30,7 +37,7 @@ async function salvarMudancas(event) {
     if (email) dados.email = email;
     if (novaSenha) dados.senha = novaSenha;
 
-    const userId = 3; 
+    const userId = getIdUsuarioLogado(); 
     const endpoint = `http://localhost:8080/usuarios/atualizar/${userId}`;
 
     try {
