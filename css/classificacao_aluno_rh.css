@@ -305,10 +305,13 @@ header .search-container input#searchInput {
     color: #FFFFFF;
 }
 
-.table th:last-child,
-.table td:last-child {
+.table th:last-child{
     width: 20%;
     color: #244AA5;
+}
+
+.table td:last-child {
+    color: #FFFFFF;
 }
 
 /* Footer */
