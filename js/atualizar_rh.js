@@ -22,13 +22,39 @@ async function salvarMudancas(event) {
     const novaSenha = document.getElementById('nova_senha').value;
     const confirmacaoSenha = document.getElementById('nova_senha_confirmacao').value;
 
+    // Validação das senhas
     if (novaSenha && novaSenha !== confirmacaoSenha) {
-        alert('As senhas não coincidem.');
+        showAlert('As senhas não coincidem.', 'error');
+        return;
+    }
+
+    // Validação do comprimento da senha
+    if (novaSenha && novaSenha.length < 6) {
+        showAlert('A senha deve ter no mínimo 6 caracteres.', 'error');
+        return;
+    }
+
+    // Validação do primeiro nome e sobrenome
+    if (novoPrimeiroNome && !novoSobrenome) {
+        showAlert('Você precisa mudar o sobrenome junto com o nome.', 'error');
+        return;
+    }
+
+    // Validação do e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Verifica se o e-mail tem o formato correto
+    if (email && !emailRegex.test(email)) {
+        showAlert('Por favor, insira um e-mail válido (exemplo@dominio.com).', 'error');
+        return;
+    }
+
+    // Validação do telefone
+    const telefoneRegex = /^\d{10,11}$/; // Verifica se o telefone contém entre 10 e 11 dígitos numéricos
+    if (telefone && !telefoneRegex.test(telefone)) {
+        showAlert('O telefone deve ter entre 10 e 11 dígitos numéricos.', 'error');
         return;
     }
 
     const dados = {};
-
     dados.nomeUsuario = `${novoPrimeiroNome || dadosUsuarioAtual.primeiroNome} ${novoSobrenome || dadosUsuarioAtual.sobrenome}`.trim();
 
     if (novoPrimeiroNome) dados.primeiroNome = novoPrimeiroNome;
@@ -62,7 +88,6 @@ async function salvarMudancas(event) {
         showAlert(`Erro: ${error.message}`, 'error');
     }
 }
-
 
 function showAlert(message, type = 'success') {
     const alertBox = document.getElementById('alerta');
