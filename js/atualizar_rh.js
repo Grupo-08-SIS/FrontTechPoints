@@ -4,6 +4,7 @@ window.salvarMudancas = salvarMudancas
 window.fazerLogout = fazerLogout
 window.editarPerfil = editarPerfil
 window.fecharFormulario = fecharFormulario
+window.desinteressarAluno = desinteressarAluno
 
 function getIdUsuarioLogado() {
     const data = JSON.parse(sessionStorage.getItem('user'))
@@ -13,7 +14,7 @@ function getIdUsuarioLogado() {
 }
 
 async function salvarMudancas(event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const novoPrimeiroNome = document.getElementById('novo_apelido').value;
     const novoSobrenome = document.getElementById('novo_sobrenome').value;
@@ -63,7 +64,7 @@ async function salvarMudancas(event) {
     if (email) dados.email = email;
     if (novaSenha) dados.senha = novaSenha;
 
-    const userId = getIdUsuarioLogado(); 
+    const userId = getIdUsuarioLogado();
     const endpoint = `http://localhost:8080/usuarios/atualizar/${userId}`;
 
     try {
@@ -78,8 +79,8 @@ async function salvarMudancas(event) {
         if (response.ok) {
             showAlert('Informações atualizadas com sucesso! Você será redirecionado para a tela de login.', 'success');
             setTimeout(() => {
-                window.location.href = 'login.html'; 
-            }, 3000); 
+                window.location.href = 'login.html';
+            }, 3000);
         } else {
             const error = await response.json();
             showAlert(`Erro: ${error.message || 'Não foi possível atualizar as informações.'}`, 'error');
@@ -143,14 +144,67 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const idUsuario = user.id;
 
+    async function listarFavoritos() {
+        try {
+            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
+            const data = await response.json();
+
+            const container = document.querySelector(".bloco_alunos_favoritos");
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                const noFavoritesMessage = document.createElement("p");
+                noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
+                noFavoritesMessage.className = "no-alunos-message";
+                container.appendChild(noFavoritesMessage);
+            } else {
+                for (const aluno of data) {
+                    const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
+                    const pontosData = await pontosResponse.json();
+
+                    let maxPontos = -1;
+                    let cursoComMaiorPontuacao = '';
+
+                    for (const key in pontosData) {
+                        const curso = pontosData[key];
+                        if (curso.pontosTotais > maxPontos) {
+                            maxPontos = curso.pontosTotais;
+                            cursoComMaiorPontuacao = curso.nomeCurso;
+                        }
+                    }
+
+                    const medalhaTipo = obterMedalha(maxPontos);
+
+                    const alunoDiv = document.createElement("div");
+                    alunoDiv.className = "box_Aluno_favoritos";
+
+                    alunoDiv.innerHTML = `
+                        <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
+                        <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
+                        <img src="../imgs/${medalhaTipo}" alt="medalha">
+                        <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
+                    `;
+
+                    alunoDiv.style.backgroundColor = '#E6E6E6';
+                    alunoDiv.style.color = '#323636';
+                    alunoDiv.style.border = '3px solid #1E3A8A';
+
+                    container.appendChild(alunoDiv);
+                }
+            }
+        } catch (error) {
+            console.error("Erro ao buscar alunos favoritos:", error);
+        }
+    }
+
     async function listarInteressados() {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
             const data = await response.json();
-    
+
             const container = document.querySelector(".bloco_alunos");
-            container.innerHTML = ""; 
-    
+            container.innerHTML = "";
+
             if (data.length === 0) {
                 const noInterestedMessage = document.createElement("p");
                 noInterestedMessage.textContent = "Não há alunos interessados no momento.";
@@ -160,10 +214,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
-    
+
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
-    
+
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -171,19 +225,19 @@ document.addEventListener("DOMContentLoaded", async function () {
                             cursoComMaiorPontuacao = curso.nomeCurso;
                         }
                     }
-    
+
                     const medalhaTipo = obterMedalha(maxPontos);
-    
+
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno";
-    
+
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a></span>
                         <img src="../imgs/${medalhaTipo}" alt="medalha">
-                        <button onclick="atribuir(${aluno.id})">Atribuir</button>
+                        <button onclick="atribuir(${aluno.id}, false, 'interessados')">Atribuir</button>
                     `;
-    
+
                     container.appendChild(alunoDiv);
                 }
             }
@@ -192,6 +246,144 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    async function listarCancelados() {
+        try {
+            const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/cancelados`);
+            const data = await response.json();
+
+            const container = document.querySelector(".bloco_alunos_cancelados");
+            container.innerHTML = "";
+
+            if (data.length > 3) {
+                container.style.display = "flex";
+                container.style.flexWrap = "nowrap";
+                container.style.overflowX = "auto";
+                container.style.width = "90%";
+                container.style.justifyContent = "flex-start";
+            }
+
+            if (data.length === 0) {
+                const noInterestedMessage = document.createElement("p");
+                noInterestedMessage.textContent = "Não há alunos cancelados no momento.";
+                noInterestedMessage.className = "no-alunos-message";
+                container.appendChild(noInterestedMessage);
+                container.style.justifyContent = "center";
+                container.style.width = "40%";
+            } else {
+                const alunoDivs = [];
+
+                // Itera sobre os alunos e cria as divs
+                for (const aluno of data) {
+                    const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
+                    const pontosData = await pontosResponse.json();
+
+                    let maxPontos = -1;
+                    let cursoComMaiorPontuacao = '';
+
+                    for (const key in pontosData) {
+                        const curso = pontosData[key];
+                        if (curso.pontosTotais > maxPontos) {
+                            maxPontos = curso.pontosTotais;
+                            cursoComMaiorPontuacao = curso.nomeCurso;
+                        }
+                    }
+
+                    const medalhaTipo = obterMedalha(maxPontos);
+
+                    const alunoDiv = document.createElement("div");
+                    alunoDiv.className = "box_Aluno";
+                    alunoDiv.innerHTML = `
+                        <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
+                        <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a></span>
+                        <img src="../imgs/${medalhaTipo}" alt="medalha">
+                    `;
+
+                    alunoDiv.style.backgroundColor = '#F0F0F0';
+                    alunoDiv.style.color = '#808080';
+
+                    alunoDivs.push(alunoDiv);
+                }
+
+                // Adiciona todos os alunos ao contêiner na ordem invertida
+                for (let i = alunoDivs.length - 1; i >= 0; i--) {
+                    container.appendChild(alunoDivs[i]); // Adiciona na ordem invertida
+                }
+
+                // Adiciona o botão "Desfazer" ao último aluno (que é o mais recente na pilha)
+                if (alunoDivs.length > 0) {
+                    const ultimoAluno = alunoDivs[alunoDivs.length - 1]; // O último aluno na pilha é o mais recente
+                    ultimoAluno.innerHTML += `<button onclick="desfazer(${data[data.length - 1].id})">Desfazer</button>`;
+                }
+            }
+        } catch (error) {
+            console.error("Erro ao buscar cancelados:", error);
+        }
+    }
+
+    window.desfazer = async function (idAluno) {
+        // Recupera as listas do localStorage
+        let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+        let desinteressados = JSON.parse(localStorage.getItem('desinteressados')) || [];
+
+        // Logar as listas para verificar o que contém
+        console.log('Favoritos:', favoritos);
+        console.log('Desinteressados:', desinteressados);
+
+        // Verifica se o aluno está nas listas, convertendo idAluno para número
+        const alunoFavoritosIndex = favoritos.findIndex(favorito => Number(favorito.id) === Number(idAluno));
+        const alunoDesinteressadosIndex = desinteressados.findIndex(interessado => Number(interessado.id) === Number(idAluno));
+
+        try {
+            let response;
+
+            // Se o aluno estiver na lista de favoritos
+            if (alunoFavoritosIndex !== -1) {
+                response = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/favoritos/${idAluno}`, {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    // Remove o aluno da lista de favoritos
+                    favoritos.splice(alunoFavoritosIndex, 1);
+                    localStorage.setItem('favoritos', JSON.stringify(favoritos));
+                    console.log(`Aluno com ID ${idAluno} foi restaurado e removido dos favoritos.`);
+                    showAlert('Aluno restaurado com sucesso!', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    console.error('Erro ao restaurar aluno dos favoritos:', response.statusText);
+                }
+                // Se o aluno estiver na lista de desinteressados
+            } else if (alunoDesinteressadosIndex !== -1) {
+                const alunoDesinteressado = desinteressados[alunoDesinteressadosIndex];
+                const listaAssociada = alunoDesinteressado.lista; // Captura a lista associada
+
+                // Define o endpoint com base na lista associada
+                response = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/${listaAssociada}/${idAluno}`, {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    // Remove o aluno da lista de desinteressados
+                    desinteressados.splice(alunoDesinteressadosIndex, 1);
+                    localStorage.setItem('desinteressados', JSON.stringify(desinteressados));
+                    console.log(`Aluno com ID ${idAluno} foi restaurado e removido dos desinteressados.`);
+                    showAlert('Aluno restaurado com sucesso!', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    console.error('Erro ao restaurar aluno dos desinteressados:', response.statusText);
+                }
+            } else {
+                console.log(`Aluno com ID ${idAluno} não está em nenhuma das listas.`);
+            }
+        } catch (error) {
+            console.error('Erro ao chamar o endpoint:', error);
+        }
+    };
+
     window.desfavoritar = async function (idAluno) {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/cancelados/${idAluno}`, {
@@ -199,7 +391,26 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (response.ok) {
-                console.log(`Aluno com ID ${idAluno} cancelado.`);
+                // Criar um objeto com os dados do aluno
+                const alunoData = {
+                    id: idAluno,
+                    lista: 'favoritos' // Nome da lista
+                };
+
+                // Recuperar a lista existente de alunos do localStorage, se houver
+                let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+
+                // Adicionar o aluno à lista de favoritos
+                favoritos.push(alunoData);
+
+                // Armazenar a lista atualizada de favoritos no localStorage
+                localStorage.setItem('favoritos', JSON.stringify(favoritos));
+
+                console.log(`Aluno com ID ${idAluno} cancelado e adicionado aos favoritos.`);
+                showAlert('Aluno desfavoritado com sucesso!', 'success');
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             } else {
                 console.error('Erro ao cancelar o aluno.');
             }
@@ -214,7 +425,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         return date.toLocaleDateString('pt-BR', options);
     }
 
+    listarFavoritos();
     listarInteressados();
+    listarCancelados();
     window.formatDate = formatDate
 });
 
@@ -251,15 +464,15 @@ function fecharFormulario() {
 let idAlunoSelecionado = null;
 
 window.onload = function () {
-    listarContratados(); 
+    listarContratados();
 };
 
-function atribuir(idAluno, fromListar = false) {
-    idAlunoSelecionado = idAluno; 
-    console.log("Aluno selecionado:", idAlunoSelecionado); 
+function atribuir(idAluno, fromListar = false, elementoChamador = null) {
+    idAlunoSelecionado = idAluno;
+    console.log("Aluno selecionado:", idAlunoSelecionado);
 
     const atribuicaoDiv = document.getElementById("atribuicao");
-    atribuicaoDiv.style.display = "flex"; 
+    atribuicaoDiv.style.display = "flex";
 
     if (fromListar) {
         const boxProcessoSeletivo = document.querySelector(".box_atribuir:nth-child(3)");
@@ -281,7 +494,11 @@ function atribuir(idAluno, fromListar = false) {
     btnProcessoSeletivo.onclick = () => processoSeletivoAluno(idAlunoSelecionado);
 
     const btnDesinteressar = document.querySelector(".btn_desinteressar");
-    btnDesinteressar.onclick = () => desinteressarAluno(idAlunoSelecionado);
+    btnDesinteressar.onclick = () => desinteressarAluno(idAlunoSelecionado, elementoChamador);
+
+    if (elementoChamador) {
+        console.log("Chamado a partir do elemento:", elementoChamador);
+    }
 }
 
 async function contratarAluno(idAlunoSelecionado) {
@@ -372,8 +589,8 @@ async function processoSeletivoAluno(idAluno) {
         });
         if (response.ok) {
             showAlert('Aluno movido para o processo seletivo!', 'success');
-            await listarProcessoSeletivo(); 
-            fecharAtribuicao(); 
+            await listarProcessoSeletivo();
+            fecharAtribuicao();
             setTimeout(() => {
                 location.reload();
             }, 1000);
@@ -433,7 +650,7 @@ async function listarProcessoSeletivo() {
                     <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
                     <img src="../imgs/${medalhaTipo}" alt="medalha">
-                    <button onclick="atribuir(${aluno.id}, true)">Atribuir</button>
+                    <button onclick="atribuir(${aluno.id}, true, 'processoSeletivo')">Atribuir</button>
                 `;
 
                 container.appendChild(alunoDiv);
@@ -446,7 +663,7 @@ async function listarProcessoSeletivo() {
 
 document.addEventListener("DOMContentLoaded", listarProcessoSeletivo);
 
-async function desinteressarAluno(idAluno) {
+async function desinteressarAluno(idAluno, elementoChamador) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
 
@@ -454,9 +671,28 @@ async function desinteressarAluno(idAluno) {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/cancelados/${idAluno}`, {
             method: "POST",
         });
+
         if (response.ok) {
+            // Criar um objeto com os dados do aluno
+            const alunoData = {
+                id: idAluno,
+                lista: elementoChamador // Nome da lista é o elementoChamador
+            };
+
+            // Recuperar a lista existente do localStorage, se houver
+            let desinteressados = JSON.parse(localStorage.getItem('desinteressados')) || [];
+
+            // Adicionar o aluno à lista de desinteressados
+            desinteressados.push(alunoData);
+
+            // Armazenar a lista atualizada de desinteressados no localStorage
+            localStorage.setItem('desinteressados', JSON.stringify(desinteressados));
+
+            // Exibir mensagem de sucesso
             showAlert('Interesse cancelado com sucesso!', 'success');
-            fecharAtribuicao(); 
+            fecharAtribuicao();
+
+            // Redirecionar após um tempo
             setTimeout(() => {
                 location.reload();
             }, 1000);
@@ -473,7 +709,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (fecharBtn) {
         fecharBtn.addEventListener('click', function () {
-            console.log('Fechar botão clicado'); 
+            console.log('Fechar botão clicado');
             document.getElementById('atribuicao').style.display = 'none';
         });
     } else {
@@ -483,6 +719,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function fecharAtribuicao() {
     const atribuicaoDiv = document.getElementById("atribuicao");
-    atribuicaoDiv.style.display = "none"; 
+    atribuicaoDiv.style.display = "none";
 }
 

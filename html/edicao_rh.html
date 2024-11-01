@@ -210,7 +210,7 @@
         </div>
     </div>
 
-    <!-- <div class="container_separacao">
+    <div class="container_separacao">
         <div class="container_interno_separacao">
             <h1>Pessoas Favoritadas</h1>
         </div>
@@ -225,7 +225,7 @@
                 <button data-id="1" onclick="desfavoritar(this)">Desfavoritar</button>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <div class="container_separacao">
         <div class="container_interno_separacao">
@@ -251,7 +251,22 @@
 
     <div class="container_fundo_aluno_processoSeletivo">
         <div class="bloco_alunos_processo_seletivo"></div>
-    </div>    
+    </div>  
+    
+    <div class="container_separacao_cancelados">
+        <div class="container_interno_separacao_cancelados">
+            <h1 id="titulo">Pessoas Canceladas</h1>
+            <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Se você clicar em desfazer, o aluno será restaurado ao estado anterior')"
+                    onmouseout="hideTooltip()">?</div>
+            </div>
+    </div>
+    
+    <div class="container_fundo_aluno_cancelados">
+        <div class="bloco_alunos_cancelados">
+        </div>
+    </div>
+    
 
     <div class="container_separacao">
         <div class="container_interno_separacao">
