@@ -20,14 +20,15 @@
 <script src="../js/editar_foto.js"></script>
 <script src="../js/buscar_foto_perfil.js"></script>
 <script src="../js/medalhas.js"></script>
+
 <body>
-        <!-- Container do VLibras Widget -->
-  <div vw class="enabled">
-    <div vw-access-button class="active"></div>
-    <div vw-plugin-wrapper>
-      <div class="vw-plugin-top-wrapper"></div>
+    <!-- Container do VLibras Widget -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
     </div>
-  </div>
     <header>
         <div class="header-content">
             <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
@@ -60,41 +61,41 @@
     <div id="atribuicao" class="container_atribuir">
         <div class="bloco_atribuir">
             <span class="fechar">&times;</span>
-            
+
             <div class="box_atribuir">
-                <p>O aluno foi contratado com sucesso. 
-                    <div class="info_icon" 
-                         onmouseover="showTooltip(event, 'Essa ação indica que o aluno foi efetivamente contratado.')" 
-                         onmouseout="hideTooltip(event)">?</div>
+                <p>O aluno foi contratado com sucesso.
+                <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Essa ação indica que o aluno foi efetivamente contratado.')"
+                    onmouseout="hideTooltip(event)">?</div>
                 </p>
                 <button class="btn_contratado">Contratado</button>
             </div>
-    
+
             <div class="box_atribuir">
-                <p>Colocar aluno no processo seletivo.<br/> 
-                    <div class="info_icon" 
-                         onmouseover="showTooltip(event, 'Esta ação indica que o aluno foi/será encaminhado para o processo seletivo.')" 
-                         onmouseout="hideTooltip(event)">?</div>
+                <p>Colocar aluno no processo seletivo.<br />
+                <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Esta ação indica que o aluno foi/será encaminhado para o processo seletivo.')"
+                    onmouseout="hideTooltip(event)">?</div>
                 </p>
                 <button class="btn_processo_seletivo">Processo Seletivo</button>
             </div>
-    
+
             <div class="box_atribuir">
-                <p>Cancelar interesse no aluno. 
-                    <div class="info_icon" 
-                         onmouseover="showTooltip(event, 'Esta ação indica que o aluno não passou no processo seletivo ou a empresa não há mais interesse no aluno.')" 
-                         onmouseout="hideTooltip(event)">?</div>
+                <p>Cancelar interesse no aluno.
+                <div class="info_icon"
+                    onmouseover="showTooltip(event, 'Esta ação indica que o aluno não passou no processo seletivo ou a empresa não há mais interesse no aluno.')"
+                    onmouseout="hideTooltip(event)">?</div>
                 </p>
                 <button class="btn_desinteressar">Desinteressar</button>
             </div>
         </div>
     </div>
-      
+
 
     <div style="display: none;" class="container_notificacao_exclusao">
         <div class="bloco_notificacao_exclusao">
             <div class="container_notificacao">
-                <span class="notificacao">Exclusão <m>parcial</m> <br/> do perfil</span>
+                <span class="notificacao">Exclusão <m>parcial</m> <br /> do perfil</span>
                 <div class="imagem_wrapper2">
                     <img onclick="fecharNotificacao()" src="../imgs/x_de_fechamento.png"
                         alt="fechar aba de ver mais sobre o aluno">
@@ -251,22 +252,22 @@
 
     <div class="container_fundo_aluno_processoSeletivo">
         <div class="bloco_alunos_processo_seletivo"></div>
-    </div>  
-    
+    </div>
+
     <div class="container_separacao_cancelados">
         <div class="container_interno_separacao_cancelados">
             <h1 id="titulo">Pessoas Canceladas</h1>
             <div class="info_icon"
-                    onmouseover="showTooltip(event, 'Se você clicar em desfazer, o aluno será restaurado ao estado anterior')"
-                    onmouseout="hideTooltip()">?</div>
-            </div>
+                onmouseover="showTooltip(event, 'Clique em desfazer para restaurar o aluno ao estado anterior. Se o botão desfazer não aparecer, você pode atribuir o aluno manualmente acessando a tela principal de Vagas e pesquisando pelo nome do aluno.')"
+                onmouseout="hideTooltip()">?</div>
+        </div>
     </div>
-    
+
     <div class="container_fundo_aluno_cancelados">
         <div class="bloco_alunos_cancelados">
         </div>
     </div>
-    
+
 
     <div class="container_separacao">
         <div class="container_interno_separacao">
@@ -326,8 +327,8 @@
 
 <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 <script>
-  new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script> 
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+</script>
 
 
 </html>

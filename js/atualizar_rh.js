@@ -309,8 +309,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     container.appendChild(alunoDivs[i]); // Adiciona na ordem invertida
                 }
 
-                // Adiciona o botão "Desfazer" ao último aluno (que é o mais recente na pilha)
-                if (alunoDivs.length > 0) {
+                // Verifica se há dados no localStorage para as chaves "favoritos" ou "desinteressados"
+                const favoritos = localStorage.getItem("favoritos");
+                const desinteressados = localStorage.getItem("desinteressados");
+
+                // Adiciona o botão "Desfazer" ao último aluno apenas se uma das chaves existir no localStorage
+                if ((favoritos || desinteressados) && alunoDivs.length > 0) {
                     const ultimoAluno = alunoDivs[alunoDivs.length - 1]; // O último aluno na pilha é o mais recente
                     ultimoAluno.innerHTML += `<button onclick="desfazer(${data[data.length - 1].id})">Desfazer</button>`;
                 }
