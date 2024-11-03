@@ -19,10 +19,12 @@
     </div>
   </div>
 
-    <header class="header">
+  <header class="header">
+    <a href="home.html">
         <img src="../imgs/logo-techJobs.JPG" alt="Logo" class="logo">
-        <button onclick="window.location.href = 'home.html'" type="button" class="back-btn-top">Voltar</button>
-    </header>
+    </a>
+    <button onclick="window.location.href = 'login.html'" type="button" class="back-btn-top">Login</button>
+</header>
 
     <div id="alertDiv" class="container_alerta d-none">
         <span class="titulo_alerta">Alerta</span>
@@ -42,7 +44,7 @@
             <article class="form-step" id="step1">
                 <form class="form" onsubmit="return false;">
                     <h2>Cadastre-se</h2>
-                    <p>Comece a moldar o seu futuro hoje mesmo. Crie sua conta!</p>
+                    <p>Comece a moldar o seu futuro hoje mesmo, Crie sua conta!</p>
                     <label for="username">Apelido</label>
                     <input type="text" id="username" name="username" class="validate" required>
                     <label for="email">Email</label>
@@ -128,8 +130,16 @@
                 <div class="dot" onclick="showSlide(2)"></div>
                 <div class="dot" onclick="showSlide(3)"></div>
             </div>
-            <div class="arrow arrow-left1">&lt;</div>
-            <div class="arrow arrow-right1">&gt;</div>
+            <div class="arrow arrow-left1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                    <path fill="white" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+            </div>
+            <div class="arrow arrow-right1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                    <path fill="white" d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L12.17 12z" />
+                </svg>
+            </div>
         </section>
 
         <div id="terms-modal" class="modal">

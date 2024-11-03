@@ -375,19 +375,11 @@ body {
 
 
     .image-container {
-        /* width: 40%;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px; */
-
+        margin-right: 100px;
         position: relative;
-        width: 460px;
-        /* Ajuste a largura conforme necessário */
-        height: 400px;
-        /* Ajuste a altura conforme necessário */
-
+        width: 370px; /* Largura do contêiner */
+        height: 300px; /* Ajuste a altura conforme necessário */
+        /* Você pode ajustar este valor para a altura desejada */
     }
 
     .dots {
@@ -412,36 +404,32 @@ body {
 
     .arrow {
         position: absolute;
+        top: 560px;
         right: 270px;
-        width: 50px;
-        height: 50px;
-        background-color: #FFD700;
-        /* Cor dourada */
+        width: 60px; 
+        height: 60px;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
         transform: translateY(-50%);
         border-radius: 8px;
-        color: white;
+    }
 
+    .arrow svg {
+        width: 100px; /* Aumentando o tamanho do ícone da seta */
+        height: 100px;
+    }
+
+    .arrow svg path {
+        fill: #FFD700; /* Mantendo a seta dourada */
     }
 
     .arrow-left1 {
-        left: -220px;
-
+        left: -260px;
     }
 
-    .arrow-right1 {}
 
-
-
-    .arrow-left1:after {}
-
-    .image {
-        text-align: center;
-
-    }
 
     .image img {
         max-width: 100%;
