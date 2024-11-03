@@ -12,8 +12,6 @@ async function realizarCadastro() {
         return; // Se houve erro no cadastro do endereço, não prossegue
     }
 
-    const isRH = window.location.pathname.includes('cadastro_rh');
-    const tipoUsuario = isRH ? 3 : 2;
 
     // Cadastra o usuário e aguarda a resposta
     const id = await cadastrarUsuario(enderecoId);
@@ -218,7 +216,7 @@ async function cadastrarUsuario(idEndereco) {
         sobrenome: lastnameInput.value,
         email: emailInput.value,
         telefone: telefone,
-        tipoUsuario: document.getElementById('is-rh').checked ? 2 : 1,
+        tipoUsuario: 
         escolaridade: escolaridadeInput.value,
         sexo: sexoMap[sexoInput.value],  // Mapeando o valor do sexo para o formato correto
         etnia: etniaMap[etniaInput.value],  // Mapeando o valor de cor/raça para o formato correto

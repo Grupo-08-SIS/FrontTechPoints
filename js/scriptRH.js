@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    const isRHCheckbox = document.getElementById('is-rh');
+    const isRHCheckbox = document.getElementById('form-select');
     
     isRHCheckbox.addEventListener('change', function () {
         if (this.checked) {
