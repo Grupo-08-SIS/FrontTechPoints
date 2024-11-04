@@ -89,6 +89,10 @@ function redirectToDashboard(tipoUsuario) {
             console.log('Redirecionando para tela_rh_vagas.html');
             window.location.href = 'tela_rh_vagas.html';
             break;
+        case "Adm":
+            console.log('Redirecionando para dash_adm.html');
+            window.location.href = 'dash_adm.html';
+            break;    
         default:
             showAlert('error', 'Erro: Tipo de usuário desconhecido');
             console.error('Tipo de usuário desconhecido');
