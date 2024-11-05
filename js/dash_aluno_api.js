@@ -52,6 +52,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       );
       atualizarElemento(progressoAtualMetaEstudo2);
     }
+    const idAluno = user.id;
+    carregarTabelaPontuacoes(idAluno);
   } catch (error) {
     console.error("Erro:", error);
   }
@@ -234,7 +236,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function initMedalhaSelect() {
-    fetch("http://localhost:8080/pontuacoes/pontos-totais/1")
+    fetch(`http://localhost:8080/pontuacoes/pontos-totais/${user.id}`)
       .then((response) => response.json())
       .then((data) => {
         const courseSelect = document.getElementById("course-select");
@@ -918,5 +920,42 @@ async function cadastrarMetaEstudo(studyPlan, days) {
       console.error(error);
     }
     i++;
+  }
+}
+
+async function carregarTabelaPontuacoes(idAluno) {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/pontuacoes/lista?idAluno=${idAluno}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar os dados da API");
+    }
+
+    const dados = await response.json();
+
+    const tabelaAlunos = document.getElementById("tabela-alunos");
+
+    tabelaAlunos.innerHTML = "";
+    dados.forEach((item) => {
+      const linha = document.createElement("tr");
+
+      const colunaNomeEmpresa = document.createElement("td");
+      colunaNomeEmpresa.textContent = item.nomeEmpresa;
+
+      const colunaEmailRecrutador = document.createElement("td");
+      colunaEmailRecrutador.textContent = item.emailRecrutador;
+
+      const colunaLista = document.createElement("td");
+
+      colunaLista.textContent = item.lista;
+      linha.appendChild(colunaNomeEmpresa);
+      linha.appendChild(colunaEmailRecrutador);
+      linha.appendChild(colunaLista);
+      tabelaAlunos.appendChild(linha);
+    });
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
   }
 }

@@ -164,7 +164,9 @@ a {
 
 .geral-container {
   display: flex;
+  gap: 60px;
   flex-direction: row;
+  
 }
 
 .notifications .bi,
@@ -286,25 +288,24 @@ main {
   }
 }
 
-main {
-  padding: 20px;
-}
-
 .main-content {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
   flex-direction: column;
+  height: fit-content;
+  gap: 16px;
 }
 
 .welcome-section {
   background-size: cover;
   color: #fff;
   border-radius: 15px;
-  text-align: center;
   width: 100%;
-  height: 50vh;
+  height: 44vh;
   position: relative;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 #img-welcome {
@@ -321,15 +322,15 @@ main {
 
 .welcome-text {
   position: absolute;
-  top: 3%;
-  left: 6.8%;
+  top: 9%;
+  left: 21.2%;
   transform: translate(-50%, -50%);
-  margin-left: 13.2%;
   z-index: 99;
 }
 
 .welcome-text h1 {
-  margin: 0;
+  display: inline-block;
+  margin: 0 auto;
   z-index: 99;
   font-size: 1.5rem;
   background-color: #244aa5;
@@ -349,18 +350,16 @@ main {
   z-index: 99;
 }
 
-.welcome-section .table-responsive {
-  width: 80%;
-}
 
 .course-section {
   background-color: #fff;
-  padding: 10px;
+  padding: 20px;
   border-radius: 20px;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   width: 88%;
-  height: 45vh;
+  height: auto;
+  min-height: 40vh;
   border: 2px solid #244aa5;
 }
 
@@ -380,6 +379,12 @@ main {
 .course-section img {
   margin-top: 30px;
   width: 85px;
+}
+#nomeCurso {
+  max-width: 196px; /* Ajuste este valor conforme necessário */
+  white-space: nowrap; /* Não permite quebra de linha */
+  overflow: hidden; /* Oculta o texto que excede o limite */
+  text-overflow: ellipsis; /* Adiciona "..." ao final do texto que não cabe */
 }
 
 .course-info {
@@ -408,8 +413,14 @@ main {
   height: 7vh;
   display: flex;
   align-items: center;
+  text-align: center;
   justify-content: center;
   flex-direction: column;
+}
+
+#top-medalha {
+  display: block;
+  margin: 30px auto;
 }
 
 .course-info2 p {
@@ -448,17 +459,26 @@ main {
 .stats-section {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 16px;
   height: 32vh;
 }
 
 .stat-item {
   background-color: #fff;
-  padding: 10px;
+  padding: 16px;
   border-radius: 15px;
   text-align: center;
+  border: 2px solid #244aa5;
+  width: 50vh;
+  height: 33vh;
   flex: 1;
   margin: 0 10px;
-  border: 2px solid #244aa5;
+}
+
+#medalha-curso {
+  width: 100px;
+  height: 100px;
 }
 
 .stat-item p {
@@ -509,7 +529,7 @@ main {
 .total-left {
   display: flex;
   flex-direction: column;
-  width: 75%;
+  width: 70%;
   height: auto;
   padding-top: 4vh;
 }
@@ -517,9 +537,10 @@ main {
 .total-right {
   display: flex;
   flex-direction: column;
-  width: 23%;
   height: auto;
-  padding: 3.4vh;
+  padding: 3.4vh 2vh;
+  gap: 24px;
+  width: 23%;
 }
 
 .div-welcome {
@@ -545,36 +566,45 @@ main {
 
 .longo-do-tempo {
   background-color: #244aa5;
-
-  height: 55vh;
   border-radius: 30px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin-top: 1.5rem;
+  padding: 24px;
+  width: 100%;
+  height: fit-content;
 }
 
-.longo-do-tempo h3 {
+.longo-do-tempo h3,
+.cada-curso h3 {
+  margin-top: 0;
   color: white;
 }
 
-.dash-longoDoTempo {
+.dash-longoDoTempo,
+.dash-pontosCadaCurso {
   background-color: white;
   height: 46vh;
-  width: 97%;
+  width: 100%;
   border-radius: 20px;
+  padding: 20px;
+}
+
+#pontosLinhaChart {
+  height: fit-content;
 }
 
 .cada-curso {
   background-color: #244aa5;
-  height: 69vh;
+  height: fit-content;
   border-radius: 30px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   margin-top: 1.5rem;
+  padding: 24px;
 }
 
 .cada-curso h3 {
@@ -603,12 +633,13 @@ main {
 .course-section-2 {
   background-color: #244aa5;
   color: white;
-  padding: 20px;
+  padding: 32px;
   border-radius: 20px;
   align-items: center;
   text-align: center;
-  width: 88%;
-  height: 44.3vh;
+  width: 47vh;
+  height: 45vh;
+  margin-right: 40px;
   border: 2px solid #244aa5;
 }
 
@@ -618,9 +649,12 @@ main {
   border-radius: 20px;
   align-items: center;
   text-align: center;
-  width: 88%;
+  width: fit-content;
   height: 72vh;
   border: 2px solid #244aa5;
+  padding: 25px;
+  height: auto;
+  min-height: 60vh
 }
 
 .course-section-3 h2 {
@@ -654,12 +688,15 @@ main {
   border-radius: 10px;
   overflow: hidden;
   margin: 10px 0;
+  padding: 20px;
+  text-align: left;
 }
 
 .days {
   display: flex;
   justify-content: center;
   margin: 10px 0;
+  gap: 10px;
 }
 
 .day {
@@ -671,12 +708,10 @@ main {
   align-items: center;
   justify-content: center;
   background-color: #eead2d;
-  color: #244aa5;
+  color: #fff;
   font-weight: bold;
-  cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 5px;
-  /* Espaçamento entre bolinhas */
 }
 
 .day.active {
@@ -686,6 +721,7 @@ main {
 .total-container {
   display: flex;
   flex-direction: column;
+  padding-left: 2px;
 }
 
 .desempenho-habilidades {
@@ -728,13 +764,13 @@ footer {
   position: relative;
 }
 
-.footer-content > div {
+.footer-content>div {
   flex: 1;
   padding: 10px;
   position: relative;
 }
 
-.footer-content > div:nth-child(1)::after {
+.footer-content>div:nth-child(1)::after {
   content: "";
   position: absolute;
   top: 10%;
@@ -744,7 +780,7 @@ footer {
   background-color: yellow;
 }
 
-.footer-content > div:nth-child(2)::after {
+.footer-content>div:nth-child(2)::after {
   content: "";
   position: absolute;
   top: 10%;
@@ -923,7 +959,6 @@ input[type="number"] {
   }
 }
 
-/* Estilo para os inputs de dias */
 .day-inputs {
   display: flex;
   justify-content: center;
@@ -968,4 +1003,48 @@ input[type="number"] {
 
 .progress-bar.meta-ultrapassada {
   background-color: #f7b700;
+}
+
+.table-responsive {
+  max-width: 900px;
+  background-color: rgba(255, 255, 255, 0.9); 
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-left: 1%;
+  margin-top: 10%;
+  padding: 20px;
+}
+
+/* Estilos da tabela interna */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table-striped tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+@media (max-width: 768px) {
+
+  .table th,
+  .table td {
+    padding: 8px 10px;
+  }
 }
