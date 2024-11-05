@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function initMedalhaSelect() {
-    fetch("http://localhost:8080/pontuacoes/pontos-totais/1")
+    fetch(`http://localhost:8080/pontuacoes/pontos-totais/${user.id}`)
       .then((response) => response.json())
       .then((data) => {
         const courseSelect = document.getElementById("course-select");

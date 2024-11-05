@@ -164,9 +164,9 @@ a {
 
 .geral-container {
   display: flex;
-  gap: 64px;
+  gap: 60px;
   flex-direction: row;
-  padding: 0 24px;
+  
 }
 
 .notifications .bi,
@@ -301,8 +301,8 @@ main {
   background-size: cover;
   color: #fff;
   border-radius: 15px;
-  width: 80%;
-  height: 50vh;
+  width: 100%;
+  height: 44vh;
   position: relative;
   text-align: center;
   margin-bottom: 10px;
@@ -322,12 +322,10 @@ main {
 
 .welcome-text {
   position: absolute;
-  top: 3%;
-  left: 6.8%;
+  top: 9%;
+  left: 21.2%;
   transform: translate(-50%, -50%);
-  margin-left: 13.2%;
   z-index: 99;
-  margin-bottom: 20px;
 }
 
 .welcome-text h1 {
@@ -382,6 +380,12 @@ main {
   margin-top: 30px;
   width: 85px;
 }
+#nomeCurso {
+  max-width: 196px; /* Ajuste este valor conforme necessário */
+  white-space: nowrap; /* Não permite quebra de linha */
+  overflow: hidden; /* Oculta o texto que excede o limite */
+  text-overflow: ellipsis; /* Adiciona "..." ao final do texto que não cabe */
+}
 
 .course-info {
   background-color: #244aa5;
@@ -409,8 +413,14 @@ main {
   height: 7vh;
   display: flex;
   align-items: center;
+  text-align: center;
   justify-content: center;
   flex-direction: column;
+}
+
+#top-medalha {
+  display: block;
+  margin: 30px auto;
 }
 
 .course-info2 p {
@@ -460,15 +470,15 @@ main {
   border-radius: 15px;
   text-align: center;
   border: 2px solid #244aa5;
-  width: fit-content;
-  height: fit-content;
+  width: 50vh;
+  height: 33vh;
   flex: 1;
   margin: 0 10px;
 }
 
 #medalha-curso {
-  width: 35%;
-  height: 64px;
+  width: 100px;
+  height: 100px;
 }
 
 .stat-item p {
@@ -519,7 +529,7 @@ main {
 .total-left {
   display: flex;
   flex-direction: column;
-  width: 75%;
+  width: 70%;
   height: auto;
   padding-top: 4vh;
 }
@@ -627,8 +637,9 @@ main {
   border-radius: 20px;
   align-items: center;
   text-align: center;
-  width: fit-content;
+  width: 47vh;
   height: 45vh;
+  margin-right: 40px;
   border: 2px solid #244aa5;
 }
 
@@ -710,7 +721,7 @@ main {
 .total-container {
   display: flex;
   flex-direction: column;
-  padding-left: 32px;
+  padding-left: 2px;
 }
 
 .desempenho-habilidades {
@@ -995,11 +1006,16 @@ input[type="number"] {
 }
 
 .table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  margin-bottom: 20px;
+  max-width: 900px;
+  background-color: rgba(255, 255, 255, 0.9); 
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-left: 1%;
+  margin-top: 10%;
+  padding: 20px;
 }
 
+/* Estilos da tabela interna */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -1008,7 +1024,7 @@ input[type="number"] {
 
 .table th,
 .table td {
-  padding: 8px 10px;
+  padding: 12px 15px;
   text-align: left;
 }
 
