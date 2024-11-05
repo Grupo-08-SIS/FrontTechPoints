@@ -165,7 +165,7 @@ a {
 .geral-container {
   display: flex;
   gap: 64px;
-  width: 100%;
+  flex-direction: row;
   padding: 0 24px;
 }
 
@@ -295,14 +295,13 @@ main {
   flex-direction: column;
   height: fit-content;
   gap: 16px;
-  width: fit-content;
 }
 
 .welcome-section {
   background-size: cover;
   color: #fff;
   border-radius: 15px;
-  width: 100%;
+  width: 80%;
   height: 50vh;
   position: relative;
   text-align: center;
@@ -360,7 +359,7 @@ main {
   border-radius: 20px;
   align-items: flex-start;
   text-align: left;
-  width: fit-content;
+  width: 88%;
   height: auto;
   min-height: 40vh;
   border: 2px solid #244aa5;
@@ -452,7 +451,7 @@ main {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  width: 100%;
+  height: 32vh;
 }
 
 .stat-item {
@@ -463,6 +462,8 @@ main {
   border: 2px solid #244aa5;
   width: fit-content;
   height: fit-content;
+  flex: 1;
+  margin: 0 10px;
 }
 
 #medalha-curso {
@@ -518,8 +519,8 @@ main {
 .total-left {
   display: flex;
   flex-direction: column;
-  height: fit-content;
-  width: 2000px;
+  width: 75%;
+  height: auto;
   padding-top: 4vh;
 }
 
@@ -529,6 +530,7 @@ main {
   height: auto;
   padding: 3.4vh 2vh;
   gap: 24px;
+  width: 23%;
 }
 
 .div-welcome {
