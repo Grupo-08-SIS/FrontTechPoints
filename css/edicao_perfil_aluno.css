@@ -294,6 +294,7 @@ a {
     font-weight: 600;
     text-align: center;
     transition: all 0.3s ease;
+    margin-top: 2%;
 }
 
 .upload_button {
@@ -800,4 +801,22 @@ footer {
 .header_img_usuario {
     width: 5vh;
     border-radius: 100%;
+}
+
+.piscando {
+    animation: piscar 0.5s infinite alternate;
+}
+
+@keyframes piscar {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.blur {
+    filter: blur(5px); /* Ajuste a intensidade do desfoque conforme necessário */
+    transition: filter 0.3s ease; /* Transição suave ao aplicar ou remover o desfoque */
 }

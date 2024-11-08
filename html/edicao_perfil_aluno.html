@@ -17,6 +17,7 @@
 <script src="../js/drop_down.js"></script>
 <script src="../js/localiza_usuario_header.js"></script>
 <script src="../js/buscar_foto_perfil.js"></script>
+<script src="../js/editar_foto.js"></script>
 
 <body>
        
@@ -96,16 +97,19 @@
             </div>
             <div class="container_span_e_botoes">
                 <div class="blco_span">
-                    <span>
-                        Nome do usuário: <span class="span_texto_recebido" id="id_nome">nome</span>
-                        Email do usuário: <span class="span_texto_recebido" id="id_email_usuario">email</span>
-                        Data de Criação: <span class="span_texto_recebido" id="span_data_criacao">data</span>
-                        Data da última atualização: <span class="span_texto_recebido" id="span_data_ultima_atualizacao">data</span>
-                    </span>
+                    <div class="coluna_esquerda">
+                        <span>Nome do usuário: <span class="span_texto_recebido" id="id_nome">nome</span></span>
+                        <span>Email do usuário: <span class="span_texto_recebido"
+                                id="id_email_usuario">email</span></span>
+                        <span>Data de Criação: <span class="span_texto_recebido"
+                                id="span_data_criacao">data</span></span>
+                        <span>Data da última atualização: <span class="span_texto_recebido"
+                                id="span_data_ultima_atualizacao">data</span></span>
+                    </div>
                 </div>
-                <div class="bloco_botoes"> 
+                <div class="bloco_botoes">
                     <input type="file" id="fileInput" class="inputfile" />
-                    <label for="fileInput" class="upload_label">Escolher Arquivo</label>
+                    <label for="fileInput" class="upload_label">Escolher arquivo</label>
                     <button class="upload_button" id="uploadButton">Atualizar Foto</button>
                     <button class="upload_button" onclick="editarPerfil()">Editar Perfil</button>
                 </div>
@@ -211,7 +215,6 @@
     <script src="../js/localiza_usuario_header.js"></script>
     <script src="../js/rh_exclusao_perfil.js"></script>
     <script src="../js/editar_perfil_aluno.js"></script>
-    <script src="../js/editar_foto.js"></script>
 
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
