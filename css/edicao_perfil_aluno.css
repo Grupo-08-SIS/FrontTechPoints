@@ -263,13 +263,24 @@ a {
 }
 
 .blco_span {
-    color: #ffffff;
-    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10vh;
 }
 
 .blco_span span {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 1%;
+}
+
+.coluna_esquerda,
+.coluna_direita {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    font-size: 16px;
+    gap: 10px;
 }
 
 .bloco_botoes {
@@ -280,6 +291,11 @@ a {
 
 .inputfile {
     display: none;
+}
+
+#descricao {
+    resize: vertical; 
+    width: 100%;
 }
 
 .upload_label {

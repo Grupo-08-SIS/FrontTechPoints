@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/edicao_perfil_aluno.css">
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link rel="icon" type="image/x-icon" href="../imgs/logo-arrastao.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -20,14 +20,14 @@
 <script src="../js/editar_foto.js"></script>
 
 <body>
-       
-  <div vw class="enabled">
-    <div vw-access-button class="active"></div>
-    <div vw-plugin-wrapper>
-      <div class="vw-plugin-top-wrapper"></div>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
     </div>
-  </div>
-   
+
     <header>
         <div class="header-content">
             <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
@@ -106,6 +106,9 @@
                         <span>Data da última atualização: <span class="span_texto_recebido"
                                 id="span_data_ultima_atualizacao">data</span></span>
                     </div>
+                    <div class="coluna_direita">
+                        <span>Descrição: <span class="span_texto_recebido" id="id_descricao">desicricao</span></span>
+                    </div>
                 </div>
                 <div class="bloco_botoes">
                     <input type="file" id="fileInput" class="inputfile" />
@@ -116,7 +119,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <div class="container_fundo_editar_informacoes">
         <div class="container_interno_editar_informacoes">
@@ -149,6 +152,11 @@
 
                 <label for="rua">Nova Rua</label>
                 <input type="text" id="rua" name="rua" placeholder="Digite sua nova rua...">
+
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" placeholder="Minha descrição..." rows="4"
+                    cols="50"></textarea>
+
 
                 <button type="submit" class="btn" onclick="salvarMudancas(event)">Salvar Mudanças</button>
             </form>
@@ -218,8 +226,8 @@
 
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
-      new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script> 
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 
 </body>
 

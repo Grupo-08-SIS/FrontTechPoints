@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(sessionStorage.getItem('user'));
+    const descricaoTextarea = document.getElementById('descricao');
+    const descricao = document.getElementById('id_descricao');
+    if (user && user.descricao) {
+        descricaoTextarea.placeholder = user.descricao;
+        descricao.innerHTML = user.descricao;
+    } else {
+        descricao.innerHTML = "Nenhuma descrição escrita.";
+    }
 
     if (user) {
         // Confirma o conteúdo do objeto
@@ -80,6 +88,7 @@ async function salvarMudancas(event) {
     const estadoInput = document.getElementById('estado');
     const cidadeInput = document.getElementById('cidade');
     const ruaInput = document.getElementById('rua');
+    const descricaoInput = document.getElementById('descricao');
 
     const data = JSON.parse(sessionStorage.getItem('user'));
     const idUsuario = data.id;
@@ -99,11 +108,9 @@ async function salvarMudancas(event) {
             updates.primeiroNome = apelido;
 
             const sobrenome = sobrenomeInput.value.trim();
-            // Se o sobrenome for preenchido, concatenamos o apelido e o sobrenome
             if (sobrenome !== '') {
                 updates.nomeUsuario = `${apelido} ${sobrenome}`;
             } else {
-                // Caso não tenha sobrenome, usamos apenas o apelido como nome completo
                 updates.nomeUsuario = apelido;
             }
         }
@@ -128,6 +135,12 @@ async function salvarMudancas(event) {
         const senhaError = validarSenha(senhaInput, senhaConfirmacaoInput);
         if (senhaError !== true) erros.push(senhaError);
         else updates.senha = senhaInput.value.trim();
+    }
+
+    // Verifica o campo de descrição, se estiver preenchido
+    const descricao = descricaoInput.value.trim();
+    if (descricao !== '') {
+        updates.descricao = descricao;
     }
 
     // Verifica se todos os campos de endereço estão preenchidos
@@ -155,7 +168,6 @@ async function salvarMudancas(event) {
     }
 
     try {
-        // Atualiza as informações de usuário
         if (Object.keys(updates).length > 0) {
             const response = await fetch(`http://localhost:8080/usuarios/atualizar/${idUsuario}`, {
                 method: 'PATCH',
@@ -168,7 +180,6 @@ async function salvarMudancas(event) {
             }
         }
 
-        // Atualiza o endereço se necessário
         if (Object.keys(enderecoUpdates).length > 0) {
             const enderecoResponse = await fetch(`http://localhost:8080/enderecos/atualizar/${idEndereco}`, {
                 method: 'PATCH',
@@ -181,12 +192,9 @@ async function salvarMudancas(event) {
             }
         }
 
-        // Esconde o formulário após a atualização bem-sucedida
         document.querySelector('.container_fundo_editar_informacoes').style.display = 'none';
-
         showAlert("Informações atualizadas com sucesso. Você será redirecionado para a tela de login.", 'success');
 
-        // Limpa todas as inputs
         apelidoInput.value = '';
         sobrenomeInput.value = '';
         emailInput.value = '';
@@ -196,17 +204,15 @@ async function salvarMudancas(event) {
         estadoInput.value = '';
         cidadeInput.value = '';
         ruaInput.value = '';
+        descricaoInput.value = ''; // Limpa o campo de descrição
 
-        // Redireciona o usuário após um tempo
         setTimeout(() => {
-            window.location.href = '/html/login.html';        
+            window.location.href = '/html/login.html';
         }, 3000);
 
-        // Atualiza a senha, se necessário
         if (updates.senha) {
             try {
                 const novaSenha = updates.senha;
-
                 const senhaResponse = await fetch('http://localhost:8080/reset-senha/nova-senha', {
                     method: 'PATCH',
                     headers: { "Content-Type": "application/json" },
