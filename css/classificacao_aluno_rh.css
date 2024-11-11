@@ -146,9 +146,12 @@ a {
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 15px 15px;
+    margin-bottom: 2%;
 }
 
-
+.course-select:nth-of-type(2) {
+    display: none;
+}
 
 /* Modal */
 .modal {
