@@ -179,45 +179,45 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('courseFilter').addEventListener('change', async function () {
             try {
                 const categoriaSelecionadaNome = this.options[this.selectedIndex].text.trim().toLowerCase();
-        
+            
                 // Se a categoria selecionada for "Categoria", mostra o ranking geral
                 if (categoriaSelecionadaNome === 'Categoria') {
                     await buscarEExibirRanking();
                     return;
                 }
-        
+            
                 // Verifica se há cursos para a categoria selecionada no sessionStorage
                 const chaveCategoria = `cursos_${categoriaSelecionadaNome.charAt(0).toUpperCase() + categoriaSelecionadaNome.slice(1)}`;  // Exemplo: cursos_Tecnologia
                 const cursosDaCategoria = JSON.parse(sessionStorage.getItem(chaveCategoria));
-        
+            
                 // Se não houver cursos para a categoria selecionada
                 if (!cursosDaCategoria || cursosDaCategoria.length === 0) {
                     console.log(`Nenhum curso encontrado para a categoria: ${categoriaSelecionadaNome}`);
                     return;
                 }
-        
+            
                 // Exibe os cursos dessa categoria
                 console.log(`Cursos da categoria ${categoriaSelecionadaNome}:`, cursosDaCategoria);
-        
+            
                 // Busca o ranking para cada curso da categoria
                 const responseRanking = await fetch('http://localhost:8080/pontuacoes/ranking');
                 if (!responseRanking.ok) throw new Error('Falha ao buscar o ranking dos cursos.');
-        
+            
                 const dadosRanking = await responseRanking.json();
-        
+            
                 tabelaRanking.innerHTML = ''; // Limpa a tabela de ranking antes de exibir os dados
-        
+            
                 // Itera pelos cursos da categoria armazenada no sessionStorage
                 cursosDaCategoria.forEach((curso) => {
                     // Encontra o ranking do curso dentro dos dados de ranking
                     const dadosCurso = Object.values(dadosRanking).find(rankingCurso =>
                         rankingCurso.nomeCurso.trim().toLowerCase() === curso.nome.trim().toLowerCase()
                     );
-        
+            
                     if (dadosCurso && dadosCurso.ranking && dadosCurso.ranking.length > 0) {
                         dadosCurso.ranking.forEach((entrada, index) => {
                             let medalhaHtml = '';
-        
+            
                             // Definindo a medalha para os 3 primeiros lugares
                             if (index === 0) {
                                 medalhaHtml = '<img src="/imgs/gold_medal.png" alt="Medalha de Ouro" style="width: 40px; height: 40px;">';
@@ -229,7 +229,12 @@ document.addEventListener('DOMContentLoaded', function () {
                                 // Alunos sem medalha mostram apenas a posição numérica
                                 medalhaHtml = `<span>${index + 1}º</span>`;
                             }
-        
+            
+                            // Agora, somamos os pontos totais de cada aluno
+                            let pontosTotais = entrada.pontosTotais;
+                            console.log(`Aluno: ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}`);
+                            console.log(`Pontos no curso ${curso.nome}: ${pontosTotais}`);
+            
                             // Criando a linha de tabela para cada aluno
                             const linha = document.createElement('tr');
                             linha.innerHTML = `
@@ -246,9 +251,20 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </td>
                             `;
                             tabelaRanking.appendChild(linha);
-        
+            
                             // Carregar a imagem de perfil do aluno
                             carregarImagemPerfil(entrada.aluno.id);
+            
+                            // Exibe a soma dos pontos totais de cada aluno
+                            // Verificamos se o aluno já tem pontos de outros cursos somados
+                            const alunoId = entrada.aluno.id;
+                            let pontosSoma = sessionStorage.getItem(`pontosTotais_${alunoId}`);
+                            if (!pontosSoma) {
+                                pontosSoma = 0;
+                            }
+                            pontosSoma = parseInt(pontosSoma) + pontosTotais;
+                            sessionStorage.setItem(`pontosTotais_${alunoId}`, pontosSoma);
+                            console.log(`Pontos totais acumulados de ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}: ${pontosSoma}`);
                         });
                     }
                 });
