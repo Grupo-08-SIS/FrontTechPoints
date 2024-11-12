@@ -4,6 +4,7 @@ window.fazerLogout = fazerLogout;
 document.addEventListener('DOMContentLoaded', function () {
     const filtroCursos = document.getElementById('courseFilter');
     const tabelaRanking = document.getElementById('rankingTable');
+    const user = JSON.parse(sessionStorage.getItem('user'));
 
     if (filtroCursos && tabelaRanking) {
         async function buscarEExibirRanking() {
@@ -51,8 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     // Criando a linha de tabela para cada aluno
+
                     const linha = document.createElement('tr');
-                    linha.innerHTML = `
+                    if(user.tipoUsuario != 'Aluno'){
+                        linha.innerHTML = `
                         <td>${medalhaHtml}</td>
                         <td style="text-align: right;">
                             <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
@@ -65,6 +68,19 @@ document.addEventListener('DOMContentLoaded', function () {
                             ${entrada.pontosTotais} 
                         </td>
                     `;
+                    }else {
+                        linha.innerHTML = `
+                        <td>${medalhaHtml}</td>
+                        <td style="text-align: right;">
+                            <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
+                        </td>
+                        <td>
+                            <span style="font-weight: 800;">${entrada.nome}</span> <br>
+                            <small style="font-weight: 200;">${entrada.email}</small>
+                        </td>
+                    `;
+                    }
+                    
                     tabelaRanking.appendChild(linha);
 
                     // Carregar imagem de perfil do aluno
@@ -237,7 +253,8 @@ document.addEventListener('DOMContentLoaded', function () {
             
                             // Criando a linha de tabela para cada aluno
                             const linha = document.createElement('tr');
-                            linha.innerHTML = `
+                            if(user.tipoUsuario != 'Aluno'){
+                                linha.innerHTML = `
                                 <td>${medalhaHtml}</td>
                                 <td style="text-align: right;">
                                     <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
@@ -250,6 +267,19 @@ document.addEventListener('DOMContentLoaded', function () {
                                     ${entrada.pontosTotais}
                                 </td>
                             `;
+                            }else {
+                                linha.innerHTML = `
+                                <td>${medalhaHtml}</td>
+                                <td style="text-align: right;">
+                                    <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.aluno.id}">
+                                </td>
+                                <td>
+                                    <span style="font-weight: 800;">${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}</span> <br>
+                                    <small style="font-weight: 200;">${entrada.aluno.email}</small>
+                                </td>
+                            `;
+                            }
+                            
                             tabelaRanking.appendChild(linha);
             
                             // Carregar a imagem de perfil do aluno
@@ -341,7 +371,6 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Elementos necessários não encontrados.');
     }
 });
-
 
 async function fazerLogout() {
     const user = JSON.parse(sessionStorage.getItem('user'));
