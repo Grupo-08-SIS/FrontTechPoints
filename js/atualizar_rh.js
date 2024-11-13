@@ -148,10 +148,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
             const data = await response.json();
-
+    
             const container = document.querySelector(".bloco_alunos_favoritos");
             container.innerHTML = "";
-
+    
+            if (data.length > 3) {
+                container.style.display = "flex";
+                container.style.flexWrap = "nowrap";
+                container.style.overflowX = "auto";
+                container.style.width = "90%";
+                container.style.justifyContent = "flex-start";
+            }
+    
             if (data.length === 0) {
                 const noFavoritesMessage = document.createElement("p");
                 noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
@@ -161,10 +169,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
-
+    
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
-
+    
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -172,30 +180,31 @@ document.addEventListener("DOMContentLoaded", async function () {
                             cursoComMaiorPontuacao = curso.nomeCurso;
                         }
                     }
-
+    
                     const medalhaTipo = obterMedalha(maxPontos);
-
+    
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno_favoritos";
-
+    
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
                         <img src="../imgs/${medalhaTipo}" alt="medalha">
                         <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
                     `;
-
+    
                     alunoDiv.style.backgroundColor = '#E6E6E6';
                     alunoDiv.style.color = '#323636';
                     alunoDiv.style.border = '3px solid #1E3A8A';
-
+                    alunoDiv.style.marginRight = '10px'; // Espaço entre as divs
+    
                     container.appendChild(alunoDiv);
                 }
             }
         } catch (error) {
             console.error("Erro ao buscar alunos favoritos:", error);
         }
-    }
+    }    
 
     async function listarInteressados() {
         try {
