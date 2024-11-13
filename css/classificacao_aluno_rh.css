@@ -30,41 +30,6 @@ a {
     z-index: 2;
 }
 
-.barra_de_pesquisa {
-    position: relative;
-    display: inline-block;
-    width: 100%; 
-    max-width: 500px;
-}
-
-.barra_pesquisar {
-    width: 100%;
-    padding: 2vh;
-    border-radius: 10px;
-    font-size: 16px;
-    border: 4px solid #244aa5;
-}
-
-.barra_pesquisar::placeholder {
-    color: #999; /* Cor do texto placeholder */
-}
-
-.lupa_de_pesquisa {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-}
-
-.lupa_de_pesquisa img {
-    display: block;
-}
-
 .drop_down {
     position: relative; /* Define o contêiner pai para o posicionamento absoluto do dropdown */
     display: inline-block;
