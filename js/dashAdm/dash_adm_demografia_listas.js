@@ -81,10 +81,43 @@ async function gerarRelatorioEmpresas() {
         if (!resposta.ok) {
             throw new Error('Erro ao buscar o csv de demografia')
         }
-        window.location.href = url;
+        window.location.href = url
     } catch (erro) {
         console.error('Erro ao buscar o csv de demografia:', erro)
         return null
+    }
+}
+
+async function gerarRelatorioAlunos() {
+    try {
+       
+        const sexo = document.getElementById('select-sexo').value
+        const etnia = document.getElementById('select-etnia').value
+        const idadeMaxima = document.getElementById('idade-max').value
+        const cidade = document.getElementById('select-cidade').value
+        const escolaridade = document.getElementById('select-escolaridade').value
+
+        let url = `http://localhost:8080/dashboardAdm/relatorio-alunos?`
+
+        if (sexo) url += `sexo=${sexo}&`
+        if (etnia) url += `etnia=${etnia}&`
+        if (idadeMaxima) url += `idadeMaxima=${idadeMaxima}&`
+        if (cidade) url += `cidade=${cidade}&`
+        if (escolaridade) url += `escolaridade=${escolaridade}&`
+
+        // Remove o último caractere '&' da URL
+        url = url.slice(0, -1)
+
+        const resposta = await fetch(url, { method: 'GET' })
+
+        if (!resposta.ok) {
+            throw new Error('Erro ao gerar o relatório de alunos')
+        }
+
+        window.location.href = url
+
+    } catch (erro) {
+        console.error('Erro ao gerar o relatório de alunos:', erro)
     }
 }
 
