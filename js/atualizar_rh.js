@@ -5,6 +5,7 @@ window.fazerLogout = fazerLogout
 window.editarPerfil = editarPerfil
 window.fecharFormulario = fecharFormulario
 window.desinteressarAluno = desinteressarAluno
+window.interessarAluno = interessarAluno
 
 function getIdUsuarioLogado() {
     const data = JSON.parse(sessionStorage.getItem('user'))
@@ -148,10 +149,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
             const data = await response.json();
-    
+
             const container = document.querySelector(".bloco_alunos_favoritos");
             container.innerHTML = "";
-    
+
             if (data.length > 3) {
                 container.style.display = "flex";
                 container.style.flexWrap = "nowrap";
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 container.style.width = "90%";
                 container.style.justifyContent = "flex-start";
             }
-    
+
             if (data.length === 0) {
                 const noFavoritesMessage = document.createElement("p");
                 noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
@@ -169,10 +170,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
-    
+
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
-    
+
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -180,46 +181,57 @@ document.addEventListener("DOMContentLoaded", async function () {
                             cursoComMaiorPontuacao = curso.nomeCurso;
                         }
                     }
-    
+
                     const medalhaTipo = obterMedalha(maxPontos);
-    
+
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno_favoritos";
-    
+
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
                         <span>Aluno do projeto arrastão, finalizou curso <a>${cursoComMaiorPontuacao}</a> com ${maxPontos} pontos</span>
                         <img src="../imgs/${medalhaTipo}" alt="medalha">
-                        <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
+                        <div class="button-container">
+                        <button onclick="interessarAluno(${aluno.id})">Interessar</button>
+                            <button onclick="desfavoritar(${aluno.id})">Desfavoritar</button>
+                        </div>
                     `;
-    
-                    alunoDiv.style.backgroundColor = '#E6E6E6';
-                    alunoDiv.style.color = '#323636';
-                    alunoDiv.style.border = '3px solid #1E3A8A';
-                    alunoDiv.style.marginRight = '10px'; // Espaço entre as divs
-    
+
                     container.appendChild(alunoDiv);
                 }
             }
         } catch (error) {
             console.error("Erro ao buscar alunos favoritos:", error);
         }
-    }    
+    }
 
     async function listarInteressados() {
         try {
+            // Fazendo a requisição para listar os alunos interessados
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
             const data = await response.json();
 
             const container = document.querySelector(".bloco_alunos");
-            container.innerHTML = "";
+            container.innerHTML = ""; // Limpando o conteúdo do contêiner antes de adicionar os novos itens
 
+            sessionStorage.setItem('quantidadeInteressados', data.length);
+
+            // Verificando se o número de alunos interessados é maior que 3 para aplicar o estilo de rolagem horizontal
+            if (data.length > 3) {
+                container.style.display = "flex";
+                container.style.flexWrap = "nowrap";
+                container.style.width = "90%";
+                container.style.justifyContent = "flex-start";
+            }
+
+            // Caso não haja alunos interessados, exibe uma mensagem
             if (data.length === 0) {
                 const noInterestedMessage = document.createElement("p");
                 noInterestedMessage.textContent = "Não há alunos interessados no momento.";
                 noInterestedMessage.className = "no-alunos-message";
                 container.appendChild(noInterestedMessage);
             } else {
+                // Para cada aluno, buscamos suas pontuações e renderizamos na tela
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
@@ -227,6 +239,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
 
+                    // Determinando o curso com a maior pontuação
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -235,8 +248,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                         }
                     }
 
+                    // Obtendo o tipo de medalha com base nos pontos
                     const medalhaTipo = obterMedalha(maxPontos);
 
+                    // Criando o elemento do aluno
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno";
 
@@ -514,24 +529,22 @@ function atribuir(idAluno, fromListar = false, elementoChamador = null) {
     }
 }
 
-async function contratarAluno(idAlunoSelecionado) {
+async function interessarAluno(idAlunoSelecionado) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
 
     try {
-        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/contratados/${idAlunoSelecionado}`, {
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/interessados/${idAlunoSelecionado}`, {
             method: "POST",
         });
 
         if (response.ok) {
-            showAlert('Aluno contratado com sucesso!', 'success');
-            listarContratados();
-            fecharAtribuicao();
+            showAlert('Aluno marcado como interessado com sucesso!', 'success');
             setTimeout(() => {
                 location.reload();
             }, 1000);
         } else {
-            alert("Erro ao contratar o aluno.");
+            alert("Erro ao marcar o aluno como interessado.");
         }
     } catch (error) {
         console.error("Erro:", error);
@@ -574,9 +587,11 @@ async function listarContratados() {
 
                 const alunoDiv = document.createElement("div");
                 alunoDiv.className = "box_Aluno";
-                alunoDiv.style.backgroundColor = "#9ABE62";
-                alunoDiv.style.border = "3px solid #828282";
-                alunoDiv.style.color = "#363636";
+                alunoDiv.className = "box_Aluno";
+                alunoDiv.style.backgroundColor = "#f1f7e4";
+                alunoDiv.style.border = "3px solid #4CAF50";
+                alunoDiv.style.color = "#333333";
+
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
@@ -597,12 +612,24 @@ async function processoSeletivoAluno(idAluno) {
     const idRecrutador = user.id;
 
     try {
+        // Fazendo a requisição para adicionar o aluno ao processo seletivo
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/processoSeletivo/${idAluno}`, {
             method: "POST",
         });
+
         if (response.ok) {
+            // Exibe o alerta de sucesso
             showAlert('Aluno movido para o processo seletivo!', 'success');
+
+            // Após mover o aluno para o processo seletivo, vamos listar os alunos no processo seletivo
             await listarProcessoSeletivo();
+
+            // Atualizando a quantidade de alunos no processo seletivo no sessionStorage
+            const processoSeletivoData = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/listar/processoSeletivo`);
+            const processoSeletivo = await processoSeletivoData.json();
+            sessionStorage.setItem('quantidadeProcessoSeletivo', processoSeletivo.length);
+
+            // Fechar a atribuição e recarregar a página após 1 segundo
             fecharAtribuicao();
             setTimeout(() => {
                 location.reload();
@@ -630,6 +657,13 @@ async function listarProcessoSeletivo() {
         }
         container.innerHTML = "";
 
+        if (data.length > 3) {
+            container.style.display = "flex";
+            container.style.flexWrap = "nowrap";
+            container.style.width = "90%";
+            container.style.justifyContent = "flex-start";
+        }
+
         if (data.length === 0) {
             const noInterestedMessage = document.createElement("p");
             noInterestedMessage.textContent = "Não há alunos no processo seletivo no momento.";
@@ -654,10 +688,7 @@ async function listarProcessoSeletivo() {
                 const medalhaTipo = obterMedalha(maxPontos);
 
                 const alunoDiv = document.createElement("div");
-                alunoDiv.className = "box_Aluno";
-                alunoDiv.style.backgroundColor = "#FFE879";
-                alunoDiv.style.border = "3px solid #828282";
-                alunoDiv.style.color = "#363636";
+                alunoDiv.className = "box_Aluno_processo";
 
                 alunoDiv.innerHTML = `
                     <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>

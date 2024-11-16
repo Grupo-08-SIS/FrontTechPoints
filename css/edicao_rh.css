@@ -191,7 +191,8 @@ a {
     color: #e0e0e0;
     text-shadow: 2px 2px 4px #0000007c;
     font-size: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adicionando sombra */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Adicionando sombra */
 }
 
 .container_interno_separacao {
@@ -233,23 +234,19 @@ a {
 }
 
 .box_Aluno {
-    background-color: #244aa5;
-    border: 3px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
-    width: calc(33% - 40px);
-    flex: 1 1 250px;
-    height: auto;
-    min-width: 200px;
-    max-width: 250px;
-    padding: 20px;
-    margin: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    color: #ffffff;
-    transition: transform 0.3s;
+    justify-content: space-between;
+    background: #f4f4f9;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    width: 240px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    color: #4d4d4d;
+    font-weight: 600;
 }
 
 .box_Aluno:hover {
@@ -258,48 +255,98 @@ a {
 
 .box_Aluno span:first-child {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 10px;
-    text-align: center;
 }
 
 .box_Aluno span:nth-child(2) {
     font-size: 0.9rem;
-    margin-bottom: 10px;
-    text-align: center;
+    margin-bottom: 15px;
 }
 
 .box_Aluno img {
     width: 50px;
     height: auto;
-    margin-top: 10px;
-}
-
-.box_Aluno .solicitacao {
-    margin-top: 5px;
-    font-size: 12px;
-    color: #ffffff;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    margin-bottom: 15px;
 }
 
 .box_Aluno button {
-    background-color: #ed1b24;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 10px;
     border: none;
-    color: #ffffff;
-    padding: 5px 10px;
-    font-size: 0.75rem;
     border-radius: 5px;
     cursor: pointer;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    transition: background-color 0.3s;
+    font-weight: 600;
+    color: #ffffff9c;
+}
+
+.box_Aluno button:first-of-type {
+    background: #1E3A8A;
 }
 
 .box_Aluno button:hover {
-    background-color: #ffd700;
-    color: #244aa5;
+    opacity: 0.9;
+}
+
+.box_Aluno_processo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f4f9;
+    border: 2px solid #FABC09;
+    border-radius: 10px;
+    padding: 20px;
+    width: 240px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    color: #4d4d4d;
+    font-weight: 600;
+}
+
+.box_Aluno_processo:hover {
+    transform: scale(1.05);
+}
+
+.box_Aluno_processo span:first-child {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.box_Aluno_processo span:nth-child(2) {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.box_Aluno_processo img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.box_Aluno_processo button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 600;
+    color: #ffffff9c;
+}
+
+.box_Aluno_processo button:first-of-type {
+    background: #1E3A8A;
+}
+
+.box_Aluno_processo button:hover {
+    opacity: 0.9;
 }
 
 .container_fundo_aluno_favoritos {
@@ -358,7 +405,6 @@ a {
     color: #ffffff;
     transition: transform 0.3s;
 }
-
 
 .container_fundo_aluno_contratados {
     width: 90%;
@@ -422,26 +468,21 @@ a {
     align-items: center;
 }
 
-.box_Aluno_processo_seletivo {
-    background-color: #244aa5;
-    border: 3px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.267);
-    width: calc(33% - 40px);
-    flex: 1 1 250px;
-    height: auto;
-    min-width: 200px;
-    max-width: 250px;
-    padding: 20px;
-    margin: 10px;
+.box_Aluno_favoritos {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    color: #ffffff;
-    transition: transform 0.3s;
+    justify-content: space-between;
+    background: #f4f4f9;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    width: 240px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    color: #4d4d4d;
+    font-weight: 600;
 }
-
 
 .box_Aluno_favoritos:hover {
     transform: scale(1.05);
@@ -449,50 +490,111 @@ a {
 
 .box_Aluno_favoritos span:first-child {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 10px;
-    text-align: center;
 }
 
 .box_Aluno_favoritos span:nth-child(2) {
     font-size: 0.9rem;
-    margin-bottom: 10px;
-    text-align: center;
+    margin-bottom: 15px;
 }
 
 .box_Aluno_favoritos img {
     width: 50px;
     height: auto;
-    margin-top: 10px;
-}
-
-.box_Aluno_favoritos .solicitacao {
-    margin-top: 5px;
-    font-size: 12px;
-    color: #ffffff;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    margin-bottom: 15px;
 }
 
 .box_Aluno_favoritos button {
-    background-color: #FF4D4D;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 10px;
     border: none;
-    color: black;
-    padding: 5px 10px;
-    font-size: 0.75rem;
     border-radius: 5px;
     cursor: pointer;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    transition: background-color 0.3s;
+    font-weight: 600;
+    color: #0000009c;
+}
+
+.box_Aluno_favoritos button:first-of-type {
+    background: #4CAF50;
+    /* Verde para "Interessar" */
+}
+
+.box_Aluno_favoritos button:last-of-type {
+    background: #f44336;
+    /* Vermelho para "Desfavoritar" */
 }
 
 .box_Aluno_favoritos button:hover {
-    background-color: #ffd700;
-    color: #244aa5;
+    opacity: 0.9;
 }
 
+.box_Aluno_favoritos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f4f9;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    width: 240px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    color: #4d4d4d;
+    font-weight: 600;
+}
+
+.box_Aluno_favoritos:hover {
+    transform: scale(1.05);
+}
+
+.box_Aluno_favoritos span:first-child {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.box_Aluno_favoritos span:nth-child(2) {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.box_Aluno_favoritos img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.box_Aluno_favoritos button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 600;
+    color: #0000009c;
+}
+
+.box_Aluno_favoritos button:first-of-type {
+    background: #4CAF50;
+    /* Verde para "Interessar" */
+}
+
+.box_Aluno_favoritos button:last-of-type {
+    background: #f44336;
+    /* Vermelho para "Desfavoritar" */
+}
+
+.box_Aluno_favoritos button:hover {
+    opacity: 0.9;
+}
 
 .container_texto_foto_e_data {
     width: 100%;
@@ -1275,12 +1377,15 @@ label {
     0% {
         opacity: 1;
     }
+
     100% {
         opacity: 0.5;
     }
 }
 
 .blur {
-    filter: blur(5px); /* Ajuste a intensidade do desfoque conforme necessário */
-    transition: filter 0.3s ease; /* Transição suave ao aplicar ou remover o desfoque */
+    filter: blur(5px);
+    /* Ajuste a intensidade do desfoque conforme necessário */
+    transition: filter 0.3s ease;
+    /* Transição suave ao aplicar ou remover o desfoque */
 }
