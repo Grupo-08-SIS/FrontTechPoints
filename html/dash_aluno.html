@@ -111,13 +111,23 @@
             <div class="total-right">
                 <div class="dash-atual">
                     <section class="course-section">
-                        <p id="p-curso">Atualmente sua Dash está no: <span id="p-geral">Geral</span></p>
+                        <p id="p-curso">Filtrar por período:</p>
                         <hr>
-                        <div class="p-descricao">
-                            <p id="descricao-p">Se quiser trocar ela selecione outro curso abaixo</p>
+                        
+                        <!-- Formulário de filtro de datas -->
+                        <div class="date-filter">
+                            <label for="start-date">Data de início:</label>
+                            <input type="date" id="start-date" name="start-date">
+                            
+                            <label for="end-date">Data de fim:</label>
+                            <input type="date" id="end-date" name="end-date">
+                            
+                            <button id="apply-filter">Aplicar Filtro</button>
                         </div>
-                        <div class="course-info">
-                            <p>Geral</p>
+                
+                        <!-- Área que vai exibir o status do filtro -->
+                        <div class="date-info">
+                            <p id="filter-result">Nenhum filtro aplicado</p>
                         </div>
                     </section>
                 </div>
@@ -259,7 +269,7 @@
 
     </div>
 
-     <script src="../js/dash_aluno.js"></script>
+    <script src="../js/dash_aluno.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="../js/dash_aluno_api.js"></script>
@@ -270,17 +280,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const user = JSON.parse(sessionStorage.getItem('user'));
+           const user = JSON.parse(sessionStorage.getItem('user'));
             if (user && user.nomeUsuario) {
-                const userNameElements = document.querySelectorAll('#nomeUsuario');
-                userNameElements.forEach(element => {
+               const userNameElements = document.querySelectorAll('#nomeUsuario');
+               userNameElements.forEach(element => {
                     element.innerHTML = user.nomeUsuario;
                 });
             } else {
 
                 window.location.href = '/login.html';
             }
-        });
+      });
 
         function openModal() {
             document.getElementById("modal").style.display = "block";
@@ -327,6 +337,26 @@
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
         new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+
+
+    <script>
+        document.getElementById("apply-filter").addEventListener("click", function() {
+            // Obter as datas selecionadas
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+        
+            // Verificar se as datas foram preenchidas corretamente
+            if (startDate && endDate) {
+                // Formatar e exibir o resultado
+                const resultText = `Filtro aplicado de ${startDate} a ${endDate}`;
+                document.getElementById("filter-result").textContent = resultText;
+            } else {
+                // Caso não tenha selecionado ambas as datas
+                document.getElementById("filter-result").textContent = "Por favor, selecione as duas datas.";
+            }
+        });
+        
     </script>
 </body>
 

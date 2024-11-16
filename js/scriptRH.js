@@ -152,4 +152,3 @@ async function fazerLogout() {
         alert('Erro ao fazer logoff. Por favor, tente novamente.')
     }
 } 
-

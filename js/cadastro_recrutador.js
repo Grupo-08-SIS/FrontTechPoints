@@ -111,6 +111,8 @@ async function cadastrarUsuario() {
         cargoUsuario: document.getElementById('cargoUsuario').value
     };
 
+    
+
     try {
         const response = await fetch('http://localhost:8080/usuarios/cadastro', {
             method: 'POST',

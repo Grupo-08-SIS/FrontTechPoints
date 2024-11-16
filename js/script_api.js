@@ -12,8 +12,6 @@ async function realizarCadastro() {
         return; // Se houve erro no cadastro do endereço, não prossegue
     }
 
-    const isRH = window.location.pathname.includes('cadastro_rh');
-    const tipoUsuario = isRH ? 3 : 2;
 
     // Cadastra o usuário e aguarda a resposta
     const id = await cadastrarUsuario(enderecoId);
@@ -26,6 +24,25 @@ async function realizarCadastro() {
     }
 
 }
+const tipoUsuario = {
+    Aluno: 1,
+    Recrutador: 2,
+    Empresa: 3
+};
+
+
+tipoUsuario: (() => {
+    const userType = document.getElementById('userType').value;
+    switch (userType) {
+        case 'aluno': return TipoUsuario.Aluno;
+        case 'recrutador': return TipoUsuario.Recrutador;
+        case 'empresa': return TipoUsuario.Empresa;
+        default: 
+            showAlert('error', 'Tipo de usuário inválido. Selecione um tipo válido.');
+            throw new Error('Tipo de usuário inválido.');
+    }
+})(),
+
 
 function validarCampos() {
     // Obtém valores dos campos
@@ -162,7 +179,8 @@ function formatarDataParaEnvio(data) {
     return '';
 }
 
-async function cadastrarUsuario(idEndereco) {
+async function cadastrarUsuario(idEndereco, tipoUsuario) {
+    // Elementos de input
     const usernameInput = document.getElementById('username');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
@@ -174,24 +192,27 @@ async function cadastrarUsuario(idEndereco) {
     const sexoInput = document.getElementById('sexo');
     const etniaInput = document.getElementById('etnia');
     const dtNascInput = document.getElementById('dataNascimento');
+    const cnpjInput = document.getElementById('cnpj');
+    const cargoInput = document.getElementById('cargo');
+    const setorIndustriaInput = document.getElementById('setorIndustria');
 
     // Formatar e validar CPF
-    const cpf = cpfInput.value.replace(/\D/g, '');
-    if (!validarCPF(cpf)) {
+    const cpf = cpfInput?.value?.replace(/\D/g, '');
+    if (cpf && !validarCPF(cpf)) {
         showAlert('error', 'CPF inválido. Por favor, insira um CPF válido.');
         return;
     }
 
     // Formatar e validar telefone
-    const telefone = telefoneInput.value.replace(/\D/g, '');
-    if (!validarTelefone(telefone)) {
+    const telefone = telefoneInput?.value?.replace(/\D/g, '');
+    if (telefone && !validarTelefone(telefone)) {
         showAlert('error', 'Telefone inválido. Por favor, insira um telefone válido.');
         return;
     }
 
     // Validar a data de nascimento antes de formatar
-    const dataNascimento = formatarDataParaEnvio(dtNascInput.value);
-    if (!dataNascimento) {
+    const dataNascimento = dtNascInput?.value ? formatarDataParaEnvio(dtNascInput.value) : null;
+    if (dataNascimento === null && tipoUsuario === 'aluno') {
         showAlert('error', 'Data de nascimento inválida. Por favor, insira uma data válida.');
         return;
     }
@@ -201,7 +222,7 @@ async function cadastrarUsuario(idEndereco) {
         "sexo_masculino": "Masculino",
         "sexo_feminino": "Feminino"
     };
-    
+
     const etniaMap = {
         "Branco": "Branco(a)",
         "Preto": "Preto(a)",
@@ -210,27 +231,61 @@ async function cadastrarUsuario(idEndereco) {
         "Indigena": "Indígena(a)"
     };
 
-    const usuario = {
+    // Obter campos comuns
+    const camposComuns = {
         nomeUsuario: usernameInput.value,
-        cpf: cpf, 
         senha: passwordInput.value,
-        primeiroNome: firstnameInput.value,
-        sobrenome: lastnameInput.value,
         email: emailInput.value,
         telefone: telefone,
-        tipoUsuario: document.getElementById('is-rh').checked ? 2 : 1,
-        escolaridade: escolaridadeInput.value,
-        sexo: sexoMap[sexoInput.value],  // Mapeando o valor do sexo para o formato correto
-        etnia: etniaMap[etniaInput.value],  // Mapeando o valor de cor/raça para o formato correto
-        enderecoId: idEndereco,
-        dtNasc: dataNascimento 
     };
 
+    // Obter campos específicos
+    let camposEspecificos = {};
+    if (tipoUsuario === 'aluno') {
+        camposEspecificos = {
+            cpf: cpf,
+            primeiroNome: firstnameInput.value,
+            sobrenome: lastnameInput.value,
+            escolaridade: escolaridadeInput.value,
+            sexo: sexoMap[sexoInput.value],
+            etnia: etniaMap[etniaInput.value],
+            enderecoId: idEndereco,
+            dtNasc: dataNascimento,
+        };
+    } else if (tipoUsuario === 'recrutador') {
+        camposEspecificos = {
+            cpf: cpf,
+            primeiroNome: firstnameInput.value,
+            sobrenome: lastnameInput.value,
+            cnpj: cnpjInput?.value?.replace(/\D/g, ''),
+            enderecoId: idEndereco,
+            cargo: cargoInput?.value,
+        };
+    } else if (tipoUsuario === 'empresa') {
+        camposEspecificos = {
+            representanteLegal: firstnameInput.value,
+            sobrenome: lastnameInput.value,
+            cnpj: cnpjInput?.value?.replace(/\D/g, ''),
+            enderecoId: idEndereco,
+            setorIndustria: setorIndustriaInput?.value,
+        };
+    } else {
+        showAlert('error', 'Tipo de usuário inválido.');
+        return;
+    }
+
+    // Montar objeto final
+    const usuario = {
+        ...camposComuns,
+        ...camposEspecificos,
+    };
+
+    // Fazer requisição
     try {
         const response = await fetch('http://localhost:8080/usuarios/cadastro', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(usuario)
+            body: JSON.stringify(usuario),
         });
 
         if (response.ok) {
@@ -243,10 +298,12 @@ async function cadastrarUsuario(idEndereco) {
             return null;
         }
     } catch (error) {
+        console.error('Erro na requisição:', error);
         showAlert('error', 'Erro ao tentar fazer cadastro');
         return null;
     }
 }
+
 
 async function realizarLoginAutomatico(email, senha) {
     try {
@@ -274,11 +331,15 @@ async function realizarLoginAutomatico(email, senha) {
             if (!data.deletado) {
 
                 switch (data.tipoUsuario) {
-                    case "Aluno":
+                    case "aluno":
                         console.log('Redirecionando para dash_aluno.html');
                         window.location.href = 'dash_aluno.html';
                         break;
-                    case "Recrutador":
+                    case "recrutador":
+                        console.log('Redirecionando para tela_rh_vagas.html');
+                        window.location.href = 'tela_rh_vagas.html';
+                        break;
+                    case "empresa":
                         console.log('Redirecionando para tela_rh_vagas.html');
                         window.location.href = 'tela_rh_vagas.html';
                         break;
