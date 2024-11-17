@@ -294,7 +294,7 @@ a {
 }
 
 #descricao {
-    resize: vertical; 
+    resize: vertical;
     width: 100%;
 }
 
@@ -827,12 +827,15 @@ footer {
     0% {
         opacity: 1;
     }
+
     100% {
         opacity: 0.5;
     }
 }
 
 .blur {
-    filter: blur(5px); /* Ajuste a intensidade do desfoque conforme necessário */
-    transition: filter 0.3s ease; /* Transição suave ao aplicar ou remover o desfoque */
+    filter: blur(5px);
+    /* Ajuste a intensidade do desfoque conforme necessário */
+    transition: filter 0.3s ease;
+    /* Transição suave ao aplicar ou remover o desfoque */
 }

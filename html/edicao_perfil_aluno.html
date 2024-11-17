@@ -7,6 +7,7 @@
     <title>Tech Jobs - Classificação dos Alunos</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/edicao_perfil_aluno.css">
+    <link rel="stylesheet" href="../css/notificacao.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -18,6 +19,7 @@
 <script src="../js/localiza_usuario_header.js"></script>
 <script src="../js/buscar_foto_perfil.js"></script>
 <script src="../js/editar_foto.js"></script>
+<script src="../js/notificacao.js"></script>
 
 <body>
 
@@ -32,19 +34,30 @@
         <div class="header-content">
             <img src="../imgs/logo_arrastao.png" alt="logo arrastão com o nome tech jobs" class="logo-header">
 
-            <div class="drop_down" onclick="toggleDropdown()">
-                <div class="container_nome_usuario">
-                    <img id="profileImageHeader" class="header_img_usuario" src="" alt="Imagem de perfil">
-                    <h1 id="id_nome_usuario">Nome do Usuário</h1>
-                    <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
-                </div>
-                <div id="dropdown-content" class="dropdown_content">
-                    <a href="dash_aluno.html">Dashboard</a>
-                    <a href="classificacao_aluno.html">Classificação</a>
-                    <a href="#">Editar Perfil</a>
-                    <a href="#" onclick="fazerLogout()">Sair</a>
+            <div class="espaço-notificacao-dropdown">
+                <div class="notificacao" onclick="toggleNotificacao()">
+                    <img src="../imgs/notificacao.png" alt="Ícone de notificações" class="icone-notificacao">
+                    <div id="notificacao-dropdown" class="notificacao-dropdown">
+                        <ul id="notificacao-lista" class="notificacao-lista">
+                            <!-- As notificações serão inseridas aqui via JavaScript -->
+                        </ul>
+                    </div>
+                </div>                            
+                <div class="drop_down" onclick="toggleDropdown()">
+                    <div class="container_nome_usuario">
+                        <img id="profileImageHeader" class="header_img_usuario" src="" alt="Imagem de perfil">
+                        <h1 id="id_nome_usuario">Nome do Usuário</h1>
+                        <img class="tracos_drop" src="../imgs/tracos_drop.png" alt="Traços drop down">
+                    </div>
+                    <div id="dropdown-content" class="dropdown_content">
+                        <a href="dash_aluno.html">Dashboard</a>
+                        <a href="classificacao_aluno.html">Classificação</a>
+                        <a href="#">Editar Perfil</a>
+                        <a href="#" onclick="fazerLogout()">Sair</a>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </header>
 
