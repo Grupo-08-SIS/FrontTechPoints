@@ -551,6 +551,41 @@ async function interessarAluno(idAlunoSelecionado) {
     }
 }
 
+async function contratarAluno(idAluno) {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const idRecrutador = user.id;
+
+    try {
+        // Fazendo a requisição para adicionar o aluno ao processo seletivo
+        const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/contratados/${idAluno}`, {
+            method: "POST",
+        });
+
+        if (response.ok) {
+            // Exibe o alerta de sucesso
+            showAlert('Aluno movido para a lista de contratados!', 'success');
+
+            // Após mover o aluno para o processo seletivo, vamos listar os alunos no processo seletivo
+            await listarContratados();
+
+            // Atualizando a quantidade de alunos no processo seletivo no sessionStorage
+            const contratadosData = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/listar/contratados`);
+            const contratados = await contratadosData.json();
+            sessionStorage.setItem('quantidadeContratados', contratados.length);
+
+            // Fechar a atribuição e recarregar a página após 1 segundo
+            fecharAtribuicao();
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        } else {
+            alert("Erro ao adicionar o aluno no processo seletivo.");
+        }
+    } catch (error) {
+        console.error("Erro:", error);
+    }
+}
+
 async function listarContratados() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
