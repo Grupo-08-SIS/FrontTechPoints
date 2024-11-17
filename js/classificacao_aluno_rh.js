@@ -8,17 +8,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (filtroCursos && tabelaRanking) {
         async function buscarEExibirRanking() {
-            // Exibe o loader
-            const loader = document.getElementById('loader');
-            loader.style.display = 'block';
-        
             try {
                 const response = await fetch('http://localhost:8080/pontuacoes/ranking');
                 if (!response.ok) throw new Error('Falha ao buscar o ranking.');
-        
+
                 const dados = await response.json();
                 const pontosTotais = {};
-        
+
                 Object.values(dados).forEach(dadosCurso => {
                     dadosCurso.ranking.forEach(entrada => {
                         const aluno = entrada.aluno;
@@ -33,16 +29,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         pontosTotais[aluno.id].pontosTotais += entrada.pontosTotais;
                     });
                 });
-        
+
                 // Ordenando alunos pelo total de pontos
                 const arrayRanking = Object.values(pontosTotais).sort((a, b) => b.pontosTotais - a.pontosTotais);
-        
+
                 // Limpando o conteúdo atual da tabela de ranking
                 tabelaRanking.innerHTML = '';
-        
+
                 arrayRanking.forEach((entrada, index) => {
                     let medalhaHtml = '';
-        
+
                     // Definindo a medalha para os 3 primeiros lugares
                     if (index === 0) {
                         medalhaHtml = '<img src="/imgs/gold_medal.png" alt="Medalha de Ouro" style="width: 40px; height: 40px;">';
@@ -54,49 +50,46 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Alunos sem medalha mostram apenas a posição numérica
                         medalhaHtml = `<span>${index + 1}º</span>`;
                     }
-        
+
                     // Criando a linha de tabela para cada aluno
+
                     const linha = document.createElement('tr');
                     if(user.tipoUsuario != 'Aluno'){
                         linha.innerHTML = `
-                            <td>${medalhaHtml}</td>
-                            <td style="text-align: right;">
-                                <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
-                            </td>
-                            <td>
-                                <span style="font-weight: 800;">${entrada.nome}</span> <br>
-                                <small style="font-weight: 200;">${entrada.email}</small>
-                            </td>
-                            <td>
-                                ${entrada.pontosTotais} 
-                            </td>
-                        `;
-                    } else {
+                        <td>${medalhaHtml}</td>
+                        <td style="text-align: right;">
+                            <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
+                        </td>
+                        <td>
+                            <span style="font-weight: 800;">${entrada.nome}</span> <br>
+                            <small style="font-weight: 200;">${entrada.email}</small>
+                        </td>
+                        <td>
+                            ${entrada.pontosTotais} 
+                        </td>
+                    `;
+                    }else {
                         linha.innerHTML = `
-                            <td>${medalhaHtml}</td>
-                            <td style="text-align: right;">
-                                <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
-                            </td>
-                            <td>
-                                <span style="font-weight: 800;">${entrada.nome}</span> <br>
-                                <small style="font-weight: 200;">${entrada.email}</small>
-                            </td>
-                        `;
+                        <td>${medalhaHtml}</td>
+                        <td style="text-align: right;">
+                            <img src="" alt="Imagem de perfil" class="img-thumbnail" style="width: 50px;" id="img-${entrada.id}">
+                        </td>
+                        <td>
+                            <span style="font-weight: 800;">${entrada.nome}</span> <br>
+                            <small style="font-weight: 200;">${entrada.email}</small>
+                        </td>
+                    `;
                     }
-        
+                    
                     tabelaRanking.appendChild(linha);
-        
+
                     // Carregar imagem de perfil do aluno
                     carregarImagemPerfil(entrada.id);
                 });
-        
             } catch (error) {
                 console.error('Erro ao buscar o ranking:', error);
-            } finally {
-                // Esconde o loader quando a requisição terminar (independente de sucesso ou falha)
-                loader.style.display = 'none';
             }
-        }        
+        }
 
         async function carregarImagemPerfil(id) {
             const imgElement = document.getElementById(`img-${id}`);
