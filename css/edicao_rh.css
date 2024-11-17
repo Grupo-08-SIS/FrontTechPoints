@@ -421,6 +421,7 @@ a {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    width: 90%;
 }
 
 .bloco_alunos_processoSeletivo {

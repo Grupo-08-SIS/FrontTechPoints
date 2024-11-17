@@ -349,27 +349,31 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     window.desfazer = async function (idAluno) {
+        // Exibe o loader
+        const loader = document.querySelector('.container_loader');
+        loader.style.display = 'flex';
+    
         // Recupera as listas do localStorage
         let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
         let desinteressados = JSON.parse(localStorage.getItem('desinteressados')) || [];
-
+    
         // Logar as listas para verificar o que contém
         console.log('Favoritos:', favoritos);
         console.log('Desinteressados:', desinteressados);
-
+    
         // Verifica se o aluno está nas listas, convertendo idAluno para número
         const alunoFavoritosIndex = favoritos.findIndex(favorito => Number(favorito.id) === Number(idAluno));
         const alunoDesinteressadosIndex = desinteressados.findIndex(interessado => Number(interessado.id) === Number(idAluno));
-
+    
         try {
             let response;
-
+    
             // Se o aluno estiver na lista de favoritos
             if (alunoFavoritosIndex !== -1) {
                 response = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/favoritos/${idAluno}`, {
                     method: 'POST',
                 });
-
+    
                 if (response.ok) {
                     // Remove o aluno da lista de favoritos
                     favoritos.splice(alunoFavoritosIndex, 1);
@@ -382,16 +386,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                 } else {
                     console.error('Erro ao restaurar aluno dos favoritos:', response.statusText);
                 }
-                // Se o aluno estiver na lista de desinteressados
+    
+            // Se o aluno estiver na lista de desinteressados
             } else if (alunoDesinteressadosIndex !== -1) {
                 const alunoDesinteressado = desinteressados[alunoDesinteressadosIndex];
                 const listaAssociada = alunoDesinteressado.lista; // Captura a lista associada
-
+    
                 // Define o endpoint com base na lista associada
                 response = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/${listaAssociada}/${idAluno}`, {
                     method: 'POST',
                 });
-
+    
                 if (response.ok) {
                     // Remove o aluno da lista de desinteressados
                     desinteressados.splice(alunoDesinteressadosIndex, 1);
@@ -409,8 +414,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         } catch (error) {
             console.error('Erro ao chamar o endpoint:', error);
+        } finally {
+            // Oculta o loader
+            loader.style.display = 'none';
         }
-    };
+    };    
 
     window.desfavoritar = async function (idAluno) {
         try {
@@ -533,6 +541,10 @@ async function interessarAluno(idAlunoSelecionado) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
 
+    // Exibe o loader
+    const loader = document.querySelector('.container_loader');
+    loader.style.display = 'flex';
+
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/interessados/${idAlunoSelecionado}`, {
             method: "POST",
@@ -548,6 +560,8 @@ async function interessarAluno(idAlunoSelecionado) {
         }
     } catch (error) {
         console.error("Erro:", error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -555,34 +569,36 @@ async function contratarAluno(idAluno) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
 
+    // Exibe o loader
+    const loader = document.querySelector('.container_loader');
+    loader.style.display = 'flex';
+    fecharAtribuicao();
+
     try {
-        // Fazendo a requisição para adicionar o aluno ao processo seletivo
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/contratados/${idAluno}`, {
             method: "POST",
         });
 
         if (response.ok) {
-            // Exibe o alerta de sucesso
             showAlert('Aluno movido para a lista de contratados!', 'success');
 
-            // Após mover o aluno para o processo seletivo, vamos listar os alunos no processo seletivo
             await listarContratados();
 
-            // Atualizando a quantidade de alunos no processo seletivo no sessionStorage
             const contratadosData = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/listar/contratados`);
             const contratados = await contratadosData.json();
             sessionStorage.setItem('quantidadeContratados', contratados.length);
 
-            // Fechar a atribuição e recarregar a página após 1 segundo
-            fecharAtribuicao();
             setTimeout(() => {
                 location.reload();
             }, 1000);
         } else {
-            alert("Erro ao adicionar o aluno no processo seletivo.");
+            alert("Erro ao adicionar o aluno no contratados.");
         }
     } catch (error) {
         console.error("Erro:", error);
+    } finally {
+        // Oculta o loader
+        loader.style.display = 'none';
     }
 }
 
@@ -646,6 +662,11 @@ async function processoSeletivoAluno(idAluno) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
 
+    // Exibe o loader
+    const loader = document.querySelector('.container_loader');
+    loader.style.display = 'flex';
+    fecharAtribuicao();
+
     try {
         // Fazendo a requisição para adicionar o aluno ao processo seletivo
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/processoSeletivo/${idAluno}`, {
@@ -664,8 +685,6 @@ async function processoSeletivoAluno(idAluno) {
             const processoSeletivo = await processoSeletivoData.json();
             sessionStorage.setItem('quantidadeProcessoSeletivo', processoSeletivo.length);
 
-            // Fechar a atribuição e recarregar a página após 1 segundo
-            fecharAtribuicao();
             setTimeout(() => {
                 location.reload();
             }, 1000);
@@ -674,6 +693,9 @@ async function processoSeletivoAluno(idAluno) {
         }
     } catch (error) {
         console.error("Erro:", error);
+    } finally {
+        // Oculta o loader
+        loader.style.display = 'none';
     }
 }
 
