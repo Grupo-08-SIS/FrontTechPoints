@@ -576,7 +576,12 @@ function fecharVerMais_img() {
 }
 
 async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
-    const idUsuarioLogado = getIdUsuarioLogado(); 
+    const idUsuarioLogado = getIdUsuarioLogado();
+
+    // Exibe o loader
+    const loader = document.querySelector('.container_loader');
+    loader.style.display = 'flex';
+
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/interessados/${alunoId}`, {
             method: 'POST'
@@ -602,6 +607,8 @@ async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
         }
     } catch (error) {
         console.error('Erro ao marcar interesse no aluno:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
