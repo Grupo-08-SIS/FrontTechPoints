@@ -1,5 +1,4 @@
 import { obterMedalha } from './medalhas.js';
-window.fazerLogout = fazerLogout;
 
 document.addEventListener('DOMContentLoaded', function () {
     const filtroCursos = document.getElementById('courseFilter');
@@ -54,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Criando a linha de tabela para cada aluno
 
                     const linha = document.createElement('tr');
-                    if(user.tipoUsuario != 'Aluno'){
+                    if (user.tipoUsuario != 'Aluno') {
                         linha.innerHTML = `
                         <td>${medalhaHtml}</td>
                         <td style="text-align: right;">
@@ -68,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             ${entrada.pontosTotais} 
                         </td>
                     `;
-                    }else {
+                    } else {
                         linha.innerHTML = `
                         <td>${medalhaHtml}</td>
                         <td style="text-align: right;">
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </td>
                     `;
                     }
-                    
+
                     tabelaRanking.appendChild(linha);
 
                     // Carregar imagem de perfil do aluno
@@ -195,45 +194,41 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('courseFilter').addEventListener('change', async function () {
             try {
                 const categoriaSelecionadaNome = this.options[this.selectedIndex].text.trim().toLowerCase();
-            
+
                 // Se a categoria selecionada for "Categoria", mostra o ranking geral
                 if (categoriaSelecionadaNome === 'Categoria') {
                     await buscarEExibirRanking();
                     return;
                 }
-            
+
                 // Verifica se há cursos para a categoria selecionada no sessionStorage
                 const chaveCategoria = `cursos_${categoriaSelecionadaNome.charAt(0).toUpperCase() + categoriaSelecionadaNome.slice(1)}`;  // Exemplo: cursos_Tecnologia
                 const cursosDaCategoria = JSON.parse(sessionStorage.getItem(chaveCategoria));
-            
+
                 // Se não houver cursos para a categoria selecionada
                 if (!cursosDaCategoria || cursosDaCategoria.length === 0) {
-                    console.log(`Nenhum curso encontrado para a categoria: ${categoriaSelecionadaNome}`);
                     return;
                 }
-            
-                // Exibe os cursos dessa categoria
-                console.log(`Cursos da categoria ${categoriaSelecionadaNome}:`, cursosDaCategoria);
-            
+
                 // Busca o ranking para cada curso da categoria
                 const responseRanking = await fetch('http://localhost:8080/pontuacoes/ranking');
                 if (!responseRanking.ok) throw new Error('Falha ao buscar o ranking dos cursos.');
-            
+
                 const dadosRanking = await responseRanking.json();
-            
-                tabelaRanking.innerHTML = ''; // Limpa a tabela de ranking antes de exibir os dados
-            
+
+                tabelaRanking.innerHTML = '';
+
                 // Itera pelos cursos da categoria armazenada no sessionStorage
                 cursosDaCategoria.forEach((curso) => {
                     // Encontra o ranking do curso dentro dos dados de ranking
                     const dadosCurso = Object.values(dadosRanking).find(rankingCurso =>
                         rankingCurso.nomeCurso.trim().toLowerCase() === curso.nome.trim().toLowerCase()
                     );
-            
+
                     if (dadosCurso && dadosCurso.ranking && dadosCurso.ranking.length > 0) {
                         dadosCurso.ranking.forEach((entrada, index) => {
                             let medalhaHtml = '';
-            
+
                             // Definindo a medalha para os 3 primeiros lugares
                             if (index === 0) {
                                 medalhaHtml = '<img src="/imgs/gold_medal.png" alt="Medalha de Ouro" style="width: 40px; height: 40px;">';
@@ -245,15 +240,13 @@ document.addEventListener('DOMContentLoaded', function () {
                                 // Alunos sem medalha mostram apenas a posição numérica
                                 medalhaHtml = `<span>${index + 1}º</span>`;
                             }
-            
+
                             // Agora, somamos os pontos totais de cada aluno
                             let pontosTotais = entrada.pontosTotais;
-                            console.log(`Aluno: ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}`);
-                            console.log(`Pontos no curso ${curso.nome}: ${pontosTotais}`);
-            
+
                             // Criando a linha de tabela para cada aluno
                             const linha = document.createElement('tr');
-                            if(user.tipoUsuario != 'Aluno'){
+                            if (user.tipoUsuario != 'Aluno') {
                                 linha.innerHTML = `
                                 <td>${medalhaHtml}</td>
                                 <td style="text-align: right;">
@@ -267,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     ${entrada.pontosTotais}
                                 </td>
                             `;
-                            }else {
+                            } else {
                                 linha.innerHTML = `
                                 <td>${medalhaHtml}</td>
                                 <td style="text-align: right;">
@@ -279,12 +272,12 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </td>
                             `;
                             }
-                            
+
                             tabelaRanking.appendChild(linha);
-            
+
                             // Carregar a imagem de perfil do aluno
                             carregarImagemPerfil(entrada.aluno.id);
-            
+
                             // Exibe a soma dos pontos totais de cada aluno
                             // Verificamos se o aluno já tem pontos de outros cursos somados
                             const alunoId = entrada.aluno.id;
@@ -294,14 +287,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                             pontosSoma = parseInt(pontosSoma) + pontosTotais;
                             sessionStorage.setItem(`pontosTotais_${alunoId}`, pontosSoma);
-                            console.log(`Pontos totais acumulados de ${entrada.aluno.primeiroNome} ${entrada.aluno.sobrenome}: ${pontosSoma}`);
                         });
                     }
                 });
             } catch (error) {
                 console.error('Erro ao buscar os dados:', error);
             }
-        });        
+        });
 
         document.getElementById('filtroCurso').addEventListener('change', async function () {
             try {
@@ -339,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             // Criando a linha de tabela para cada aluno
                             const linha = document.createElement('tr');
-                            if (user.tipoUsuario != 'Aluno'){
+                            if (user.tipoUsuario != 'Aluno') {
                                 linha.innerHTML = `
                                 <td>${medalhaHtml}</td>
                                 <td style="text-align: right;">
@@ -353,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     ${entrada.pontosTotais}
                                 </td>
                             `;
-                            }else {
+                            } else {
                                 linha.innerHTML = `
                                 <td>${medalhaHtml}</td>
                                 <td style="text-align: right;">
@@ -365,13 +357,11 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </td>
                             `;
                             }
-                            
+
                             tabelaRanking.appendChild(linha);
 
                             carregarImagemPerfil(entrada.aluno.id);
                         });
-                    } else {
-                        console.log('Nenhum ranking encontrado para o curso selecionado.');
                     }
                 }
             } catch (error) {
@@ -385,21 +375,3 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Elementos necessários não encontrados.');
     }
 });
-
-async function fazerLogout() {
-    const user = JSON.parse(sessionStorage.getItem('user'));
-
-    try {
-        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
-            method: 'POST'
-        });
-
-        if (!response.ok) throw new Error('Erro ao fazer logoff.');
-
-        sessionStorage.clear();
-        window.location.href = '/html/home.html';
-    } catch (error) {
-        console.error('Erro ao fazer logoff:', error);
-        alert('Erro ao fazer logoff. Por favor, tente novamente.');
-    }
-}

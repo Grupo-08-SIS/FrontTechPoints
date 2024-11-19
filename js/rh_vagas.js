@@ -1,6 +1,5 @@
 import { obterMedalha } from './medalhas.js';
 window.verMais = verMais
-window.fazerLogout = fazerLogout
 window.desfavoritar = desfavoritar
 window.tenhoInteresse = tenhoInteresse
 window.fecharVerMais = fecharVerMais 
@@ -1437,32 +1436,5 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
-    }
-}
-
-async function fazerLogout() {
-    const user = JSON.parse(sessionStorage.getItem('user'));
-
-    if (!user || !user.id) {
-        console.error('Usuário não encontrado ou ID do usuário ausente');
-        alert('Erro ao fazer logoff. Por favor, tente novamente.');
-        return;
-    }
-
-    try {
-        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
-            method: 'POST'
-        });
-
-        if (!response.ok) {
-            throw new Error('Erro ao fazer logoff');
-        }
-
-        sessionStorage.clear();
-        window.location.href = '/html/home.html';
-
-    } catch (error) {
-        console.error('Erro ao fazer logoff:', error);
-        alert('Erro ao fazer logoff. Por favor, tente novamente.');
     }
 }

@@ -255,40 +255,6 @@ function showAlert(message, type = 'success') {
     }, 3000);
 }
 
-async function fazerLogout() {
-    // Obtém o objeto 'user' do sessionStorage
-    const user = JSON.parse(sessionStorage.getItem('user'));
-
-    // Verifica se o objeto user e seu id estão presentes
-    if (!user || !user.id) {
-        console.error('Usuário não encontrado ou ID do usuário ausente');
-        alert('Erro ao fazer logoff. Por favor, tente novamente.');
-        return;
-    }
-
-    try {
-        // Envia uma requisição POST para fazer logoff
-        const response = await fetch(`http://localhost:8080/usuarios/logoff?idUsuario=${user.id}`, {
-            method: 'POST'
-        });
-
-        // Verifica se a resposta da requisição foi bem-sucedida
-        if (!response.ok) {
-            throw new Error('Erro ao fazer logoff');
-        }
-
-        // Limpa o sessionStorage e redireciona para a página inicial
-        sessionStorage.clear();
-        window.location.href = '/html/home.html';
-
-    } catch (error) {
-        // Exibe um erro no console e no alerta
-        console.error('Erro ao fazer logoff:', error);
-        alert('Erro ao fazer logoff. Por favor, tente novamente.');
-    }
-}
-
-
 document.getElementById('cep').addEventListener('blur', buscarCep);
 
 function buscarCep() {
