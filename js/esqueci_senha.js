@@ -1,42 +1,59 @@
+const loader = document.querySelector('.container_loader');
+
+function validaEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function exibirLoader(isLoading, botao) {
+    loader.style.display = isLoading ? 'flex' : 'none';
+    botao.disabled = isLoading;
+    botao.textContent = isLoading ? "Carregando..." : "Próximo";
+    botao.setAttribute('aria-busy', isLoading);
+}
+
 function verificaEmail() {
     const email = document.getElementById('emailInput').value;
     const botaoProximo = document.querySelector('button[onclick="verificaEmail()"]');
-    
-    if (email) {
-        // Desativa o botão e altera o texto para "Carregando..."
-        botaoProximo.disabled = true;
-        botaoProximo.textContent = "Carregando...";
 
-        sessionStorage.setItem('email', email);
-        fetch('http://localhost:8080/reset-senha/solicitar-troca', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email })
-        })
-        .then(response => {
-            if (response.ok) {
-                mostrarCampoCodigo();
-                showAlert('Código de recuperação enviado para o seu e-mail.', 'success');
-            } else {
-                // Obtém a mensagem de erro do servidor
-                return response.json().then(errorData => {
-                    showAlert(errorData.message || 'Falha ao enviar o código. Tente novamente.', 'error');
-                });
-            }
-        })
-        .catch(error => {
-            showAlert('Erro ao tentar se conectar com o servidor. Tente novamente.', 'error');
-        })
-        .finally(() => {
-            // Reativa o botão e restaura o texto original
-            botaoProximo.disabled = false;
-            botaoProximo.textContent = "Próximo";
-        });
-    } else {
+    if (!email || !validaEmail(email)) {
         showAlert('Por favor, insira um e-mail válido.', 'error');
+        return;
     }
+
+    exibirLoader(true, botaoProximo);
+    sessionStorage.setItem('email', email);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); 
+
+    fetch('http://localhost:8080/reset-senha/solicitar-troca', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+        signal: controller.signal
+    })
+    .then(response => {
+        clearTimeout(timeout);
+        if (response.ok) {
+            mostrarCampoCodigo();
+            showAlert('Código de recuperação enviado para o seu e-mail.', 'success');
+        } else {
+            return response.json().then(errorData => {
+                showAlert(errorData.message || 'Falha ao enviar o código. Tente novamente.', 'error');
+            });
+        }
+    })
+    .catch(error => {
+        if (error.name === 'AbortError') {
+            showAlert('Tempo de espera excedido. Tente novamente.', 'error');
+        } else {
+            showAlert('Erro ao tentar se conectar com o servidor. Tente novamente.', 'error');
+        }
+    })
+    .finally(() => {
+        exibirLoader(false, botaoProximo);
+    });
 }
 
 function verificaToken() {
@@ -44,6 +61,7 @@ function verificaToken() {
     const email = sessionStorage.getItem('email'); 
 
     if (codigo && email) {
+        loader.style.display = 'flex';
         fetch('http://localhost:8080/reset-senha/verificar-token', {
             method: 'POST',
             headers: {
@@ -66,6 +84,9 @@ function verificaToken() {
             })
             .catch(error => {
                 showAlert('Erro ao tentar se conectar com o servidor. Tente novamente.', 'error');
+            })
+            .finally(() => {
+                loader.style.display = 'none';
             });
     } else {
         showAlert('Por favor, insira o código de recuperação.', 'error');

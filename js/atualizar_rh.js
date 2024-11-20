@@ -6,6 +6,8 @@ window.fecharFormulario = fecharFormulario
 window.desinteressarAluno = desinteressarAluno
 window.interessarAluno = interessarAluno
 
+const loader = document.querySelector('.container_loader');
+
 function getIdUsuarioLogado() {
     const data = JSON.parse(sessionStorage.getItem('user'))
 
@@ -22,6 +24,7 @@ async function salvarMudancas(event) {
     const email = document.getElementById('email').value;
     const novaSenha = document.getElementById('nova_senha').value;
     const confirmacaoSenha = document.getElementById('nova_senha_confirmacao').value;
+    const data = JSON.parse(sessionStorage.getItem('user'))
 
     // Validação das senhas
     if (novaSenha && novaSenha !== confirmacaoSenha) {
@@ -56,7 +59,7 @@ async function salvarMudancas(event) {
     }
 
     const dados = {};
-    dados.nomeUsuario = `${novoPrimeiroNome || dadosUsuarioAtual.primeiroNome} ${novoSobrenome || dadosUsuarioAtual.sobrenome}`.trim();
+    dados.nomeUsuario = `${novoPrimeiroNome || data.primeiroNome} ${novoSobrenome || data.sobrenome}`.trim();
 
     if (novoPrimeiroNome) dados.primeiroNome = novoPrimeiroNome;
     if (novoSobrenome) dados.sobrenome = novoSobrenome;
@@ -66,6 +69,7 @@ async function salvarMudancas(event) {
 
     const userId = getIdUsuarioLogado();
     const endpoint = `http://localhost:8080/usuarios/atualizar/${userId}`;
+    loader.style.display = 'flex';
 
     try {
         const response = await fetch(endpoint, {
@@ -87,6 +91,8 @@ async function salvarMudancas(event) {
         }
     } catch (error) {
         showAlert(`Erro: ${error.message}`, 'error');
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -121,6 +127,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const idUsuario = user.id;
 
     async function listarFavoritos() {
+        loader.style.display = 'flex';
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/favoritos`);
             const data = await response.json();
@@ -177,12 +184,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         } catch (error) {
             console.error("Erro ao buscar alunos favoritos:", error);
+        } finally {
+            loader.style.display = 'flex';
         }
     }
 
     async function listarInteressados() {
+        loader.style.display = 'flex';
         try {
-            // Fazendo a requisição para listar os alunos interessados
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/interessados`);
             const data = await response.json();
 
@@ -242,10 +251,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         } catch (error) {
             console.error("Erro ao buscar interessados:", error);
+        } finally {
+            loader.style.display = 'none';
         }
     }
 
     async function listarCancelados() {
+        loader.style.display = 'flex';
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/listar/cancelados`);
             const data = await response.json();
@@ -320,12 +332,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         } catch (error) {
             console.error("Erro ao buscar cancelados:", error);
+        } finally {
+            loader.style.display = 'none';
         }
     }
 
     window.desfazer = async function (idAluno) {
-        // Exibe o loader
-        const loader = document.querySelector('.container_loader');
         loader.style.display = 'flex';
     
         // Recupera as listas do localStorage
@@ -395,6 +407,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     };    
 
     window.desfavoritar = async function (idAluno) {
+        loader.style.display = 'flex';
         try {
             const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/cancelados/${idAluno}`, {
                 method: 'POST',
@@ -426,6 +439,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         } catch (error) {
             console.error('Erro:', error);
+        } finally {
+            loader.style.display = 'none';
         }
     }
 
@@ -579,7 +594,7 @@ async function contratarAluno(idAluno) {
 async function listarContratados() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
-
+    loader.style.display = 'flex';
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/listar/contratados`);
         const data = await response.json();
@@ -629,6 +644,8 @@ async function listarContratados() {
         }
     } catch (error) {
         console.error("Erro ao buscar alunos contratados:", error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -676,7 +693,7 @@ async function processoSeletivoAluno(idAluno) {
 async function listarProcessoSeletivo() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
-
+    loader.style.display = 'flex';
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/listar/processoSeletivo`);
         const data = await response.json();
@@ -733,6 +750,8 @@ async function listarProcessoSeletivo() {
         }
     } catch (error) {
         console.error("Erro ao buscar alunos no processo seletivo:", error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -741,7 +760,7 @@ document.addEventListener("DOMContentLoaded", listarProcessoSeletivo);
 async function desinteressarAluno(idAluno, elementoChamador) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
-
+    loader.style.display = 'flex';
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idRecrutador}/cancelados/${idAluno}`, {
             method: "POST",
@@ -776,6 +795,8 @@ async function desinteressarAluno(idAluno, elementoChamador) {
         }
     } catch (error) {
         console.error("Erro:", error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
