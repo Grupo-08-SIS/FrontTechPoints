@@ -1,59 +1,43 @@
 const loader = document.querySelector('.container_loader');
 
-function validaEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-function exibirLoader(isLoading, botao) {
-    loader.style.display = isLoading ? 'flex' : 'none';
-    botao.disabled = isLoading;
-    botao.textContent = isLoading ? "Carregando..." : "Próximo";
-    botao.setAttribute('aria-busy', isLoading);
-}
-
 function verificaEmail() {
     const email = document.getElementById('emailInput').value;
-    const botaoProximo = document.querySelector('button[onclick="verificaEmail()"]');
+    const botaoProximo = document.querySelector('form#formEmail button[type="submit"]'); // Seleciona o botão correto
+    
+    if (email) {
+        loader.style.display = 'flex';
+        botaoProximo.disabled = true;
+        botaoProximo.textContent = "Carregando...";
 
-    if (!email || !validaEmail(email)) {
-        showAlert('Por favor, insira um e-mail válido.', 'error');
-        return;
-    }
-
-    exibirLoader(true, botaoProximo);
-    sessionStorage.setItem('email', email);
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000); 
-
-    fetch('http://localhost:8080/reset-senha/solicitar-troca', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-        signal: controller.signal
-    })
-    .then(response => {
-        clearTimeout(timeout);
-        if (response.ok) {
-            mostrarCampoCodigo();
-            showAlert('Código de recuperação enviado para o seu e-mail.', 'success');
-        } else {
-            return response.json().then(errorData => {
-                showAlert(errorData.message || 'Falha ao enviar o código. Tente novamente.', 'error');
-            });
-        }
-    })
-    .catch(error => {
-        if (error.name === 'AbortError') {
-            showAlert('Tempo de espera excedido. Tente novamente.', 'error');
-        } else {
+        sessionStorage.setItem('email', email);
+        fetch('http://localhost:8080/reset-senha/solicitar-troca', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        })
+        .then(response => {
+            if (response.ok) {
+                mostrarCampoCodigo(); // Mostra o próximo campo (função precisa estar definida)
+                showAlert('Código de recuperação enviado para o seu e-mail.', 'success'); // Função de alerta
+            } else {
+                return response.json().then(errorData => {
+                    showAlert(errorData.message || 'Falha ao enviar o código. Tente novamente.', 'error');
+                });
+            }
+        })
+        .catch(() => {
             showAlert('Erro ao tentar se conectar com o servidor. Tente novamente.', 'error');
-        }
-    })
-    .finally(() => {
-        exibirLoader(false, botaoProximo);
-    });
+        })
+        .finally(() => {
+            loader.style.display = 'none';
+            botaoProximo.disabled = false;
+            botaoProximo.textContent = "Próximo";
+        });
+    } else {
+        showAlert('Por favor, insira um e-mail válido.', 'error');
+    }
 }
 
 function verificaToken() {
@@ -99,7 +83,6 @@ function validarSenha() {
     const email = sessionStorage.getItem('email'); 
     const token  = document.getElementById('codigoInput').value;
 
-    // Valida as entradas
     if (!novaSenha || !confirmarSenha) {
         showAlert('Por favor, preencha todos os campos.', 'error');
         return;
@@ -114,6 +97,8 @@ function validarSenha() {
         showAlert('A confirmação da senha não corresponde à nova senha.', 'error');
         return;
     }
+
+    loader.style.display = 'flex';
 
     fetch('http://localhost:8080/reset-senha/nova-senha', {
         method: 'PATCH',
@@ -140,6 +125,9 @@ function validarSenha() {
     })
     .catch(error => {
         showAlert('Erro ao tentar se conectar com o servidor. Tente novamente.', 'error');
+    })
+    .finally(() => {
+        loader.style.display = 'none';
     });
 }
 
