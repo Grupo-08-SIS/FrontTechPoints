@@ -32,7 +32,7 @@ body::before {
 .logo-container {
     width: 35vh;
     height: 7.5vh; 
-    background-color: white;
+    background-color: rgb(222, 222, 222); /* Fundo com a cor #244AA5 e transparência */
     justify-content: center;
     align-items: center;
     border-top-left-radius: 20px;
@@ -42,6 +42,7 @@ body::before {
     border-top: 2px solid black;   
     border-bottom: none;           
     padding: 8px;
+    backdrop-filter: blur(10px); /* Desfoque no fundo */
 }
 
 img.logo{
@@ -62,14 +63,16 @@ img.logo{
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.container-principal{
+.container-principal {
     display: flex;
-    background-color: #244AA5;
+    background-color: rgba(36, 74, 165, 0.6); /* Fundo com a cor #244AA5 e transparência */
+    backdrop-filter: blur(10px); /* Desfoque no fundo */
     justify-content: center;
     align-items: center;
     width: 50%;
     height: 75%;
     border-radius: 30px;
+    border: 2px solid black;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
@@ -88,6 +91,7 @@ img.logo{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: #ffffff;
 }
 
 .main-title {
