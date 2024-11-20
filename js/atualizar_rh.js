@@ -390,7 +390,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         } catch (error) {
             console.error('Erro ao chamar o endpoint:', error);
         } finally {
-            // Oculta o loader
             loader.style.display = 'none';
         }
     };    

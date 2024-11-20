@@ -1,5 +1,7 @@
 import { obterMedalha } from './medalhas.js';
 
+const loader = document.querySelector('.container_loader');
+
 document.addEventListener('DOMContentLoaded', function () {
     const filtroCursos = document.getElementById('courseFilter');
     const tabelaRanking = document.getElementById('rankingTable');
@@ -7,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (filtroCursos && tabelaRanking) {
         async function buscarEExibirRanking() {
+            loader.style.display = 'flex';
             try {
                 const response = await fetch('http://localhost:8080/pontuacoes/ranking');
                 if (!response.ok) throw new Error('Falha ao buscar o ranking.');
@@ -87,13 +90,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             } catch (error) {
                 console.error('Erro ao buscar o ranking:', error);
+            } finally {
+                loader.style.display = 'none';
             }
         }
 
         async function carregarImagemPerfil(id) {
             const imgElement = document.getElementById(`img-${id}`);
             if (!imgElement) return;
-
+            loader.style.display = 'flex';
             try {
                 const response = await fetch(`http://localhost:8080/usuarios/imagem/${id}`);
                 if (response.ok) {
@@ -110,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (error) {
                 console.error('Erro ao buscar a imagem do perfil:', error);
                 imgElement.src = '/imgs/foto_padrao.png';
+            } finally {
+                loader.style.display = 'none';
             }
 
             imgElement.style.width = '50px';
@@ -119,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         async function popularFiltroCategorias() {
+            loader.style.display = 'flex';
             try {
                 const response = await fetch('http://localhost:8080/dashboardRecrutador/listar');
                 if (!response.ok) throw new Error('Falha ao buscar as categorias dos cursos.');
@@ -140,10 +148,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             } catch (error) {
                 console.error('Erro ao carregar as categorias:', error);
+            } finally {
+                loader.style.display = 'none';
             }
         }
 
         async function carregarCursosPorCategoria(categoria) {
+            loader.style.display = 'flex';
             try {
                 const response = await fetch(`http://localhost:8080/dashboardRecrutador/listar?categoria=${categoria}`);
                 if (!response.ok) throw new Error('Falha ao buscar cursos da categoria selecionada.');
@@ -170,6 +181,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             } catch (error) {
                 console.error('Erro ao carregar cursos:', error);
+            } finally {
+                loader.style.display = 'none';
             }
         }
 
@@ -192,6 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.getElementById('courseFilter').addEventListener('change', async function () {
+            loader.style.display = 'flex';
             try {
                 const categoriaSelecionadaNome = this.options[this.selectedIndex].text.trim().toLowerCase();
 
@@ -292,10 +306,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             } catch (error) {
                 console.error('Erro ao buscar os dados:', error);
+            } finally {
+                loader.style.display = 'none';
             }
         });
 
         document.getElementById('filtroCurso').addEventListener('change', async function () {
+            loader.style.display = 'flex';
             try {
                 const cursoSelecionadoNome = this.options[this.selectedIndex].text.trim().toLowerCase();
 
@@ -366,6 +383,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 console.error('Erro ao buscar o ranking por curso:', error);
+            } finally {
+                loader.style.display = 'flex';
             }
         });
 

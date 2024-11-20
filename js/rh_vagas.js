@@ -2,28 +2,30 @@ import { obterMedalha } from './medalhas.js';
 window.verMais = verMais
 window.desfavoritar = desfavoritar
 window.tenhoInteresse = tenhoInteresse
-window.fecharVerMais = fecharVerMais 
+window.fecharVerMais = fecharVerMais
 window.fecharVerMais_img = fecharVerMais_img
-window.fecharNotificacao = fecharNotificacao 
+window.fecharNotificacao = fecharNotificacao
 window.alunoRemovido = alunoRemovido
 window.buscarAlunoPorNome = buscarAlunoPorNome
 window.exibirAlunosPorSexo = exibirAlunosPorSexo
 window.exibirAlunosPorEtnia = exibirAlunosPorEtnia
 
+const loader = document.querySelector('.container_loader');
+
 sessionStorage.removeItem('itemStatus');
 
 document.addEventListener('DOMContentLoaded', async function () {
-    await carregarCategorias(); 
-    await atualizarAlunos(); 
+    await carregarCategorias();
+    await atualizarAlunos();
 
     const cursosSelect = document.getElementById('cursos');
     cursosSelect.addEventListener('change', exibirCursosPorCategoria);
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.blocos_selecao select').forEach(select => {
-        select.addEventListener('change', function() {
-            clearOtherSelects(this); 
+        select.addEventListener('change', function () {
+            clearOtherSelects(this);
         });
     });
 });
@@ -33,13 +35,15 @@ function clearOtherSelects(currentSelect) {
 
     selects.forEach(select => {
         if (select !== currentSelect) {
-            select.selectedIndex = 0; 
+            select.selectedIndex = 0;
         }
     });
 }
 
 
 async function carregarCategorias() {
+    loader.style.display = 'flex';
+
     try {
         const response = await fetch('http://localhost:8080/dashboardRecrutador/listar');
         const data = await response.json();
@@ -47,11 +51,11 @@ async function carregarCategorias() {
         const categoriasSet = new Set();
 
         data.forEach(curso => {
-            curso.categoria.forEach(cat => categoriasSet.add(cat)); 
+            curso.categoria.forEach(cat => categoriasSet.add(cat));
         });
 
         const categoriasSelect = document.getElementById('cursos');
-        categoriasSelect.innerHTML = '<option value="opc_categorias">Categorias</option>'; 
+        categoriasSelect.innerHTML = '<option value="opc_categorias">Categorias</option>';
 
         categoriasSet.forEach(categoria => {
             const option = document.createElement('option');
@@ -61,14 +65,18 @@ async function carregarCategorias() {
         });
     } catch (error) {
         console.error('Erro ao carregar as categorias:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
-async function exibirCursosPorCategoria() { 
+async function exibirCursosPorCategoria() {
+    
+    loader.style.display = 'flex';
     const categoria = this.value;
 
     if (categoria === 'opc_categorias') {
-        location.reload(); 
+        location.reload();
         return;
     }
 
@@ -77,12 +85,11 @@ async function exibirCursosPorCategoria() {
         const data = await response.json();
 
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; 
+        containerCursos.innerHTML = '';
 
-        const cursosEmbaralhados = shuffleArray(data); // Embaralha o array de cursos
+        const cursosEmbaralhados = shuffleArray(data);
 
         cursosEmbaralhados.forEach(async (curso, index) => {
-            // Adiciona o espaçamento antes de cada curso, exceto antes do primeiro
             if (index > 0) {
                 const espacoDiv = document.createElement('div');
                 espacoDiv.className = 'container_espacamento';
@@ -103,16 +110,20 @@ async function exibirCursosPorCategoria() {
             `;
 
             containerCursos.appendChild(cursoDiv);
-            await exibirAlunosDoCurso(curso); 
+            await exibirAlunosDoCurso(curso);
 
         });
 
     } catch (error) {
         console.error('Erro ao carregar os cursos por categoria:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
 async function exibirAlunosDoCurso(curso) {
+    
+    loader.style.display = 'flex';
     try {
         const alunosResponse = await fetch(`http://localhost:8080/pontuacoes/alunos`);
         const dadosAlunos = await alunosResponse.json();
@@ -174,7 +185,7 @@ async function exibirAlunosDoCurso(curso) {
             const isFavorite = idsFavoritos.includes(aluno.id);
 
             if (isInterested || isHired || isInProcess) {
-                continue; 
+                continue;
             }
 
             alunosExibidos++;
@@ -183,7 +194,7 @@ async function exibirAlunosDoCurso(curso) {
             alunoDiv.className = 'box_Aluno';
 
             if (isFavorite) {
-                alunoDiv.style.border = '2px solid yellow'; 
+                alunoDiv.style.border = '2px solid yellow';
             }
 
             alunoDiv.innerHTML = `
@@ -203,10 +214,14 @@ async function exibirAlunosDoCurso(curso) {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
 async function atualizarAlunos() {
+    
+    loader.style.display = 'flex';
     try {
         const idUsuarioLogado = getIdUsuarioLogado();
 
@@ -293,8 +308,8 @@ async function atualizarAlunos() {
                 blocoAlunos.style.padding = '10px';
 
                 if (alunosParaExibir.length > 3) {
-                    blocoAlunos.style.overflowY = 'auto'; 
-                    blocoAlunos.style.maxHeight = '400vh'; 
+                    blocoAlunos.style.overflowY = 'auto';
+                    blocoAlunos.style.maxHeight = '400vh';
                     blocoAlunos.style.justifyContent = 'flex-start';
                     blocoAlunos.style.alignItems = 'flex-start';
                 } else {
@@ -311,7 +326,7 @@ async function atualizarAlunos() {
                     alunoDiv.style.borderRadius = '10px';
                     alunoDiv.style.boxShadow = '0 8px 8px rgba(0, 0, 0, 0.267)';
                     alunoDiv.style.width = '250px';
-                    alunoDiv.style.flexShrink = '0'; 
+                    alunoDiv.style.flexShrink = '0';
                     alunoDiv.style.padding = '20px';
                     alunoDiv.style.margin = '10px';
                     alunoDiv.style.display = 'flex';
@@ -362,6 +377,8 @@ async function atualizarAlunos() {
 
     } catch (error) {
         console.error('Erro ao carregar os dados:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -384,6 +401,8 @@ function alunoRemovido() {
 }
 
 async function verMais(alunoId) {
+    
+    loader.style.display = 'flex';
     try {
         const idUsuarioLogado = getIdUsuarioLogado();
 
@@ -422,14 +441,14 @@ async function verMais(alunoId) {
         for (const key in emblemasData) {
             const emblema = emblemasData[key];
             const pontos = emblema.pontosTotais;
-        
+
             const emblemaTipo = obterMedalha(pontos);
-        
+
             const emblemaElement = document.createElement('div');
             emblemaElement.classList.add('box_emblemas');
             emblemaElement.innerHTML = `<img src="/imgs/${emblemaTipo}" alt="${emblema.nomeCurso}">`;
             blocoEmblemas.appendChild(emblemaElement);
-        }        
+        }
 
         emblemasContainer.appendChild(blocoEmblemas);
 
@@ -468,17 +487,21 @@ async function verMais(alunoId) {
         interesseButton.innerText = 'Tenho Interesse';
         interesseButton.onclick = () => tenhoInteresse(alunoId, interesseButton, nomeAluno);
 
-        containerBotaoInteresse.innerHTML = ''; 
+        containerBotaoInteresse.innerHTML = '';
         containerBotaoInteresse.appendChild(interesseButton);
 
         document.querySelector('.container_ver_mais').style.display = 'block';
 
     } catch (error) {
         console.error('Erro ao buscar os detalhes do aluno:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
 async function favoritar(alunoId, favoritarButton) {
+    
+    loader.style.display = 'flex';
     const idUsuarioLogado = getIdUsuarioLogado();
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/favoritos/${alunoId}`, {
@@ -494,20 +517,23 @@ async function favoritar(alunoId, favoritarButton) {
             favoritarButton.onclick = () => desfavoritar(alunoId, favoritarButton);
 
             const boxAluno = document.querySelector(`.box_aluno[data-aluno-id="${alunoId}"]`);
-            console.log("box do aluno selecionado " + boxAluno); // Log para verificar se o box foi selecionado
             if (boxAluno) {
-                boxAluno.style.border = '2px solid #FFBF00'; // Muda a cor da borda para amarelo
+                boxAluno.style.border = '2px solid #FFBF00';
             }
         } else {
             console.error(`Box do aluno com ID ${alunoId} não encontrada.`);
         }
     } catch (error) {
         console.error('Erro ao favoritar o aluno:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
 async function desfavoritar(alunoId, favoritarButton) {
-    const idUsuarioLogado = getIdUsuarioLogado(); // Supondo que você tenha uma função para obter o ID do usuário logado
+    
+    loader.style.display = 'flex';
+    const idUsuarioLogado = getIdUsuarioLogado();
     try {
         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuarioLogado}/favoritos/${alunoId}`, {
             method: 'DELETE'
@@ -520,17 +546,17 @@ async function desfavoritar(alunoId, favoritarButton) {
             favoritarButton.style.width = '43%';
             favoritarButton.style.backgroundColor = '#244aa5';
             favoritarButton.onclick = () => favoritar(alunoId, favoritarButton);
-
-            // Pega a box do aluno e altera a borda de volta
             const boxAluno = document.querySelector(`.box_aluno[data-aluno-id="${alunoId}"]`);
             if (boxAluno) {
-                boxAluno.style.border = '2px solid #DDDDDD'; // Restaura a borda para a cor padrão
+                boxAluno.style.border = '2px solid #DDDDDD';
             }
         } else {
             alert('Falha ao desfavoritar o aluno.');
         }
     } catch (error) {
         console.error('Erro ao desfavoritar o aluno:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -550,7 +576,6 @@ function calcularIdade(dataNascimento) {
 function getIdUsuarioLogado() {
     const data = JSON.parse(sessionStorage.getItem('user'))
 
-    console.log(data)
     return data.id;
 }
 
@@ -564,21 +589,16 @@ function fecharVerMais_img() {
     const itemStatus = sessionStorage.getItem('itemStatus');
 
     if (itemStatus) {
-        console.log(`Status do item: ${itemStatus}`);
         sessionStorage.removeItem('itemStatus');
         setTimeout(() => {
             location.reload();
         }, 1000);
-    } else {
-        console.log("Nenhum status encontrado.");
     }
 }
 
 async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
     const idUsuarioLogado = getIdUsuarioLogado();
-
-    // Exibe o loader
-    const loader = document.querySelector('.container_loader');
+    
     loader.style.display = 'flex';
 
     try {
@@ -593,7 +613,7 @@ async function tenhoInteresse(alunoId, interesseButton, nomeAluno) {
             if (containerInteresse && nomeAlunoSpan) {
                 if (nomeAluno) {
                     fecharVerMais()
-                    nomeAlunoSpan.textContent = nomeAluno; 
+                    nomeAlunoSpan.textContent = nomeAluno;
                     containerInteresse.style.display = 'block';
                 } else {
                     console.error('Erro: nomeAluno está undefined');
@@ -617,6 +637,8 @@ function fecharNotificacao() {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
+    
+    loader.style.display = 'flex';
     try {
         const response = await fetch('http://localhost:8080/usuarios/listar');
         const data = await response.json();
@@ -651,11 +673,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos usuários:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 });
 
 async function exibirAlunosPorCidade(cidadeSelecionada) {
-    console.log('Cidade selecionada:', cidadeSelecionada);
+    
+    loader.style.display = 'flex';
     try {
         const [pontuacoesResponse, usuariosResponse, interessadosResponse, contratadosResponse, processoSeletivoResponse, favoritosResponse] = await Promise.all([
             fetch(`http://localhost:8080/pontuacoes/ranking`),
@@ -663,7 +688,7 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
             fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`),
             fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`),
             fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`),
-            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`) // Adicionado aqui
+            fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`)
         ]);
 
         const [pontuacoesData, usuariosData, interessadosData, contratadosData, processoSeletivoData, favoritosData] = await Promise.all([
@@ -672,7 +697,7 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
             interessadosResponse.json(),
             contratadosResponse.json(),
             processoSeletivoResponse.json(),
-            favoritosResponse.json() // Adicionado aqui
+            favoritosResponse.json()
         ]);
 
         const containerCursos = document.getElementById('cursos_container');
@@ -695,7 +720,7 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
         const interessadosSet = new Set(interessadosData.map(interessado => interessado.id));
         const contratadosSet = new Set(contratadosData.map(contratado => contratado.id));
         const processoSeletivoSet = new Set(processoSeletivoData.map(aluno => aluno.id));
-        const favoritosSet = new Set(favoritosData.map(favorito => favorito.id)); // Adicionado aqui
+        const favoritosSet = new Set(favoritosData.map(favorito => favorito.id));
 
         const alunosPorCurso = Object.entries(pontuacoesData).reduce((acc, [cursoId, curso]) => {
             const alunosFiltrados = curso.ranking?.filter(aluno => {
@@ -732,7 +757,6 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
             containerCursos.style.height = '20vh';
 
             containerCursos.appendChild(noResultsMessage);
-            console.log(`Nenhum aluno encontrado na cidade ${cidadeSelecionada}.`);
             return;
         }
 
@@ -755,7 +779,7 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
                 const medalha = obterMedalha(aluno.pontosTotais);
 
                 const alunoDiv = document.createElement('div');
-                alunoDiv.className = 'box_Aluno' + (favoritosSet.has(aluno.aluno.id) ? ' aluno-favorito' : ''); // Adicionado aqui
+                alunoDiv.className = 'box_Aluno' + (favoritosSet.has(aluno.aluno.id) ? ' aluno-favorito' : '');
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
@@ -775,6 +799,8 @@ async function exibirAlunosPorCidade(cidadeSelecionada) {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -788,6 +814,8 @@ style.innerHTML = `
 document.head.appendChild(style);
 
 document.addEventListener('DOMContentLoaded', async function () {
+    
+    loader.style.display = 'flex';
     try {
         const response = await fetch('http://localhost:8080/usuarios/listar');
         const data = await response.json();
@@ -822,12 +850,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos usuários:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 });
 
 async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
-    console.log('Escolaridade selecionada:', escolaridadeSelecionada);
-
+    
+    loader.style.display = 'flex';
     try {
         const containerCursos = document.getElementById('cursos_container');
 
@@ -911,7 +941,6 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
             containerCursos.style.height = '20vh';
 
             containerCursos.appendChild(noResultsMessage);
-            console.log(`Nenhum aluno encontrado com a escolaridade ${escolaridadeSelecionada}.`);
             return;
         }
 
@@ -945,7 +974,7 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
                 alunoDiv.className = 'box_Aluno';
 
                 if (favoritosSet.has(aluno.aluno.id)) {
-                    alunoDiv.style.border = '2px solid yellow'; 
+                    alunoDiv.style.border = '2px solid yellow';
                 }
 
                 const medalha = obterMedalha(aluno.pontosTotais);
@@ -972,11 +1001,13 @@ async function exibirAlunosPorEscolaridade(escolaridadeSelecionada) {
 
     } catch (error) {
         console.error('Erro ao buscar ou exibir alunos por escolaridade:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
 function buscarAlunoPorNome(nome) {
-    if (nome.length >= 3) { 
+    if (nome.length >= 3) {
         exibirAlunosPorNome(nome);
     } else {
         document.getElementById('cursos_container').innerHTML = '';
@@ -985,41 +1016,25 @@ function buscarAlunoPorNome(nome) {
 }
 
 async function exibirAlunosPorNome(nomeBuscado) {
-    console.log('Nome buscado:', nomeBuscado); 
-
+    
+    loader.style.display = 'flex';
     try {
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData); 
-
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData); 
-
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData); 
-
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
-        console.log('Dados de contratados:', contratadosData); 
-
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
-        console.log('Dados de processo seletivo:', processoSeletivoData); 
-
-        // Buscar favoritos
         const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
         const favoritosData = await favoritosResponse.json();
-        console.log('Dados de favoritos:', favoritosData); 
-
         const favoritosSet = new Set(favoritosData.map(favorito => favorito.id));
-
         const containerCursos = document.getElementById('cursos_container');
-        containerCursos.innerHTML = ''; 
-
-        const alunosFiltrados = []; 
-
+        containerCursos.innerHTML = '';
+        const alunosFiltrados = [];
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno") {
@@ -1027,7 +1042,7 @@ async function exibirAlunosPorNome(nomeBuscado) {
                     nome: `${usuario.primeiroNome} ${usuario.sobrenome}`,
                     primeiroNome: usuario.primeiroNome,
                     sobrenome: usuario.sobrenome
-                }; 
+                };
             }
         });
 
@@ -1042,11 +1057,9 @@ async function exibirAlunosPorNome(nomeBuscado) {
             const alunosFiltradosPorNome = alunos.filter(aluno => {
                 const alunoId = aluno.aluno.id;
                 const nomeCompleto = `${usuariosMap[alunoId]?.primeiroNome} ${usuariosMap[alunoId]?.sobrenome}`;
-                console.log('Verificando aluno:', alunoId, 'com nome:', nomeCompleto); 
-
                 return nomeCompleto.toLowerCase().includes(nomeBuscado.toLowerCase()) &&
                     !interessadosSet.has(alunoId) &&
-                    !contratadosSet.has(alunoId) && 
+                    !contratadosSet.has(alunoId) &&
                     !processoSeletivoSet.has(alunoId);
             });
 
@@ -1056,9 +1069,8 @@ async function exibirAlunosPorNome(nomeBuscado) {
         }
 
         if (alunosFiltrados.length === 0) {
-            console.log(`Nenhum aluno encontrado com o nome "${nomeBuscado}".`);
             const mensagem = document.createElement('div');
-            mensagem.className = 'mensagem_no_alunos'; 
+            mensagem.className = 'mensagem_no_alunos';
             mensagem.innerText = `Nenhum aluno encontrado com o nome "${nomeBuscado}".`;
             containerCursos.appendChild(mensagem);
             return;
@@ -1122,6 +1134,8 @@ async function exibirAlunosPorNome(nomeBuscado) {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -1130,48 +1144,33 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
         location.reload();
     }
 
-    console.log('Etnia selecionada:', etniaSelecionada);
+    
+    loader.style.display = 'flex';
 
     try {
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData); 
-
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData); 
-
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
-        console.log('Dados de contratados:', contratadosData); 
-
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData); 
-
-        // Adicionando chamada para obter os dados do processo seletivo
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
-        console.log('Dados de processo seletivo:', processoSeletivoData); 
-
-        // Adicionando chamada para obter alunos favoritos
         const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
         const favoritosData = await favoritosResponse.json();
-        console.log('Dados de favoritos:', favoritosData); 
-
         const containerCursos = document.getElementById('cursos_container');
-        
-        containerCursos.innerHTML = ''; 
-        containerCursos.removeAttribute('style'); 
-
-        const alunosComEtnia = []; 
+        containerCursos.innerHTML = '';
+        containerCursos.removeAttribute('style');
+        const alunosComEtnia = [];
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno" && usuario.etnia) {
                 usuariosMap[usuario.id] = {
                     etnia: usuario.etnia,
-                    nome: `${usuario.primeiroNome} ${usuario.sobrenome}` 
-                }; 
+                    nome: `${usuario.primeiroNome} ${usuario.sobrenome}`
+                };
             }
         });
 
@@ -1186,11 +1185,8 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             const alunos = curso.ranking || [];
 
             const alunosFiltrados = alunos.filter(aluno => {
-                const alunoId = aluno.aluno.id; 
-                const etniaDoAluno = usuariosMap[alunoId]?.etnia; 
-
-                console.log(`Verificando aluno ID ${alunoId}: Etnia - ${etniaDoAluno}`);
-
+                const alunoId = aluno.aluno.id;
+                const etniaDoAluno = usuariosMap[alunoId]?.etnia;
                 return etniaDoAluno === etniaSelecionada &&
                     !interessadosSet.has(alunoId) &&
                     !contratadosSet.has(alunoId) &&
@@ -1206,19 +1202,18 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
             const noResultsMessage = document.createElement('div');
             noResultsMessage.innerText = `Nenhum aluno encontrado com a etnia ${etniaSelecionada}.`;
             noResultsMessage.className = 'mensagem_nenhum_aluno';
-            noResultsMessage.style.textAlign = 'center'; 
-            noResultsMessage.style.margin = '20px 0'; 
+            noResultsMessage.style.textAlign = 'center';
+            noResultsMessage.style.margin = '20px 0';
             noResultsMessage.style.fontWeight = 800;
             noResultsMessage.style.fontSize = '20px';
             noResultsMessage.style.color = '#808080';
 
-            containerCursos.style.display = 'flex'; 
-            containerCursos.style.justifyContent = 'center'; 
-            containerCursos.style.alignItems = 'center'; 
-            containerCursos.style.height = '20vh'; 
+            containerCursos.style.display = 'flex';
+            containerCursos.style.justifyContent = 'center';
+            containerCursos.style.alignItems = 'center';
+            containerCursos.style.height = '20vh';
 
             containerCursos.appendChild(noResultsMessage);
-            console.log(`Nenhum aluno encontrado com a etnia ${etniaSelecionada}.`);
             return;
         }
 
@@ -1253,7 +1248,7 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
                 alunoDiv.className = 'box_Aluno';
 
                 if (favoritosSet.has(aluno.aluno.id)) {
-                    alunoDiv.style.border = '2px solid yellow'; 
+                    alunoDiv.style.border = '2px solid yellow';
                 }
 
                 const medalha = obterMedalha(aluno.pontosTotais);
@@ -1280,6 +1275,8 @@ async function exibirAlunosPorEtnia(etniaSelecionada) {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
@@ -1288,43 +1285,30 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
         location.reload();
     }
 
-    console.log('Sexo selecionado:', sexoSelecionado);
+    
+    loader.style.display = 'flex';
 
     try {
         const pontuacoesResponse = await fetch(`http://localhost:8080/pontuacoes/ranking`);
         const pontuacoesData = await pontuacoesResponse.json();
-        console.log('Dados de pontuações:', pontuacoesData);
-
         const usuariosResponse = await fetch('http://localhost:8080/usuarios/listar');
         const usuariosData = await usuariosResponse.json();
-        console.log('Dados de usuários:', usuariosData);
-
         const interessadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/interessados`);
         const interessadosData = await interessadosResponse.json();
-        console.log('Dados de interessados:', interessadosData);
-
         const contratadosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/contratados`);
         const contratadosData = await contratadosResponse.json();
-        console.log('Dados de contratados:', contratadosData);
-
         const processoSeletivoResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/processoSeletivo`);
         const processoSeletivoData = await processoSeletivoResponse.json();
-        console.log('Dados de processo seletivo:', processoSeletivoData);
-
         const favoritosResponse = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/listar/favoritos`);
         const favoritosData = await favoritosResponse.json();
         const favoritosIds = favoritosData.map(favorito => favorito.id);
-
         const containerCursos = document.getElementById('cursos_container');
-        
         containerCursos.innerHTML = '';
-        containerCursos.style.display = '';  
-        containerCursos.style.justifyContent = '';  
-        containerCursos.style.alignItems = ''; 
-        containerCursos.style.height = '';  
-
+        containerCursos.style.display = '';
+        containerCursos.style.justifyContent = '';
+        containerCursos.style.alignItems = '';
+        containerCursos.style.height = '';
         const alunosComSexo = [];
-
         const usuariosMap = {};
         usuariosData.forEach(usuario => {
             if (usuario.tipoUsuario === "Aluno" && usuario.sexo) {
@@ -1342,7 +1326,6 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
         for (const cursoId in pontuacoesData) {
             const curso = pontuacoesData[cursoId];
             const alunos = curso.ranking || [];
-
             const alunosFiltrados = alunos.filter(aluno => {
                 const sexoDoAluno = usuariosMap[aluno.aluno.id]?.sexo;
                 const alunoId = aluno.aluno.id;
@@ -1363,19 +1346,16 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
             const noResultsMessage = document.createElement('div');
             noResultsMessage.innerText = `Nenhum aluno encontrado com o sexo ${sexoSelecionado}.`;
             noResultsMessage.className = 'mensagem_nenhum_aluno';
-            noResultsMessage.style.textAlign = 'center'; 
-            noResultsMessage.style.margin = '20px 0'; 
+            noResultsMessage.style.textAlign = 'center';
+            noResultsMessage.style.margin = '20px 0';
             noResultsMessage.style.fontWeight = 800;
             noResultsMessage.style.fontSize = '20px';
             noResultsMessage.style.color = '#808080';
-
-            containerCursos.style.display = 'flex'; 
+            containerCursos.style.display = 'flex';
             containerCursos.style.justifyContent = 'center';
-            containerCursos.style.alignItems = 'center'; 
-            containerCursos.style.height = '20vh'; 
-
+            containerCursos.style.alignItems = 'center';
+            containerCursos.style.height = '20vh';
             containerCursos.appendChild(noResultsMessage);
-            console.log(`Nenhum aluno encontrado com o sexo ${sexoSelecionado}.`);
             return;
         }
 
@@ -1402,25 +1382,20 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
             `;
 
             containerCursos.appendChild(cursoDiv);
-
             const blocoAlunos = document.getElementById(`bloco_alunos_${curso}`);
-
             alunosPorCurso[curso].forEach(aluno => {
                 const alunoDiv = document.createElement('div');
                 alunoDiv.className = 'box_Aluno';
-
                 const isFavorito = favoritosIds.includes(aluno.aluno.id);
                 alunoDiv.style.border = isFavorito ? '2px solid yellow' : 'none';
-
                 const medalha = obterMedalha(aluno.pontosTotais);
-        
                 alunoDiv.innerHTML = `
                     <span>${aluno.aluno.primeiroNome} ${aluno.aluno.sobrenome}</span>
                     <span>Aluno do projeto arrastão, finalizou curso <a>${curso}</a> com ${aluno.pontosTotais} pontos</span>
                     <img src="../imgs/${medalha}" alt="medalha">
                     <button onclick="verMais(${aluno.aluno.id})">Ver mais</button>
                 `;
-        
+
                 blocoAlunos.appendChild(alunoDiv);
             });
 
@@ -1436,5 +1411,9 @@ async function exibirAlunosPorSexo(sexoSelecionado) {
 
     } catch (error) {
         console.error('Erro ao carregar os dados dos alunos:', error);
+    }
+
+    finally {
+        loader.style.display = 'none';
     }
 }

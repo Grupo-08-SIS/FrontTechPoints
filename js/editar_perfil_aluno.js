@@ -1,3 +1,5 @@
+const loader = document.querySelector('.container_loader');
+
 document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const descricaoTextarea = document.getElementById('descricao');
@@ -166,7 +168,7 @@ async function salvarMudancas(event) {
         showAlert('Nenhuma alteração detectada.', 'error');
         return;
     }
-
+    loader.style.display = 'flex';
     try {
         if (Object.keys(updates).length > 0) {
             const response = await fetch(`http://localhost:8080/usuarios/atualizar/${idUsuario}`, {
@@ -211,6 +213,7 @@ async function salvarMudancas(event) {
         }, 3000);
 
         if (updates.senha) {
+            loader.style.display = 'flex';
             try {
                 const novaSenha = updates.senha;
                 const senhaResponse = await fetch('http://localhost:8080/reset-senha/nova-senha', {
@@ -224,11 +227,15 @@ async function salvarMudancas(event) {
                 }
             } catch (error) {
                 showAlert('Erro ao tentar atualizar a senha', 'error');
+            } finally {
+            loader.style.display = 'none';
             }
         }
 
     } catch (error) {
         showAlert(error.message, 'error');
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
