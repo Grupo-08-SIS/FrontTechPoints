@@ -178,12 +178,74 @@
                     </select>
                 </div>
                 <div class="row mb-3" id="div-linha-botoes">
-                    <div class="linha-botoes" style="gap: 20px;">
-                        <button class="btn btn-secondary btn-lg me-2" onclick="gerarRelatorioAlunos()">Gerar Relatório CSV</button>
-                        <button class="btn btn-secondary btn-lg" onclick="gerarRelatorioEmpresas()">Cadastro em Lote de Alunos</button>
+                    <div class="linha-botoes" style="gap: 20px">
+                        <button class="btn btn-secondary btn-lg me-2" onclick="abrirModalRelatorio()">Gerar
+                            Relatório</button>
+                        </button>
+                        <button class="btn btn-secondary btn-lg" onclick="abrirModalCadastro()">
+                            Cadastro em Lote de Alunos
+                        </button>
                     </div>
-                </div>        
+                </div>     
             </div>
+            <div class="modal fade" id="relatorioModal" tabindex="-1" aria-labelledby="relatorioModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="relatorioModalLabel">
+                            Gerar Relatório
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Selecione o tipo de arquivo que deseja baixar:</p>
+                        <select id="select-arquivo" class="form-select mb-3">
+                            <option value="csv">CSV</option>
+                            <option value="txt">TXT</option>
+                        </select>
+                        <button id="baixarRelatorio" class="btn btn-primary">
+                            Baixar Relatório
+
+                            <a class="btn btn-secondary"
+                                href="../docs/TechJobs - Documento de Layout - Relatorio alunos.pdf"
+                                download="TechJobs - Documento de Layout - Relatorio-Alunos.pdf">
+                                Layout TXT
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="cadastroModal" tabindex="-1" aria-labelledby="cadastroModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cadastroModalLabel">
+                            Gerar Relatório
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Escolha um arquivo CSV ou TXT para cadastrar alunos:</h6>
+                 
+                        <input type="file" id="arquivo" class="form-control" accept=".csv,.txt">
+                        <br>
+                       
+                        <button id="btnEnviar" class="btn btn-primary">Enviar Arquivo</button>
+                        <br><br>
+
+                            <a class="btn btn-secondary"
+                                href="../docs/TechJobs - Documento Layout - Cadastro Em Lote.pdf"
+                                download="TechJobs - Documento Layout - Cadastro Em Lote.pdf">
+                                Layout TXT
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                 <table class="table table-striped">
                     <thead>

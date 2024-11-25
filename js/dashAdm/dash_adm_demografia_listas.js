@@ -11,7 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
         renderizarGraficos()
     })
 
+    document.getElementById('baixarRelatorio').addEventListener('click', gerarRelatorioAlunos)
+
+    document.getElementById('btnEnviar').addEventListener('click', enviarArquivo)
+    
     renderizarGraficos() 
+ 
 })
 
 let graficoSexo, graficoEtnia, graficoEscolaridade, graficoCidade, graficoCursos
@@ -88,14 +93,27 @@ async function gerarRelatorioEmpresas() {
     }
 }
 
+function abrirModalRelatorio() {
+    
+    const modal = new bootstrap.Modal(document.getElementById('relatorioModal'))
+    modal.show()
+}
+
+function abrirModalCadastro() {
+    
+    const modal = new bootstrap.Modal(document.getElementById('cadastroModal'))
+    modal.show()
+}
+
+
 async function gerarRelatorioAlunos() {
     try {
-       
         const sexo = document.getElementById('select-sexo').value
         const etnia = document.getElementById('select-etnia').value
         const idadeMaxima = document.getElementById('idade-max').value
         const cidade = document.getElementById('select-cidade').value
         const escolaridade = document.getElementById('select-escolaridade').value
+        const arquivo = document.getElementById('select-arquivo').value 
 
         let url = `http://localhost:8080/dashboardAdm/relatorio-alunos?`
 
@@ -104,9 +122,7 @@ async function gerarRelatorioAlunos() {
         if (idadeMaxima) url += `idadeMaxima=${idadeMaxima}&`
         if (cidade) url += `cidade=${cidade}&`
         if (escolaridade) url += `escolaridade=${escolaridade}&`
-
-        // Remove o último caractere '&' da URL
-        url = url.slice(0, -1)
+        if (arquivo) url += `arquivo=${arquivo}`
 
         const resposta = await fetch(url, { method: 'GET' })
 
@@ -114,12 +130,53 @@ async function gerarRelatorioAlunos() {
             throw new Error('Erro ao gerar o relatório de alunos')
         }
 
-        window.location.href = url
-
+     
+        const blob = await resposta.blob()
+        const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = `relatorio-alunos.${arquivo}`
+        link.click()
     } catch (erro) {
         console.error('Erro ao gerar o relatório de alunos:', erro)
     }
 }
+
+async function enviarArquivo() {
+    const arquivoInput = document.getElementById('arquivo')
+    const arquivo = arquivoInput.files[0]; 
+
+    if (!arquivo) {
+        alert('Por favor, selecione um arquivo CSV ou TXT!')
+        return
+    }
+
+    const formData = new FormData()
+    formData.append('file', arquivo)
+
+    try {
+    
+        const response = await fetch('http://localhost:8080/dashboardAdm/cadastrar-alunos-lote', {
+            method: 'POST',
+            body: formData
+        })
+
+
+        if (response.ok) {
+            const data = await response.json()
+            alert('Arquivo enviado com sucesso! ' + (data.message || ''))
+          
+            $('#cadastroModal').modal('hide')
+        } else {
+            const errorData = await response.json()
+            alert('Erro ao enviar o arquivo: ' + (errorData.message || 'Erro desconhecido'))
+        }
+    } catch (error) {
+      
+        console.error('Erro ao enviar o arquivo:', error)
+        alert('Erro ao enviar o arquivo. Por favor, tente novamente.')
+    }
+}
+
 
 function destruirGraficos() {
     if (graficoSexo) graficoSexo.destroy()
