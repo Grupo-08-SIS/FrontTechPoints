@@ -10,8 +10,6 @@ const loader = document.querySelector('.container_loader');
 
 function getIdUsuarioLogado() {
     const data = JSON.parse(sessionStorage.getItem('user'))
-
-    console.log(data)
     return data.id;
 }
 
@@ -26,33 +24,28 @@ async function salvarMudancas(event) {
     const confirmacaoSenha = document.getElementById('nova_senha_confirmacao').value;
     const data = JSON.parse(sessionStorage.getItem('user'))
 
-    // Validação das senhas
     if (novaSenha && novaSenha !== confirmacaoSenha) {
         showAlert('As senhas não coincidem.', 'error');
         return;
     }
 
-    // Validação do comprimento da senha
     if (novaSenha && novaSenha.length < 6) {
         showAlert('A senha deve ter no mínimo 6 caracteres.', 'error');
         return;
     }
 
-    // Validação do primeiro nome e sobrenome
     if (novoPrimeiroNome && !novoSobrenome) {
         showAlert('Você precisa mudar o sobrenome junto com o nome.', 'error');
         return;
     }
 
-    // Validação do e-mail
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Verifica se o e-mail tem o formato correto
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
     if (email && !emailRegex.test(email)) {
         showAlert('Por favor, insira um e-mail válido (exemplo@dominio.com).', 'error');
         return;
     }
 
-    // Validação do telefone
-    const telefoneRegex = /^\d{10,11}$/; // Verifica se o telefone contém entre 10 e 11 dígitos numéricos
+    const telefoneRegex = /^\d{10,11}$/; 
     if (telefone && !telefoneRegex.test(telefone)) {
         showAlert('O telefone deve ter entre 10 e 11 dígitos numéricos.', 'error');
         return;
@@ -144,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
 
             if (data.length === 0) {
-                container.style.height = "auto";  // Remove o valor fixo de 10vh e ajusta a altura ao conteúdo
+                container.style.height = "auto";  
                 const noFavoritesMessage = document.createElement("p");
                 noFavoritesMessage.textContent = "Não há alunos favoritos no momento.";
                 noFavoritesMessage.className = "no-alunos-message";
@@ -197,11 +190,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             const data = await response.json();
     
             const container = document.querySelector(".bloco_alunos");
-            container.innerHTML = ""; // Limpando o conteúdo do contêiner antes de adicionar os novos itens
+            container.innerHTML = ""; 
     
             sessionStorage.setItem('quantidadeInteressados', data.length);
     
-            // Verificando se o número de alunos interessados é maior que 3 para aplicar o estilo de rolagem horizontal
             if (data.length > 3) {
                 container.style.display = "flex";
                 container.style.flexWrap = "nowrap";
@@ -209,14 +201,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                 container.style.justifyContent = "flex-start";
             }
     
-            // Caso não haja alunos interessados, exibe uma mensagem
             if (data.length === 0) {
                 const noInterestedMessage = document.createElement("p");
                 noInterestedMessage.textContent = "Não há alunos interessados no momento.";
                 noInterestedMessage.className = "no-alunos-message";
                 container.appendChild(noInterestedMessage);
             } else {
-                // Para cada aluno, buscamos suas pontuações e renderizamos na tela
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
@@ -224,7 +214,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     let maxPontos = -1;
                     let cursoComMaiorPontuacao = '';
     
-                    // Determinando o curso com a maior pontuação
                     for (const key in pontosData) {
                         const curso = pontosData[key];
                         if (curso.pontosTotais > maxPontos) {
@@ -233,10 +222,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                         }
                     }
     
-                    // Obtendo o tipo de medalha com base nos pontos
                     const medalhaTipo = obterMedalha(maxPontos);
     
-                    // Criando o elemento do aluno
                     const alunoDiv = document.createElement("div");
                     alunoDiv.className = "box_Aluno_favoritos";
     
@@ -244,9 +231,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                     alunoButton.textContent = "Atribuir";
                     alunoButton.onclick = () => atribuir(aluno.id, false, 'interessados');
                     
-                    // Mudando a cor do botão diretamente no JavaScript
-                    alunoButton.style.backgroundColor = "#1E3A8A"; // Cor de fundo
-                    alunoButton.style.color = "white"; // Cor do texto
+                    alunoButton.style.backgroundColor = "#1E3A8A"; 
+                    alunoButton.style.color = "white";
     
                     alunoDiv.innerHTML = `
                         <span>${aluno.primeiroNome} ${aluno.sobrenome}</span>
@@ -272,9 +258,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             const data = await response.json();
     
             const container = document.querySelector(".bloco_alunos_cancelados");
-            container.innerHTML = ""; // Limpa o contêiner
+            container.innerHTML = ""; 
     
-            // Se não houver alunos cancelados
             if (data.length === 0) {
                 const noInterestedMessage = document.createElement("p");
                 noInterestedMessage.textContent = "Não há alunos cancelados no momento.";
@@ -282,11 +267,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 container.appendChild(noInterestedMessage);
                 container.style.justifyContent = "center";
                 container.style.width = "40%";
-                container.style.display = "flex"; // Garante que o container é exibido mesmo quando vazio
+                container.style.display = "flex";
             } else {
                 const alunoDivs = [];
     
-                // Itera sobre os alunos e cria as divs
                 for (const aluno of data) {
                     const pontosResponse = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${aluno.id}`);
                     const pontosData = await pontosResponse.json();
@@ -318,47 +302,31 @@ document.addEventListener("DOMContentLoaded", async function () {
                     alunoDivs.push(alunoDiv);
                 }
     
-                // Adiciona todos os alunos ao contêiner na ordem invertida
                 for (let i = alunoDivs.length - 1; i >= 0; i--) {
-                    container.appendChild(alunoDivs[i]); // Adiciona na ordem invertida
+                    container.appendChild(alunoDivs[i]); 
                 }
     
-                // Verifica se há dados no localStorage para as chaves "favoritos" ou "desinteressados"
                 const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
                 const desinteressados = JSON.parse(localStorage.getItem("desinteressados") || "[]");
     
-                // Verifica cada aluno e se ele não tem referência no localStorage, remove com o endpoint
                 for (const alunoDiv of alunoDivs) {
-                    const alunoId = alunoDiv.querySelector("span").textContent.trim(); // Extraí o nome do aluno
+                    const alunoId = alunoDiv.querySelector("span").textContent.trim(); 
                     const aluno = data.find(a => `${a.primeiroNome} ${a.sobrenome}` === alunoId);
     
-                    // Verifica se esse aluno não está na lista de favoritos ou desinteressados no localStorage
                     const isFavorito = favoritos.some(f => f.id === aluno.id);
                     const isDesinteressado = desinteressados.some(d => d.id === aluno.id);
     
                     if (!isFavorito && !isDesinteressado) {
-                        // Se o aluno não está em nenhuma das listas no localStorage, chama o endpoint para removê-lo
-                        console.log(`Removendo aluno com ID ${aluno.id} - ${aluno.primeiroNome} ${aluno.sobrenome}...`);
                         const response = await fetch(`http://localhost:8080/dashboardRecrutador/${idUsuario}/contratados/${aluno.id}`, {
-                            method: 'DELETE', // Usando DELETE ou o método apropriado
+                            method: 'DELETE', 
                         });
     
-                        if (response.ok) {
-                            console.log(`Aluno ${aluno.primeiroNome} ${aluno.sobrenome} removido com sucesso!`);
-                        } else {
-                            console.error(`Erro ao remover aluno ${aluno.primeiroNome} ${aluno.sobrenome}:`, response.statusText);
-                        }
-    
-                        // Remove o aluno da lista
                         alunoDiv.remove();
-                        console.log(`Aluno ${aluno.primeiroNome} ${aluno.sobrenome} removido da lista visual.`);
                     } else {
-                        // Adiciona o botão "Desfazer" ao último aluno apenas se uma das chaves existir no localStorage
                         alunoDiv.innerHTML += `<button onclick="desfazer(${aluno.id})">Desfazer</button>`;
                     }
                 }
     
-                // Se não houver mais alunos no contêiner após as remoções, exibe a mensagem
                 if (container.children.length === 0) {
                     const noInterestedMessage = document.createElement("p");
                     noInterestedMessage.textContent = "Não há alunos cancelados no momento.";
@@ -366,7 +334,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     container.appendChild(noInterestedMessage);
                     container.style.justifyContent = "center";
                     container.style.width = "40%";
-                    container.style.display = "flex"; // Garante que o container é exibido mesmo quando vazio
+                    container.style.display = "flex"; 
                 }
             }
         } catch (error) {
@@ -379,32 +347,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.desfazer = async function (idAluno) {
         loader.style.display = 'flex';
     
-        // Recupera as listas do localStorage
         let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
         let desinteressados = JSON.parse(localStorage.getItem('desinteressados')) || [];
     
-        // Logar as listas para verificar o que contém
-        console.log('Favoritos:', favoritos);
-        console.log('Desinteressados:', desinteressados);
-    
-        // Verifica se o aluno está nas listas, convertendo idAluno para número
         const alunoFavoritosIndex = favoritos.findIndex(favorito => Number(favorito.id) === Number(idAluno));
         const alunoDesinteressadosIndex = desinteressados.findIndex(interessado => Number(interessado.id) === Number(idAluno));
     
         try {
             let response;
     
-            // Se o aluno estiver na lista de favoritos
             if (alunoFavoritosIndex !== -1) {
                 response = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/favoritos/${idAluno}`, {
                     method: 'POST',
                 });
     
                 if (response.ok) {
-                    // Remove o aluno da lista de favoritos
                     favoritos.splice(alunoFavoritosIndex, 1);
                     localStorage.setItem('favoritos', JSON.stringify(favoritos));
-                    console.log(`Aluno com ID ${idAluno} foi restaurado e removido dos favoritos.`);
                     showAlert('Aluno restaurado com sucesso!', 'success');
                     setTimeout(() => {
                         location.reload();
@@ -413,21 +372,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                     console.error('Erro ao restaurar aluno dos favoritos:', response.statusText);
                 }
     
-            // Se o aluno estiver na lista de desinteressados
             } else if (alunoDesinteressadosIndex !== -1) {
                 const alunoDesinteressado = desinteressados[alunoDesinteressadosIndex];
-                const listaAssociada = alunoDesinteressado.lista; // Captura a lista associada
+                const listaAssociada = alunoDesinteressado.lista;  
     
-                // Define o endpoint com base na lista associada
                 response = await fetch(`http://localhost:8080/dashboardRecrutador/${getIdUsuarioLogado()}/${listaAssociada}/${idAluno}`, {
                     method: 'POST',
                 });
     
                 if (response.ok) {
-                    // Remove o aluno da lista de desinteressados
                     desinteressados.splice(alunoDesinteressadosIndex, 1);
                     localStorage.setItem('desinteressados', JSON.stringify(desinteressados));
-                    console.log(`Aluno com ID ${idAluno} foi restaurado e removido dos desinteressados.`);
                     showAlert('Aluno restaurado com sucesso!', 'success');
                     setTimeout(() => {
                         location.reload();
@@ -436,7 +391,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     console.error('Erro ao restaurar aluno dos desinteressados:', response.statusText);
                 }
             } else {
-                console.log(`Aluno com ID ${idAluno} não está em nenhuma das listas.`);
             }
         } catch (error) {
             console.error('Erro ao chamar o endpoint:', error);
@@ -453,22 +407,17 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (response.ok) {
-                // Criar um objeto com os dados do aluno
                 const alunoData = {
                     id: idAluno,
-                    lista: 'favoritos' // Nome da lista
+                    lista: 'favoritos' 
                 };
 
-                // Recuperar a lista existente de alunos do localStorage, se houver
                 let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 
-                // Adicionar o aluno à lista de favoritos
                 favoritos.push(alunoData);
 
-                // Armazenar a lista atualizada de favoritos no localStorage
                 localStorage.setItem('favoritos', JSON.stringify(favoritos));
 
-                console.log(`Aluno com ID ${idAluno} cancelado e adicionado aos favoritos.`);
                 showAlert('Aluno desfavoritado com sucesso!', 'success');
                 setTimeout(() => {
                     location.reload();
@@ -533,8 +482,6 @@ window.onload = function () {
 
 function atribuir(idAluno, fromListar = false, elementoChamador = null) {
     idAlunoSelecionado = idAluno;
-    console.log("Aluno selecionado:", idAlunoSelecionado);
-
     const atribuicaoDiv = document.getElementById("atribuicao");
     atribuicaoDiv.style.display = "flex";
 
@@ -559,17 +506,12 @@ function atribuir(idAluno, fromListar = false, elementoChamador = null) {
 
     const btnDesinteressar = document.querySelector(".btn_desinteressar");
     btnDesinteressar.onclick = () => desinteressarAluno(idAlunoSelecionado, elementoChamador);
-
-    if (elementoChamador) {
-        console.log("Chamado a partir do elemento:", elementoChamador);
-    }
 }
 
 async function interessarAluno(idAlunoSelecionado) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
 
-    // Exibe o loader
     const loader = document.querySelector('.container_loader');
     loader.style.display = 'flex';
 
@@ -597,7 +539,6 @@ async function contratarAluno(idAluno) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const idRecrutador = user.id;
 
-    // Exibe o loader
     const loader = document.querySelector('.container_loader');
     loader.style.display = 'flex';
     fecharAtribuicao();
@@ -625,7 +566,6 @@ async function contratarAluno(idAluno) {
     } catch (error) {
         console.error("Erro:", error);
     } finally {
-        // Oculta o loader
         loader.style.display = 'none';
     }
 }
@@ -858,7 +798,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (fecharBtn) {
         fecharBtn.addEventListener('click', function () {
-            console.log('Fechar botão clicado');
             document.getElementById('atribuicao').style.display = 'none';
         });
     } else {
