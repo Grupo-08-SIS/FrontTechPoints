@@ -220,9 +220,16 @@ a {
 
 .bloco_alunos {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+    overflow-x: auto; 
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory; /* (Opcional) Para um efeito de "snap" ao rolar */
+}
+
+.box_Aluno {
+    min-width: 200px; 
+    margin-right: 10px;
+    flex-shrink: 0; 
+    scroll-snap-align: start;
 }
 
 .bloco_alunos_cancelados {
@@ -300,11 +307,11 @@ a {
     border: 2px solid #FABC09;
     border-radius: 10px;
     padding: 20px;
-    width: 240px;
     text-align: center;
     transition: transform 0.3s ease-in-out;
     color: #4d4d4d;
     font-weight: 600;
+    width: 34vh;
 }
 
 .box_Aluno_processo:hover {
@@ -380,6 +387,7 @@ a {
 }
 
 .bloco_alunos_favoritos {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -414,6 +422,7 @@ a {
     align-items: center;
     justify-content: center;
     padding: 10px 0;
+    flex-direction: column;
 }
 
 .bloco_alunos_contratados {
@@ -463,10 +472,11 @@ a {
 
 .bloco_alunos_processo_seletivo {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 2vh;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .box_Aluno_favoritos {
@@ -1176,7 +1186,10 @@ footer {
     font-size: 20px;
     color: gray;
     height: 10vh;
-    margin-top: 20%;
+    margin-top: 8%;
+    visibility: visible !important; /* Garantir que a mensagem seja visível */
+    position: relative;
+    z-index: 10;  /* Coloca a mensagem acima de outros elementos */
 }
 
 .container_fundo_editar_informacoes {
@@ -1390,3 +1403,104 @@ label {
     transition: filter 0.3s ease;
     /* Transição suave ao aplicar ou remover o desfoque */
 }
+
+/* Estilos para o botão Ver mais */
+.ver-mais-button {
+    right: 20vh;
+    background-color: #4CAF50; /* Cor de fundo do botão */
+    color: white; /* Cor do texto */
+    font-size: 16px; /* Tamanho da fonte */
+    padding: 10px 20px; /* Espaçamento interno */
+    border: none; /* Remove borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Indica que é clicável */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Animação suave */
+    display: inline-block;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    height: 5vh;
+    position: absolute;
+}
+
+.ver-mais-button:hover {
+    background-color: #45a049; /* Cor de fundo no hover */
+    transform: scale(1.05); /* Efeito de aumento suave */
+}
+
+.ver-mais-button:active {
+    background-color: #388e3c; /* Cor de fundo quando pressionado */
+    transform: scale(0.98); /* Leve redução quando clicado */
+}
+
+/* Estilos para esconder os alunos */
+.alunos-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.box_Aluno {
+    display: block; /* Exibe os alunos normalmente */
+    margin-bottom: 15px;
+}
+
+/* Classe para esconder os elementos */
+.hidden {
+    display: none;
+}
+
+/* Estilos para a contêiner de paginação */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+    z-index: 1; /* Coloca a paginação abaixo da mensagem */
+}
+
+/* Estilos para os botões de página */
+.pagination button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+}
+
+.pagination button:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+    opacity: 1;
+}
+
+/* Estilos para o botão ativo */
+.pagination button.active {
+    background-color: #1E7F32;
+    border-color: #1E7F32;
+    font-weight: bold;
+    opacity: 1;
+}
+
+/* Estilos para desabilitar o botão (caso necessário) */
+.pagination button[disabled] {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Animação de transição entre as páginas */
+.page-transition {
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-transition.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
