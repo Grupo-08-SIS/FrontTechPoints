@@ -11,9 +11,34 @@ async function realizarCadastro() {
   if (enderecoId === null) {
     return; // Se houve erro no cadastro do endereço, não prossegue
   }
+  const tipoUsuarioEnum = {
+    Aluno: 1,
+    Recrutador: 2,
+    Empresa: 3,
+  };
+
+  function buscarTipoUsuario() {
+    const userType = document.getElementById("userType").value;
+    switch (userType) {
+      case "aluno":
+        return tipoUsuarioEnum.Aluno;
+      case "recrutador":
+        return tipoUsuarioEnum.Recrutador;
+      case "empresa":
+        return tipoUsuarioEnum.Empresa;
+      default:
+        console.log(userType);
+        showAlert(
+          "error",
+          "Tipo de usuário inválido. Selecione um tipo válido."
+        );
+        throw new Error("Tipo de usuário inválido.");
+    }
+  }
 
   // Cadastra o usuário e aguarda a resposta
-  const id = await cadastrarUsuario(enderecoId);
+  let tipoUsuario = buscarTipoUsuario();
+  const id = await cadastrarUsuario(enderecoId, tipoUsuario);
   if (id != null) {
     showAlert("success", "Cadastro realizado com sucesso!");
 
@@ -22,30 +47,12 @@ async function realizarCadastro() {
     await realizarLoginAutomatico(email, senha);
   }
 }
-const tipoUsuarioEnum = {
-  Aluno: 1,
-  Recrutador: 2,
-  Empresa: 3,
-};
-
-let tipoUsuario = () => {
-  const userType = document.getElementById("userType").value;
-  switch (userType) {
-    case "aluno":
-      return tipoUsuarioEnum.Aluno;
-    case "recrutador":
-      return tipoUsuarioEnum.Recrutador;
-    case "empresa":
-      return tipoUsuarioEnum.Empresa;
-    default:
-      showAlert("error", "Tipo de usuário inválido. Selecione um tipo válido.");
-      throw new Error("Tipo de usuário inválido.");
-  }
-};
 
 function validarCampos() {
+  //TODO: MUDAR PARA O TIPO DE USUARIO DO FORMS
+
   // Obtém valores dos campos
-  const logradouro = document.getElementById("street").value;
+  const rua = document.getElementById("street").value;
   const numero = document.getElementById("number").value;
   const cidade = document.getElementById("city").value;
   const estado = document.getElementById("state").value;
@@ -64,7 +71,7 @@ function validarCampos() {
 
   // Verifica se todos os campos obrigatórios estão preenchidos
   return (
-    logradouro &&
+    rua &&
     numero &&
     cidade &&
     estado &&
@@ -84,7 +91,7 @@ function validarCampos() {
 }
 
 async function cadastrarEndereco() {
-  const logradouro = document.getElementById("street").value;
+  const rua = document.getElementById("street").value;
   const numero = document.getElementById("number").value;
   const cidade = document.getElementById("city").value;
   const estado = document.getElementById("state").value;
@@ -94,7 +101,7 @@ async function cadastrarEndereco() {
     cep: cep,
     cidade: cidade,
     estado: estado,
-    rua: logradouro,
+    rua: rua,
     numero: numero,
   };
 
@@ -258,12 +265,14 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
   };
 
   const etniaMap = {
-    Branco: "Branco(a)",
-    Preto: "Preto(a)",
-    Pardo: "Pardo(a)",
-    Amarelo: "Amarelo(a)",
-    Indigena: "Indígena(a)",
+    Branca: "Branca",
+    Preta: "Preta",
+    Parda: "Parda",
+    Amarela: "Amarela",
+    Indigena: "Indígena",
   };
+
+  //TODO: MANDAR TIPO USUARIO DO FORMS
 
   // Obter campos comuns
   const camposComuns = {
@@ -285,6 +294,7 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
       etnia: etniaMap[etniaInput.value],
       enderecoId: idEndereco,
       dtNasc: dataNascimento,
+      tipoUsuario: tipoUsuario,
     };
   } else if (tipoUsuario === 2) {
     camposEspecificos = {
@@ -294,6 +304,7 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
       cnpj: cnpjInput?.value?.replace(/\D/g, ""),
       enderecoId: idEndereco,
       cargo: cargoInput?.value,
+      tipoUsuario: tipoUsuario,
     };
   } else if (tipoUsuario === 3) {
     camposEspecificos = {
@@ -302,6 +313,7 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
       cnpj: cnpjInput?.value?.replace(/\D/g, ""),
       enderecoId: idEndereco,
       setorIndustria: setorIndustriaInput?.value,
+      tipoUsuario: tipoUsuario,
     };
   } else {
     showAlert("error", "Tipo de usuário inválido.");
@@ -363,15 +375,15 @@ async function realizarLoginAutomatico(email, senha) {
 
       if (!data.deletado) {
         switch (data.tipoUsuario) {
-          case "aluno":
+          case "Aluno":
             console.log("Redirecionando para dash_aluno.html");
             window.location.href = "dash_aluno.html";
             break;
-          case "recrutador":
+          case "Recrutador":
             console.log("Redirecionando para tela_rh_vagas.html");
             window.location.href = "tela_rh_vagas.html";
             break;
-          case "empresa":
+          case "Empresa":
             console.log("Redirecionando para tela_rh_vagas.html");
             window.location.href = "tela_rh_vagas.html";
             break;
