@@ -94,16 +94,39 @@ async function gerarRelatorioEmpresas() {
 }
 
 function abrirModalRelatorio() {
-    
-    const modal = new bootstrap.Modal(document.getElementById('relatorioModal'))
-    modal.show()
+    const modal = document.getElementById('relatorioModal');
+    modal.style.display = 'flex'; 
 }
 
-function abrirModalCadastro() {
-    
-    const modal = new bootstrap.Modal(document.getElementById('cadastroModal'))
-    modal.show()
+function fecharModalRelatorio() {
+    const modal = document.getElementById('relatorioModal');
+    modal.style.display = 'none'; 
 }
+
+window.addEventListener('click', function (event) {
+    const modal = document.getElementById('relatorioModal');
+    if (event.target === modal) {
+        fecharModalRelatorio();
+    }
+});
+
+function abrirModalCadastro() {
+    const modal = document.getElementById('cadastroModal');
+    modal.style.display = 'flex'; 
+}
+
+function fecharModalCadastro() {
+    const modal = document.getElementById('cadastroModal');
+    modal.style.display = 'none';
+}
+
+window.addEventListener('click', function (event) {
+    const modal = document.getElementById('cadastroModal');
+    if (event.target === modal) {
+        fecharModalCadastro();
+    }
+});
+
 
 
 async function gerarRelatorioAlunos() {
