@@ -92,7 +92,7 @@
                             <p id="atividades-entregues-change" class="stat-change">— ⬇</p>
                         </div>
                         <div class="stat-item">
-                            <p id="kpi-titulo">Medalhas do Curso</p>
+                            <p id="kpi-titulo">Medalhas dos Cursos</p>
                             <div class="course-select mt-3">
                                 <select id="course-select" class="custom-select" aria-placeholder="Selecione um curso">
                                     <option value="" disabled selected>Selecione um curso</option>
@@ -131,21 +131,17 @@
                         <p id="p-curso">Filtrar por período:</p>
                         <hr>
                         
-                        <!-- Formulário de filtro de datas -->
+       
                         <div class="date-filter">
                             <label for="start-date">Data de início:</label>
-                            <input type="date" id="start-date" name="start-date">
+                            <input type="date"id="data-inicio" name="start-date">
                             
                             <label for="end-date">Data de fim:</label>
-                            <input type="date" id="end-date" name="end-date">
+                            <input type="date" id="data-fim" name="end-date">
                             
                             <button id="apply-filter">Aplicar Filtro</button>
                         </div>
                 
-                        <!-- Área que vai exibir o status do filtro -->
-                        <div class="date-info">
-                            <p id="filter-result">Nenhum filtro aplicado</p>
-                        </div>
                     </section>
                 </div>
                 <div id="kpiClassificacao" class="dash-atual">
@@ -167,7 +163,7 @@
                                 <div class="progress" role="progressbar" aria-label="Animated striped example"
                                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                        style="width: 75%"></div>
+                                        style="width: 100%"></div>
                                 </div>
 
                             </div>
@@ -186,7 +182,7 @@
                             </div>
 
                             <h4>Progresso atual</h4>
-                            <p id="meta-estudo-semana">a</p>
+                            <p id="meta-estudo-semana"></p>
                             <button class="edit-goal" onclick="openModal()">Editar Meta</button>
                         </div>
                     </section>

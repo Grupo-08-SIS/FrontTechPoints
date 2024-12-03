@@ -1,61 +1,90 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const user = JSON.parse(sessionStorage.getItem("user"));
 
+  atualizarFraseDoDia();
+
   if (!user || !user.id) {
     console.error("Usuário não encontrado ou ID inválido.");
     window.location.href = "login.html";
     return;
   }
 
-  try {
-    window.onload = atualizarFraseDoDia();
+  async function carregarDados(dataInicio, dataFim) {
+    try {
+      const baseURL = `http://localhost:8080/pontuacoes`;
 
-    const atividadesData = await fetchData(
-      `http://localhost:8080/pontuacoes/kpi-entregas/${user.id}`
-    );
-    const { atividadesTotais, atividadesFeitas, porcentagemFeitas } =
-      processAtividadesData(atividadesData);
-    updateAtividadesDisplay(porcentagemFeitas);
-
-    const pontosSemanaData = await fetchData(
-      `http://localhost:8080/pontuacoes/kpi-semana/${user.id}`
-    );
-    updatePontosSemanaDisplay(pontosSemanaData);
-
-    const graficoLinhaData = await fetchData(
-      `http://localhost:8080/pontuacoes/${user.id}`
-    );
-    const { labelsLinha, datasetsLinha } =
-      processGraficoLinhaData(graficoLinhaData);
-    renderLineChart(labelsLinha, datasetsLinha);
-
-    const pontosData = await fetchData(
-      `http://localhost:8080/pontuacoes/pontos-mes/${user.id}`
-    );
-    const { labelsBarra, datasetsBarra } = processGraficoBarraData(pontosData);
-    renderBarChart(labelsBarra, datasetsBarra);
-
-    const pontosPorCursoData = await fetchData(
-      `http://localhost:8080/pontuacoes/pontos-totais/${user.id}`
-    );
-    initMedalhaSelect(pontosPorCursoData);
-
-    const topCurso = getTopCurso(pontosPorCursoData);
-    updateTopCursoDisplay(topCurso);
-
-    const progressoAtualMetaEstudo = await fetchData(
-      `http://localhost:8080/meta-de-estudo/${user.id}`
-    );
-    if (progressoAtualMetaEstudo) {
-      const progressoAtualMetaEstudo2 = getProgressoAtualMetaEstudo(
-        progressoAtualMetaEstudo
+      const atividadesData = await fetchData(
+        `${baseURL}/kpi-entregas/${user.id}${gerarQueryString(
+          dataInicio,
+          dataFim
+        )}`
       );
-      atualizarElemento(progressoAtualMetaEstudo2);
+      const { atividadesTotais, atividadesFeitas, porcentagemFeitas } =
+        processAtividadesData(atividadesData);
+      updateAtividadesDisplay(porcentagemFeitas);
+
+      const pontosSemanaData = await fetchData(
+        `${baseURL}/kpi-semana/${user.id}${gerarQueryString(
+          dataInicio,
+          dataFim
+        )}`
+      );
+      updatePontosSemanaDisplay(pontosSemanaData);
+
+      const graficoLinhaData = await fetchData(
+        `${baseURL}/${user.id}${gerarQueryString(dataInicio, dataFim)}`
+      );
+      const { labelsLinha, datasetsLinha } =
+        processGraficoLinhaData(graficoLinhaData);
+      renderLineChart(labelsLinha, datasetsLinha);
+
+      const pontosData = await fetchData(
+        `${baseURL}/pontos-mes/${user.id}${gerarQueryString(
+          dataInicio,
+          dataFim
+        )}`
+      );
+      const { labelsBarra, datasetsBarra } =
+        processGraficoBarraData(pontosData);
+      renderBarChart(labelsBarra, datasetsBarra);
+
+      const pontosPorCursoData = await fetchData(
+        `${baseURL}/pontos-totais/${user.id}${gerarQueryString(
+          dataInicio,
+          dataFim
+        )}`
+      );
+      
+      await initMedalhaSelect(dataInicio, dataFim);
+
+      const topCurso = getTopCurso(pontosPorCursoData);
+      updateTopCursoDisplay(topCurso);
+
+      const progressoAtualMetaEstudo = await fetchData(
+        `http://localhost:8080/meta-de-estudo/${user.id}${gerarQueryString(
+          dataInicio,
+          dataFim
+        )}`
+      );
+      if (progressoAtualMetaEstudo) {
+        const progressoAtualMetaEstudo2 = getProgressoAtualMetaEstudo(
+          progressoAtualMetaEstudo
+        );
+        atualizarElemento(progressoAtualMetaEstudo2);
+      }
+
+      carregarTabelaPontuacoes(user.id, dataInicio, dataFim);
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
     }
-    const idAluno = user.id;
-    carregarTabelaPontuacoes(idAluno);
-  } catch (error) {
-    console.error("Erro:", error);
+  }
+
+  function gerarQueryString(dataInicio, dataFim) {
+    let queryString = "";
+    if (dataInicio && dataFim) {
+      queryString = `?dataInicio=${dataInicio}&dataFim=${dataFim}`;
+    }
+    return queryString;
   }
 
   async function fetchData(url) {
@@ -64,6 +93,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     return response.json();
   }
 
+  carregarDados();
+
+  const applyFilterButton = document.getElementById("apply-filter");
+  applyFilterButton.addEventListener("click", () => {
+    const startDate = document.getElementById("data-inicio").value;
+    const endDate = document.getElementById("data-fim").value;
+
+    if (!startDate || !endDate) {
+      alert("Por favor, preencha ambas as datas.");
+      return;
+    }
+
+    carregarDados(startDate, endDate);
+  });
   function processAtividadesData(data) {
     const totalAtividades = data.atividadesTotais;
     const atividadesFeitas = totalAtividades - data.atividadesNaoEntregues;
@@ -129,9 +172,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (!cursosGraficoLinha[cursoId]) cursosGraficoLinha[cursoId] = {};
 
       atividades.forEach((atividade) => {
-        const date = atividade.dataEntrega;
-        if (!cursosGraficoLinha[cursoId][date])
+
+        const dateObj = new Date(atividade.dataEntrega);
+        const date = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}-${dateObj.getDate().toString().padStart(2, '0')}`;
+      
+        if (!cursosGraficoLinha[cursoId][date]) {
           cursosGraficoLinha[cursoId][date] = 0;
+        }
         cursosGraficoLinha[cursoId][date] += atividade.pontosAtividade;
       });
     }
@@ -205,9 +254,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     return { labelsBarra: sortedMonths, datasetsBarra };
   }
 
+  let lineChartInstance = null;
+
   function renderLineChart(labels, datasets) {
     const ctx = document.getElementById("pontosLinhaChart").getContext("2d");
-    new Chart(ctx, {
+
+    if (lineChartInstance) {
+      lineChartInstance.destroy();
+    }
+
+    lineChartInstance = new Chart(ctx, {
       type: "line",
       data: { labels, datasets },
       options: {
@@ -235,48 +291,57 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
-  function initMedalhaSelect() {
-    fetch(`http://localhost:8080/pontuacoes/pontos-totais/${user.id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const courseSelect = document.getElementById("course-select");
-        const medalhaCurso = document.getElementById("medalha-curso");
+  async function initMedalhaSelect(dataInicio, dataFim) {
+    try {
+      const queryString = gerarQueryString(dataInicio, dataFim);
+      const response = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${user.id}${queryString}`);
+  
+      if (!response.ok) {
+        throw new Error("Erro na resposta da API");
+      }
+  
+      const data = await response.json();
+  
+      const courseSelect = document.getElementById("course-select");
+      const medalhaCurso = document.getElementById("medalha-curso");
+  
+      courseSelect.innerHTML = '<option value="" disabled selected>Selecione um curso</option>';
 
-        courseSelect.innerHTML =
-          '<option value="" disabled selected>Selecione um curso</option>';
-
-        Object.keys(data).forEach((key) => {
+      Object.keys(data)
+        .filter((key) => data[key].pontosTotais > 0)
+        .forEach((key) => {
           const option = document.createElement("option");
           option.value = key;
           option.textContent = data[key].nomeCurso;
           courseSelect.appendChild(option);
         });
-
-        courseSelect.addEventListener("change", function () {
-          const selectedCourseId = this.value;
-          const selectedCourse = data[selectedCourseId];
-
-          if (selectedCourse) {
-            const points = selectedCourse.pontosTotais;
-            let medalSrc = "../imgs/ouro_dash.png";
-
-            if (points >= 600) {
-              medalSrc = "../imgs/gold_medal.png";
-            } else if (points >= 500) {
-              medalSrc = "../imgs/silver_medal.png";
-            } else if (points >= 100) {
-              medalSrc = "../imgs/bronze_medal.png";
-            }
-
-            medalhaCurso.src = medalSrc;
+  
+      courseSelect.addEventListener("change", function () {
+        const selectedCourseId = this.value;
+        const selectedCourse = data[selectedCourseId];
+  
+        if (selectedCourse) {
+          const points = selectedCourse.pontosTotais;
+          let medalSrc = "../imgs/ouro_dash.png";
+  
+          if (points >= 600) {
+            medalSrc = "../imgs/gold_medal.png";
+          } else if (points >= 500) {
+            medalSrc = "../imgs/silver_medal.png";
+          } else if (points >= 100) {
+            medalSrc = "../imgs/bronze_medal.png";
           }
-        });
-
-        medalhaCurso.src = "../imgs/ouro_dash.png";
-      })
-      .catch((error) =>
-        console.error("Erro ao buscar dados de pontos:", error)
-      );
+  
+          medalhaCurso.src = medalSrc;
+        }
+      });
+  
+  
+      medalhaCurso.src = "../imgs/ouro_dash.png";
+  
+    } catch (error) {
+      console.error("Erro ao buscar dados de pontos:", error);
+    }
   }
 
   function getTopCurso(pontosPorCursoData) {

@@ -1082,7 +1082,7 @@ input[type="number"] {
 
 #apply-filter {
   padding: 8px 12px;
-  background-color: #4CAF50;
+  background-color: #244aa5;
   color: white;
   border: none;
   border-radius: 4px;
@@ -1090,7 +1090,7 @@ input[type="number"] {
 }
 
 #apply-filter:hover {
-  background-color: #45a049;
+  background-color: #2a5bcd;
 }
 
 .date-info {
