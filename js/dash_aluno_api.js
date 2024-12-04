@@ -127,43 +127,49 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (porcentagemFeitas >= 50) {
       updateClass(atividadesChangeElement, "green", "red");
-      atividadesChangeElement.innerText = "⬆";
     } else {
       updateClass(atividadesChangeElement, "red", "green");
-      atividadesChangeElement.innerText = "⬇";
     }
   }
 
   function updatePontosSemanaDisplay(data) {
     const pontosSemanaElement = document.getElementById("pontos-semana");
     const semanaPassadaPontosElement = document.getElementById(
-      "semana-passada-pontos"
+        "semana-passada-pontos"
     );
     const pontosSemanaChangeElement = document.getElementById(
-      "pontos-semana-change"
+        "pontos-semana-change"
     );
 
     const totalSemanaPassada = Object.values(data.semanaPassada).reduce(
-      (acc, pontos) => acc + pontos,
-      0
+        (acc, pontos) => acc + pontos,
+        0
     );
     const totalSemanaAtual = Object.values(data.semanaAtual).reduce(
-      (acc, pontos) => acc + pontos,
-      0
+        (acc, pontos) => acc + pontos,
+        0
     );
     const diferenca = totalSemanaAtual - totalSemanaPassada;
 
     pontosSemanaElement.innerText = `${totalSemanaAtual} pts`;
     semanaPassadaPontosElement.innerText = `${totalSemanaPassada} pts`;
 
-    const diferencaSimbolo = diferenca >= 0 ? "⬆" : "⬇";
-    const corClasse = diferenca >= 0 ? "green" : "red";
+    const diferencaImagem = diferenca >= 0 
+        ? "/imgs/seta-verde.png" 
+        : "/imgs/seta-vermelha.png";
 
-    pontosSemanaChangeElement.innerText = `${diferencaSimbolo} ${Math.abs(
-      diferenca
-    )} pts`;
-    updateClass(pontosSemanaChangeElement, corClasse);
-  }
+    pontosSemanaChangeElement.innerHTML = `
+        <img src="${diferencaImagem}" alt="Seta"> 
+        ${Math.abs(diferenca)} pts
+    `;
+
+    const setaElement = pontosSemanaChangeElement.querySelector("img");
+    setaElement.style.width = "40px"; 
+
+    if (diferenca < 0) {
+        setaElement.style.transform = "rotate(180deg)";
+    }
+}
 
   function processGraficoLinhaData(data) {
     const cursosGraficoLinha = {};
