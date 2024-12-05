@@ -118,6 +118,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function updateAtividadesDisplay(porcentagemFeitas) {
+    if(porcentagemFeitas == 'NaN'){
+      porcentagemFeitas = 0
+    }
+
     const atividadesChangeElement = document.getElementById(
       "atividades-entregues-change"
     );
