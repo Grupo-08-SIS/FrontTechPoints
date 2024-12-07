@@ -130,21 +130,24 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 const response = await fetch('http://localhost:8080/dashboardRecrutador/listar');
                 if (!response.ok) throw new Error('Falha ao buscar as categorias dos cursos.');
-
+        
                 const dados = await response.json();
                 const categoriasSet = new Set();
-
+        
                 dados.forEach(curso => {
-                    curso.categoria.forEach(cat => categoriasSet.add(cat));
+                    if (curso.categorias) {
+                        curso.categorias.split(',').map(cat => cat.trim()).forEach(cat => categoriasSet.add(cat));
+                    }
                 });
-
-                filtroCursos.innerHTML = '<option value="all">Categorias</option>';
-
+    
+                filtroCursos.innerHTML = '<option value="Categoria">Categoria</option>';
+            
                 categoriasSet.forEach(categoria => {
                     const opcao = document.createElement('option');
                     opcao.value = categoria;
                     opcao.textContent = categoria;
                     filtroCursos.appendChild(opcao);
+        
                 });
             } catch (error) {
                 console.error('Erro ao carregar as categorias:', error);
@@ -152,37 +155,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 loader.style.display = 'none';
             }
         }
-
+       
+        
         async function carregarCursosPorCategoria(categoria) {
-            loader.style.display = 'flex';
+            const loader = document.getElementById('loader')
+            loader.style.display = 'flex'
+        
             try {
-                const response = await fetch(`http://localhost:8080/dashboardRecrutador/listar?categoria=${categoria}`);
-                if (!response.ok) throw new Error('Falha ao buscar cursos da categoria selecionada.');
+                const response = await fetch(`http://localhost:8080/dashboardRecrutador/listar?categoria=${categoria}`)
+                if (!response.ok) throw new Error('Falha ao buscar cursos da categoria selecionada.')
+        
+                const cursos = await response.json()
+        
 
-                const cursos = await response.json();
-
-                // Remover duplicatas de categorias dentro dos cursos
                 cursos.forEach(curso => {
-                    curso.categoria = [...new Set(curso.categoria)]; // Remove categorias duplicadas
+                    curso.categorias = [...new Set(curso.categorias.split(',').map(c => c.trim()))]
                 });
+        
+                sessionStorage.setItem(`cursos_${categoria}`, JSON.stringify(cursos))
 
-                // Salvando cursos no sessionStorage com categorias únicas
-                sessionStorage.setItem(`cursos_${categoria}`, JSON.stringify(cursos));
-
-                // Atualizando o filtro de cursos
                 const filtroCurso = document.getElementById('filtroCurso');
-                filtroCurso.innerHTML = '<option value="all">Selecione um curso</option>';
-
+                filtroCurso.innerHTML = '<option value="all">Selecione um curso</option>'
+        
                 cursos.forEach(curso => {
                     const opcao = document.createElement('option');
                     opcao.value = curso.id;
-                    opcao.textContent = curso.nome;
-                    filtroCurso.appendChild(opcao);
+                    opcao.textContent = curso.nome
+                    filtroCurso.appendChild(opcao)
                 });
             } catch (error) {
-                console.error('Erro ao carregar cursos:', error);
+                console.error('Erro ao carregar cursos:', error)
             } finally {
-                loader.style.display = 'none';
+                loader.style.display = 'none'
             }
         }
 
@@ -208,9 +212,9 @@ document.addEventListener('DOMContentLoaded', function () {
             loader.style.display = 'flex';
             try {
                 const categoriaSelecionadaNome = this.options[this.selectedIndex].text.trim().toLowerCase();
+             
 
-                // Se a categoria selecionada for "Categoria", mostra o ranking geral
-                if (categoriaSelecionadaNome === 'Categoria') {
+                if (categoriaSelecionadaNome === 'categoria') {
                     await buscarEExibirRanking();
                     return;
                 }
@@ -312,28 +316,28 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.getElementById('filtroCurso').addEventListener('change', async function () {
-            loader.style.display = 'flex';
+            loader.style.display = 'flex'; // Mostra o loader no início
             try {
                 const cursoSelecionadoNome = this.options[this.selectedIndex].text.trim().toLowerCase();
-
+        
                 if (cursoSelecionadoNome === 'selecione um curso') {
                     await buscarEExibirRanking();
                 } else {
                     const response = await fetch('http://localhost:8080/pontuacoes/ranking');
                     if (!response.ok) throw new Error('Falha ao buscar o ranking por curso.');
-
+        
                     const dados = await response.json();
-
+        
                     const dadosCurso = Object.values(dados).find(curso =>
                         curso.nomeCurso.trim().toLowerCase() === cursoSelecionadoNome
                     );
-
+        
                     if (dadosCurso && dadosCurso.ranking && dadosCurso.ranking.length > 0) {
-                        tabelaRanking.innerHTML = '';
-
+                        tabelaRanking.innerHTML = ''; // Limpa a tabela
+        
                         dadosCurso.ranking.forEach((entrada, index) => {
                             let medalhaHtml = '';
-
+        
                             // Definindo a medalha para os 3 primeiros lugares
                             if (index === 0) {
                                 medalhaHtml = '<img src="/imgs/gold_medal.png" alt="Medalha de Ouro" style="width: 40px; height: 40px;">';
@@ -345,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 // Alunos sem medalha mostram apenas a posição numérica
                                 medalhaHtml = `<span>${index + 1}º</span>`;
                             }
-
+        
                             // Criando a linha de tabela para cada aluno
                             const linha = document.createElement('tr');
                             if (user.tipoUsuario != 'Aluno') {
@@ -374,19 +378,27 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </td>
                             `;
                             }
-
+        
                             tabelaRanking.appendChild(linha);
-
+        
                             carregarImagemPerfil(entrada.aluno.id);
                         });
+                    } else {
+    
+                        tabelaRanking.innerHTML = `
+                            <tr>
+                                <td colspan="4" style="text-align: center;">Não há pontuações nesse curso.</td>
+                            </tr>
+                        `;
                     }
                 }
             } catch (error) {
                 console.error('Erro ao buscar o ranking por curso:', error);
             } finally {
-                loader.style.display = 'flex';
+                loader.style.display = 'none'; 
             }
         });
+        
 
         buscarEExibirRanking();
         popularFiltroCategorias();

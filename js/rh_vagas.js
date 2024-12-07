@@ -50,9 +50,15 @@ async function carregarCategorias() {
 
         const categoriasSet = new Set();
 
-        data.forEach(curso => {
-            curso.categoria.forEach(cat => categoriasSet.add(cat));
-        });
+        data.forEach((curso) => {
+            if (curso.categorias) {
+              curso.categorias
+                .split(",")
+                .map((cat) => cat.trim())
+                .forEach((cat) => categoriasSet.add(cat));
+            }
+          });
+      
 
         const categoriasSelect = document.getElementById('cursos');
         categoriasSelect.innerHTML = '<option value="opc_categorias">Categorias</option>';
