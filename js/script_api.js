@@ -1,8 +1,31 @@
+const API_URL = "http://localhost:8080";
 const tipoUsuarioEnum = {
   Aluno: 1,
   Recrutador: 2,
   Empresa: 3,
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form");
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      realizarCadastro();
+    });
+  }
+
+  document.getElementById("cpf").addEventListener("input", formatarCPF);
+  document
+    .getElementById("telefone")
+    .addEventListener("input", formatarTelefone);
+  document
+    .getElementById("dataNascimento")
+    .addEventListener("input", formatarDataNascimento);
+  document.getElementById("cep").addEventListener("input", function () {
+    formatarCep();
+    buscarCep();
+  });
+});
 
 function buscarTipoUsuario() {
   const userType = document.getElementById("userType").value;
@@ -73,37 +96,64 @@ function validarCampos() {
 }
 
 async function realizarCadastro() {
-  const todosCamposValidos = validarCampos();
-  if (!todosCamposValidos) {
+  const tipoUsuario = buscarTipoUsuario();
+  const dataNascimento = document.getElementById("dataNascimento").value;
+  const dataNascimentoISO = converterDataParaFormatoISO(dataNascimento);
+
+  if (!validarCampos()) {
     showAlert("error", "Por favor, preencha todos os campos obrigatórios.");
     return;
   }
 
-  const tipoUsuario = buscarTipoUsuario();
-  let enderecoId = 0;
-  if (tipoUsuario === 1 || tipoUsuario === 3) {
-    enderecoId = await cadastrarEndereco(tipoUsuario);
-    if (enderecoId === null) return;
-  }
-
-  const id = await cadastrarUsuario(enderecoId, tipoUsuario);
-  if (id != null) {
-    if (tipoUsuario === 1) {
-      showAlert("success", "Cadastro realizado com sucesso!");
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("password").value;
-      await realizarLoginAutomatico(email, senha);
-    } else if (tipoUsuario === 2) {
-      showAlert("success", "Cadastro realizado com sucesso!");
-      const email = document.getElementById("recruiterEmail").value;
-      const senha = document.getElementById("passwordRecruiter").value;
-      await realizarLoginAutomatico(email, senha);
+  try {
+    let idEndereco;
+    if (tipoUsuario !== tipoUsuarioEnum.Recrutador) {
+      idEndereco = await cadastrarEndereco(tipoUsuario);
+      if (!idEndereco) {
+        throw new Error("Erro ao cadastrar endereço");
+      }
     } else {
-      showAlert("success", "Cadastro realizado com sucesso!");
-      const email = document.getElementById("companyEmail").value;
-      const senha = document.getElementById("passwordCompany").value;
-      await realizarLoginAutomaticoEmpresa(email, senha);
+      try {
+        const cnpjRecruiter = document.getElementById("cnpjRecruiter").value;
+        idEndereco = await getEnderecoByCnpj(
+          removerFormatacaoCNPJ(cnpjRecruiter)
+        );
+        console.log(idEndereco);
+        if (!idEndereco) {
+          throw new Error("Erro ao buscar endereço da Empresa");
+        }
+      } catch (error) {
+        console.error("Erro ao tentar cadastrar o endereço:", error);
+        showAlert("error", "Erro ao tentar cadastrar o endereço");
+        return null;
+      }
     }
+    const idUsuario = await cadastrarUsuario(
+      idEndereco,
+      tipoUsuario,
+      dataNascimentoISO
+    );
+    if (!idUsuario) {
+      throw new Error("Erro ao cadastrar usuário");
+    }
+
+    const email =
+      tipoUsuario === tipoUsuarioEnum.Aluno
+        ? document.getElementById("email").value
+        : tipoUsuario === tipoUsuarioEnum.Recrutador
+        ? document.getElementById("recruiterEmail").value
+        : document.getElementById("companyEmail").value;
+
+    const senha =
+      tipoUsuario === tipoUsuarioEnum.Aluno
+        ? document.getElementById("password").value
+        : tipoUsuario === tipoUsuarioEnum.Recrutador
+        ? document.getElementById("passwordRecruiter").value
+        : document.getElementById("passwordCompany").value;
+
+    await realizarLoginAutomatico(email, senha, tipoUsuario);
+  } catch (error) {
+    showAlert("error", error.message);
   }
 }
 
@@ -126,7 +176,7 @@ async function cadastrarEndereco(tipoUsuario) {
   };
 
   try {
-    const response = await fetch("http://localhost:8080/enderecos/cadastro", {
+    const response = await fetch(`${API_URL}/enderecos/cadastro`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(endereco[tipoUsuario]),
@@ -136,13 +186,14 @@ async function cadastrarEndereco(tipoUsuario) {
     if (response.status === 201) return data.id;
     showAlert("error", `Erro ao cadastrar endereço: ${data.message}`);
     return null;
-  } catch {
+  } catch (error) {
+    console.error("Erro ao tentar cadastrar o endereço:", error);
     showAlert("error", "Erro ao tentar cadastrar o endereço");
     return null;
   }
 }
 
-async function cadastrarUsuario(idEndereco, tipoUsuario) {
+async function cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO) {
   const camposEspecificos = {
     1: {
       nomeUsuario: document.getElementById("username").value,
@@ -156,7 +207,7 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
       sexo: document.getElementById("sexo").value,
       etnia: document.getElementById("etnia").value,
       enderecoId: idEndereco,
-      dtNasc: document.getElementById("dataNascimento").value,
+      dtNasc: dataNascimentoISO,
     },
     2: {
       nomeUsuario: document.getElementById("usernameRecruiter").value,
@@ -166,13 +217,15 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
       cpf: document.getElementById("cpfRecruiter").value,
       primeiroNome: document.getElementById("firstnameRecruiter").value,
       sobrenome: document.getElementById("lastnameRecruiter").value,
-      cnpj: document.getElementById("cnpjRecruiter").value,
-      cargo: document.getElementById("cargoUsuario").value,
+      cnpj: removerFormatacaoCNPJ(
+        document.getElementById("cnpjRecruiter").value
+      ),
+      cargoUsuario: document.getElementById("cargoUsuario").value,
       empresa: document.getElementById("companyRecruiter").value,
     },
     3: {
       nomeEmpresa: document.getElementById("companyName").value,
-      cnpj: document.getElementById("cnpjCompany").value,
+      cnpj: removerFormatacaoCNPJ(document.getElementById("cnpjCompany").value),
       emailCorporativo: document.getElementById("companyEmail").value,
       senhaRepresante: document.getElementById("passwordCompany").value,
       telefoneContato: document.getElementById("telefoneCompany").value,
@@ -182,8 +235,6 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
       enderecoId: idEndereco,
     },
   };
-  // TODO: Falta conseguir cadastrar o recrutador
-  console.log(camposEspecificos[tipoUsuario]);
 
   const usuario = {
     ...camposEspecificos[tipoUsuario],
@@ -191,46 +242,35 @@ async function cadastrarUsuario(idEndereco, tipoUsuario) {
   };
 
   try {
-    if (tipoUsuario !== 3) {
-      const response = await fetch("http://localhost:8080/usuarios/cadastro", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuario),
-      });
+    const url =
+      tipoUsuario !== tipoUsuarioEnum.Empresa
+        ? `${API_URL}/usuarios/cadastro`
+        : `${API_URL}/empresa/cadastro`;
+    console.log(usuario);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(usuario),
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        return data.id;
-      } else {
-        const errorData = await response.json();
-        showAlert("error", errorData.message || "Erro ao realizar cadastro");
-        return null;
-      }
+    if (response.ok) {
+      const data = await response.json();
+      return data.id;
     } else {
-      const response = await fetch("http://localhost:8080/empresa/cadastro", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuario),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data.id;
-      } else {
-        const errorData = await response.json();
-        showAlert("error", errorData.message || "Erro ao realizar cadastro");
-        return null;
-      }
+      const errorData = await response.json();
+      showAlert("error", errorData.message || "Erro ao realizar cadastro");
+      return null;
     }
-  } catch {
+  } catch (error) {
+    console.error("Erro ao tentar fazer cadastro:", error);
     showAlert("error", "Erro ao tentar fazer cadastro");
     return null;
   }
 }
 
-async function realizarLoginAutomatico(email, senha) {
+async function realizarLoginAutomatico(email, senha, tipoUsuario) {
   try {
-    const response = await fetch("http://localhost:8080/usuarios/login", {
+    const response = await fetch(`${API_URL}/usuarios/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, senha }),
@@ -242,14 +282,17 @@ async function realizarLoginAutomatico(email, senha) {
     if (data.id) {
       sessionStorage.setItem("user", JSON.stringify(data));
       window.location.href =
-        data.tipoUsuario === "Aluno" ? "dash_aluno.html" : "tela_rh_vagas.html";
+        tipoUsuario === tipoUsuarioEnum.Aluno
+          ? "dash_aluno.html"
+          : "tela_rh_vagas.html";
     } else {
-      showAlert("error", "Email ou senha incorretos");
+      showAlert("error", "Erro ao fazer login");
     }
-  } catch {
-    showAlert("error", "Erro ao tentar fazer login");
+  } catch (error) {
+    showAlert("error", error.message);
   }
 }
+
 function buscarCep() {
   const cepInputs = ["cep", "cepCompany"];
   cepInputs.forEach((cepId) => {
@@ -298,18 +341,6 @@ function formatarCep(event) {
   }
 
   cepInput.value = cepFormatado;
-}
-
-if (document.getElementById("cep")) {
-  document.getElementById("cep").addEventListener("input", function () {
-    formatarCep(event);
-    buscarCep();
-  });
-} else {
-  document.getElementById("cepCompany").addEventListener("input", function () {
-    formatarCep(event);
-    buscarCep();
-  });
 }
 
 function formatarCPF(event) {
@@ -441,15 +472,34 @@ function validarData(data) {
   return true;
 }
 
-function formatarDataParaEnvio(data) {
-  const partes = data.split("/");
-  if (partes.length === 3) {
-    const dia = partes[0].padStart(2, "0");
-    const mes = partes[1].padStart(2, "0");
-    const ano = partes[2];
-    return `${ano}-${mes}-${dia}`;
+function formatarTelefone(event) {
+  const telefoneInput = event.target;
+  let telefoneFormatado = telefoneInput.value.replace(/\D/g, "");
+
+  if (telefoneFormatado.length <= 2) {
+    telefoneFormatado = telefoneFormatado.replace(/(\d{1,2})/, "($1");
+  } else if (telefoneFormatado.length <= 6) {
+    telefoneFormatado = telefoneFormatado.replace(
+      /(\d{2})(\d{1,4})/,
+      "($1) $2"
+    );
+  } else if (telefoneFormatado.length <= 10) {
+    telefoneFormatado = telefoneFormatado.replace(
+      /(\d{2})(\d{4})(\d{1,4})/,
+      "($1) $2-$3"
+    );
+  } else {
+    telefoneFormatado = telefoneFormatado.replace(
+      /(\d{2})(\d{5})(\d{1,4})/,
+      "($1) $2-$3"
+    );
   }
-  return "";
+
+  telefoneInput.value = telefoneFormatado;
+
+  if (telefoneInput.value.length > 15) {
+    telefoneInput.value = telefoneInput.value.slice(0, 15);
+  }
 }
 
 function showAlert(type, message) {
@@ -477,22 +527,65 @@ function showAlert(type, message) {
   }, 3000);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.querySelector("form");
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-      realizarCadastro();
-    });
-  }
-});
+function converterDataParaFormatoISO(data) {
+  const [dia, mes, ano] = data.split("/");
+  return `${ano}-${mes}-${dia}`;
+}
 
-document.getElementById("cpf").addEventListener("input", formatarCPF);
-document.getElementById("telefone").addEventListener("input", formatarTelefone);
-document
-  .getElementById("dataNascimento")
-  .addEventListener("input", formatarDataNascimento);
-document.getElementById("cep").addEventListener("input", function () {
-  formatarCep();
-  buscarCep();
-});
+async function getEnderecoByCnpj(cnpj) {
+  try {
+    const response = await fetch(`${API_URL}/empresa/buscar-por-cnpj/${cnpj}`, {
+      method: "GET",
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data.endereco.id;
+    } else {
+      const errorData = await response.json();
+      showAlert("error", errorData.message || "Erro ao buscar endereço");
+      return null;
+    }
+  } catch (error) {
+    console.error("Erro ao tentar buscar endereço:", error);
+    showAlert("error", "Erro ao tentar buscar endereço");
+    return null;
+  }
+}
+
+function formatarCNPJ(event) {
+  const cnpjInput = event.target;
+  let cnpjFormatado = cnpjInput.value.replace(/\D/g, "");
+
+  if (cnpjFormatado.length <= 2) {
+    cnpjFormatado = cnpjFormatado.replace(/(\d{1,2})/, "$1");
+  } else if (cnpjFormatado.length <= 5) {
+    cnpjFormatado = cnpjFormatado.replace(/(\d{2})(\d{1,3})/, "$1.$2");
+  } else if (cnpjFormatado.length <= 8) {
+    cnpjFormatado = cnpjFormatado.replace(
+      /(\d{2})(\d{3})(\d{1,3})/,
+      "$1.$2.$3"
+    );
+  } else if (cnpjFormatado.length <= 12) {
+    cnpjFormatado = cnpjFormatado.replace(
+      /(\d{2})(\d{3})(\d{3})(\d{1,4})/,
+      "$1.$2.$3/$4"
+    );
+  } else {
+    cnpjFormatado = cnpjFormatado.replace(
+      /(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})/,
+      "$1.$2.$3/$4-$5"
+    );
+  }
+
+  cnpjInput.value = cnpjFormatado;
+
+  if (cnpjInput.value.length > 18) {
+    cnpjInput.value = cnpjInput.value.slice(0, 18);
+  }
+}
+
+function removerFormatacaoCNPJ(cnpj) {
+  return cnpj.replace(/\D/g, "");
+}
