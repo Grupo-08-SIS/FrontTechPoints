@@ -1,5 +1,3 @@
-const loader = document.querySelector('.container_loader');
-
 document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const descricaoTextarea = document.getElementById('descricao');
