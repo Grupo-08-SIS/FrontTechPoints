@@ -61,10 +61,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       updateTopCursoDisplay(topCurso);
 
       const progressoAtualMetaEstudo = await fetchData(
-        `http://localhost:8080/meta-de-estudo/${user.id}${gerarQueryString(
-          dataInicio,
-          dataFim
-        )}`
+        `http://localhost:8080/meta-de-estudo/${user.id}`
       );
       if (progressoAtualMetaEstudo) {
         const progressoAtualMetaEstudo2 = getProgressoAtualMetaEstudo(
@@ -334,9 +331,9 @@ document.addEventListener("DOMContentLoaded", async function () {
           const points = selectedCourse.pontosTotais;
           let medalSrc = "../imgs/ouro_dash.png";
   
-          if (points >= 600) {
+          if (points >= 300) {
             medalSrc = "../imgs/gold_medal.png";
-          } else if (points >= 500) {
+          } else if (points >= 260) {
             medalSrc = "../imgs/silver_medal.png";
           } else if (points >= 100) {
             medalSrc = "../imgs/bronze_medal.png";
@@ -386,15 +383,15 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function getMedalha(pontosTotais) {
-    if (pontosTotais >= 600) return '<span class="gold-text">Ouro</span>';
-    if (pontosTotais >= 500) return '<span class="silver-text">Prata</span>';
+    if (pontosTotais >= 300) return '<span class="gold-text">Ouro</span>';
+    if (pontosTotais >= 200) return '<span class="silver-text">Prata</span>';
     if (pontosTotais >= 100) return '<span class="bronze-text">Bronze</span>';
     return '<span class="no-medal">Nenhuma Medalha</span>';
   }
 
   function getMedalhaSrc(pontosTotais) {
-    if (pontosTotais >= 600) return "../imgs/gold_medal.png";
-    if (pontosTotais >= 500) return "../imgs/silver_medal.png";
+    if (pontosTotais >= 300) return "../imgs/gold_medal.png";
+    if (pontosTotais >= 200) return "../imgs/silver_medal.png";
     if (pontosTotais >= 100) return "../imgs/bronze_medal.png";
     return "../imgs/ouro_dash.png.png";
   }
@@ -968,25 +965,33 @@ let frases = [
 ];
 
 async function cadastrarMetaEstudo(studyPlan, days) {
-  let i = 0;
-  while (i < days.length) {
-    const data = {
-      metaEstudoSemanaId: user.id,
-      nomeDia: days[i],
-      qtdTempoEstudo: studyPlan[days[i]],
-      ativado: true,
-    };
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  console.log(user.id);
+
+  const hoje = new Date();
+  const dia = String(hoje.getDate()).padStart(2, "0");
+  const mes = String(hoje.getMonth() + 1).padStart(2, "0"); 
+  const ano = hoje.getFullYear();
+  const dataHoje = `${dia}-${mes}-${ano}`;
+
+  for (const day of days) {
+    const nomeDia = day;
+    const qtdTempoEstudo = studyPlan[day];
+
+    const url = new URL("http://localhost:8080/meta-de-estudo/cadastro");
+    url.searchParams.append("metaEstudoSemanaId", user.id);
+    url.searchParams.append("nomeDia", nomeDia);
+    url.searchParams.append("qtdTempoEstudo", qtdTempoEstudo);
+    url.searchParams.append("ativado", true);
+    url.searchParams.append("data", dataHoje);
+
     try {
-      const response = await fetch(
-        "http://localhost:8080/meta-de-estudo/cadastro",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(url.toString(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao cadastrar dia de estudo");
