@@ -95,47 +95,17 @@ function validarCampos() {
   return campos[tipoUsuario].every((id) => document.getElementById(id).value);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const termsCheckbox = document.getElementById("terms");
-  
-  if (termsCheckbox) {
-    termsCheckbox.addEventListener("change", () => {
-      console.log("Checkbox atualizado. Estado atual:", termsCheckbox.checked);
-    });
-  } else {
-    console.error("Checkbox 'terms' não encontrado no DOM.");
-  }
-});
-
-// Função para validar o checkbox
-function validarCheckBox() {
-  const termsCheckbox = document.getElementById("terms");
-
-  if (termsCheckbox) {
-    console.log("Estado do checkbox:", termsCheckbox.checked); // Verifique o estado aqui
-    if (termsCheckbox.checked) {
-      return true;  // Sucesso
-    } else {
-      showAlert("error", "Para realizar o cadastro é necessário concordar com os termos.");
-      return false;  // Erro
-    }
-  } else {
-    console.error("Checkbox não encontrado.");
-    return false; // Caso o checkbox não seja encontrado
-  }
-}
-
 async function realizarCadastro() {
+  const termsAccepted = sessionStorage.getItem("terms");
+
+  if (termsAccepted !== "true") {
+    showAlert("error", "Por favor, aceite os termos para continuar o cadastro.");
+    return;
+  }
+
   const tipoUsuario = buscarTipoUsuario();
   const dataNascimento = document.getElementById("dataNascimento").value;
   const dataNascimentoISO = converterDataParaFormatoISO(dataNascimento);
-
-  // Verificar se o checkbox está marcado antes de continuar
-  console.log("Verificando estado do checkbox antes do cadastro...");
-  if (!validarCheckBox()) {
-    console.log("Cadastro não permitido. Checkbox não marcado.");
-    return;  // Se o checkbox não for marcado, interrompe o processo
-  }
 
   if (!validarCampos()) {
     showAlert("error", "Por favor, preencha todos os campos obrigatórios.");
@@ -188,6 +158,7 @@ async function realizarCadastro() {
     showAlert("error", error.message);
   }
 }
+
 
 async function cadastrarEndereco(tipoUsuario) {
   const endereco = {

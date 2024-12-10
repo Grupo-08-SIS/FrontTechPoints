@@ -179,18 +179,11 @@
                     </div>
                 </div>
                 <div class="checkbox-group">
-                    <input type="checkbox" id="terms" name="terms">
-                    <label for="terms">
-                      Concordo com os 
-                      <a 
-                        href="https://arrastao.org.br/site/wp-content/uploads/2024/07/Politica-de-Governanca-LGPD.pdf" 
-                        target="_blank" 
-                        id="terms-link">
-                        termos de uso
-                      </a> 
-                      dos meus dados
-                    </label>
-                  </div>                  
+                    <input type="checkbox" id="terms" name="terms" required onblur="updateProgress()">
+                    <label for="terms">Concordo com os <a
+                            href="https://arrastao.org.br/site/wp-content/uploads/2024/07/Politica-de-Governanca-LGPD.pdf"
+                            target="_blank" id="terms-link">termos de uso</a> dos meus dados</label>
+                </div>
 
                 <div class="btn-group">
                     <button type="button" onclick="previousStep('formAluno', 2)" class="button">Voltar</button>
@@ -256,7 +249,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="company">Nome da Empresa<</label>
+                        <label for="company">Empresa</label>
                         <input type="text" id="companyRecruiter" name="company" required onblur="updateProgress()">
                     </div>
                     <div class="form-group">
@@ -277,6 +270,8 @@
                     <button type="button" class="button submit-btn" onclick="realizarCadastro()">Cadastrar</button>
                 </div>
             </div>
+
+
 
         </div>
         <!-- Formulário Empresa -->
@@ -318,7 +313,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="firstname">Nome do Representante Legal</label>
+                        <label for="firstname">Representante Legal</label>
                         <input type="text" id="firstnameCompany" name="firstname" required onblur="updateProgress()">
                     </div>
                     <div class="form-group">
@@ -473,7 +468,28 @@
                     }
                 }
 
-                // Função para resetar a barra de progresso
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+                window.addEventListener('load', () => {
+                    checkboxes.forEach((checkbox) => {
+                        const savedValue = sessionStorage.getItem(checkbox.id);
+
+                        if (savedValue !== null) {
+                            checkbox.checked = JSON.parse(savedValue);
+                        } else {
+                            checkbox.checked = false;
+                            sessionStorage.setItem(checkbox.id, 'false');
+                        }
+
+                        checkbox.addEventListener('change', () => {
+                            const isChecked = checkbox.checked;
+
+                            sessionStorage.setItem(checkbox.id, isChecked.toString());
+
+                        });
+                    });
+                });
+
                 function resetProgress() {
                     document.getElementById('progressBar').style.width = '0%';
                     document.getElementById('progressBar').style.backgroundColor = '#2196f3'; // Cor azul
