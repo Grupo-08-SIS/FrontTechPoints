@@ -95,10 +95,47 @@ function validarCampos() {
   return campos[tipoUsuario].every((id) => document.getElementById(id).value);
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const termsCheckbox = document.getElementById("terms");
+  
+  if (termsCheckbox) {
+    termsCheckbox.addEventListener("change", () => {
+      console.log("Checkbox atualizado. Estado atual:", termsCheckbox.checked);
+    });
+  } else {
+    console.error("Checkbox 'terms' não encontrado no DOM.");
+  }
+});
+
+// Função para validar o checkbox
+function validarCheckBox() {
+  const termsCheckbox = document.getElementById("terms");
+
+  if (termsCheckbox) {
+    console.log("Estado do checkbox:", termsCheckbox.checked); // Verifique o estado aqui
+    if (termsCheckbox.checked) {
+      return true;  // Sucesso
+    } else {
+      showAlert("error", "Para realizar o cadastro é necessário concordar com os termos.");
+      return false;  // Erro
+    }
+  } else {
+    console.error("Checkbox não encontrado.");
+    return false; // Caso o checkbox não seja encontrado
+  }
+}
+
 async function realizarCadastro() {
   const tipoUsuario = buscarTipoUsuario();
   const dataNascimento = document.getElementById("dataNascimento").value;
   const dataNascimentoISO = converterDataParaFormatoISO(dataNascimento);
+
+  // Verificar se o checkbox está marcado antes de continuar
+  console.log("Verificando estado do checkbox antes do cadastro...");
+  if (!validarCheckBox()) {
+    console.log("Cadastro não permitido. Checkbox não marcado.");
+    return;  // Se o checkbox não for marcado, interrompe o processo
+  }
 
   if (!validarCampos()) {
     showAlert("error", "Por favor, preencha todos os campos obrigatórios.");
@@ -115,24 +152,19 @@ async function realizarCadastro() {
     } else {
       try {
         const cnpjRecruiter = document.getElementById("cnpjRecruiter").value;
-        idEndereco = await getEnderecoByCnpj(
-          removerFormatacaoCNPJ(cnpjRecruiter)
-        );
+        idEndereco = await getEnderecoByCnpj(removerFormatacaoCNPJ(cnpjRecruiter));
         console.log(idEndereco);
         if (!idEndereco) {
           throw new Error("Erro ao buscar endereço da Empresa");
         }
       } catch (error) {
         console.error("Erro ao tentar cadastrar o endereço:", error);
-        showAlert("error", "Erro ao tentar cadastrar o endereço");
+        showAlert("error", "Erro ao tentar cadastrar, CNPJ inválido ou não encontrado");
         return null;
       }
     }
-    const idUsuario = await cadastrarUsuario(
-      idEndereco,
-      tipoUsuario,
-      dataNascimentoISO
-    );
+
+    const idUsuario = await cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO);
     if (!idUsuario) {
       throw new Error("Erro ao cadastrar usuário");
     }
@@ -246,7 +278,7 @@ async function cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO) {
       tipoUsuario !== tipoUsuarioEnum.Empresa
         ? `${API_URL}/usuarios/cadastro`
         : `${API_URL}/empresa/cadastro`;
-    console.log(usuario);
+
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -255,10 +287,18 @@ async function cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO) {
 
     if (response.ok) {
       const data = await response.json();
+      showAlert("success", "Cadastro realizado com sucesso");
+
+      if (tipoUsuario === tipoUsuarioEnum.Empresa) {
+        setTimeout(() => {
+          window.location.href = "./login.html"; 
+        }, 2000);
+      }
+
       return data.id;
     } else {
       const errorData = await response.json();
-      showAlert("error", errorData.message || "Erro ao realizar cadastro");
+      showAlert("error", "Erro ao realizar cadastro");
       return null;
     }
   } catch (error) {
@@ -269,27 +309,32 @@ async function cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO) {
 }
 
 async function realizarLoginAutomatico(email, senha, tipoUsuario) {
-  try {
-    const response = await fetch(`${API_URL}/usuarios/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, senha }),
-    });
-
-    if (!response.ok) throw new Error("Erro ao tentar fazer login");
-
-    const data = await response.json();
-    if (data.id) {
-      sessionStorage.setItem("user", JSON.stringify(data));
-      window.location.href =
-        tipoUsuario === tipoUsuarioEnum.Aluno
-          ? "dash_aluno.html"
-          : "tela_rh_vagas.html";
-    } else {
-      showAlert("error", "Erro ao fazer login");
+  if (tipoUsuario !=3) {
+    try {
+      const response = await fetch(`${API_URL}/usuarios/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+      });
+  
+      if (!response.ok) throw new Error("Erro ao tentar fazer login");
+  
+      const data = await response.json();
+      if (data.id) {
+        sessionStorage.setItem("user", JSON.stringify(data));
+        setTimeout(() => {
+          window.location.href =
+            tipoUsuario === tipoUsuarioEnum.Aluno
+              ? "dash_aluno.html"
+              : "tela_rh_vagas.html";
+        }, 3000); 
+      }
+       else {
+        showAlert("error", "Erro ao fazer login");
+      }
+    } catch (error) {
+      showAlert("error", error.message);
     }
-  } catch (error) {
-    showAlert("error", error.message);
   }
 }
 
@@ -544,20 +589,20 @@ async function getEnderecoByCnpj(cnpj) {
       return data.endereco.id;
     } else {
       const errorData = await response.json();
-      showAlert("error", errorData.message || "Erro ao buscar endereço");
+      showAlert("error", errorData.message || "Erro ao buscaraaaaaaaaa endereço");
       return null;
     }
   } catch (error) {
-    console.error("Erro ao tentar buscar endereço:", error);
-    showAlert("error", "Erro ao tentar buscar endereço");
+    console.error("Erro ao tentar buscaraaaaaaaa endereço:", error);
+    showAlert("error", "Erro ao tentar aaaaaaaaaabuscar endereço");
     return null;
   }
 }
 
 function formatarCNPJ(event) {
   const cnpjInput = event.target;
-  let cnpjFormatado = cnpjInput.value.replace(/\D/g, "");
-
+  let cnpjFormatado = cnpjInput.value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+  
   if (cnpjFormatado.length <= 2) {
     cnpjFormatado = cnpjFormatado.replace(/(\d{1,2})/, "$1");
   } else if (cnpjFormatado.length <= 5) {
@@ -584,6 +629,48 @@ function formatarCNPJ(event) {
   if (cnpjInput.value.length > 18) {
     cnpjInput.value = cnpjInput.value.slice(0, 18);
   }
+
+  // Validação do CNPJ
+  if (validarCNPJ(cnpjFormatado)) {
+    showAlert("success", "CNPJ válido. Sucesso, CNPJ inserido é válido.");
+  } else {
+    showAlert("error", "CNPJ inválido. Por favor, insira um CNPJ válido.");
+  }
+}
+
+function validarCNPJ(cnpj) {
+  cnpj = cnpj.replace(/\D/g, ""); // Remove qualquer coisa que não seja número
+
+  // CNPJ com todos os números iguais são inválidos
+  if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) {
+    return false;
+  }
+
+  // Validação dos dígitos verificadores
+  const calcularDigitoVerificador = (cnpj, pesos) => {
+    let soma = 0;
+    for (let i = 0; i < pesos.length; i++) {
+      soma += parseInt(cnpj.charAt(i)) * pesos[i];
+    }
+    const resto = soma % 11;
+    return resto < 2 ? 0 : 11 - resto;
+  };
+
+  // Primeira validação (13º dígito)
+  const pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  const digito1 = calcularDigitoVerificador(cnpj, pesos1);
+  if (digito1 !== parseInt(cnpj.charAt(12))) {
+    return false;
+  }
+
+  // Segunda validação (14º dígito)
+  const pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  const digito2 = calcularDigitoVerificador(cnpj, pesos2);
+  if (digito2 !== parseInt(cnpj.charAt(13))) {
+    return false;
+  }
+
+  return true;
 }
 
 function removerFormatacaoCNPJ(cnpj) {
