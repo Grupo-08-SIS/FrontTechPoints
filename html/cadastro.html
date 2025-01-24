@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="../css/cadastrov2.css">
     <link rel="icon" type="image/x-icon" href="../imgs/logo-arrastao.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <script src="/js/script_api.js"></script>
-
 </head>
 
 <body>
@@ -60,39 +58,39 @@
             <div id="step1" class="step">
                 <div class="form-group">
                     <label for="username">Nome do Usuário</label>
-                    <input type="text" id="username" name="username" required onblur="updateProgress()">
+                    <input type="text" id="username" name="username" required onchange="updateProgress()">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstname">Primeiro Nome</label>
-                        <input type="text" id="firstname" name="firstname" required onblur="updateProgress()">
+                        <input type="text" id="firstname" name="firstname" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="lastname">Sobrenome</label>
-                        <input type="text" id="lastname" name="lastname" required onblur="updateProgress()">
+                        <input type="text" id="lastname" name="lastname" required onchange="updateProgress()">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="cpf">CPF</label>
-                        <input type="text" id="cpf" name="cpf" required onblur="formatarCPF()" maxlength="14"
-                            onblur="updateProgress()">
+                        <input type="text" id="cpf" name="cpf" required onchange="formatarCPF()" maxlength="14"
+                            onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="telefone">Telefone</label>
-                        <input type="text" id="telefone" name="telefone" required onblur="formatarTelefone()"
-                            maxlength="15" onblur="updateProgress()">
+                        <input type="text" id="telefone" name="telefone" required onchange="formatarTelefone()"
+                            maxlength="15" onchange="updateProgress()">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" required onblur="updateProgress()">
+                        <input type="email" id="email" name="email" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="password">Senha</label>
-                        <input type="password" id="password" name="password" required onblur="updateProgress()">
+                        <input type="password" id="password" name="password" required onchange="updateProgress()">
                     </div>
                 </div>
 
@@ -108,12 +106,12 @@
                 <div class="form-group">
                     <label for="dataNascimento">Data de Nascimento</label>
                     <input type="text" id="dataNascimento" name="dataNascimento" required
-                        onblur="formatarDataNascimento()" maxlength="10" placeholder="DD/MM/AAAA"
-                        onblur="updateProgress()">
+                        onchange="formatarDataNascimento()" maxlength="10" placeholder="DD/MM/AAAA"
+                        onchange="updateProgress()">
                 </div>
                 <div class="form-group">
                     <label for="sexo">Sexo</label>
-                    <select name="sexo" id="sexo" required onblur="updateProgress()">
+                    <select name="sexo" id="sexo" required onchange="updateProgress()">
                         <option value="">Selecione o sexo</option>
                         <option value="sexo_masculino">Masculino</option>
                         <option value="sexo_feminino">Feminino</option>
@@ -122,7 +120,7 @@
 
                 <div class="form-group">
                     <label for="etnia">Etnia</label>
-                    <select name="etnia" id="etnia" required onblur="updateProgress()">
+                    <select name="etnia" id="etnia" required onchange="updateProgress()">
                         <option value="">Selecione a cor/raça</option>
                         <option value="Branca">Branca</option>
                         <option value="Preta">Preta</option>
@@ -155,31 +153,31 @@
             <div id="step3" class="step" style="display:none">
                 <div class="form-group">
                     <label for="cep">CEP</label>
-                    <input type="text" id="cep" name="cep" required onblur="formatarCep()" maxlength="9"
-                        onchange="buscarCep()" onblur="updateProgress()">
+                    <input type="text" id="cep" name="cep" required onchange="formatarCep()" maxlength="9"
+                        onchange="buscarCep()" onchange="updateProgress()">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="city">Cidade</label>
-                        <input type="text" id="city" name="city" required onblur="updateProgress()">
+                        <input type="text" id="city" name="city" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="state">Estado</label>
-                        <input type="text" id="state" name="state" required onblur="updateProgress()">
+                        <input type="text" id="state" name="state" required onchange="updateProgress()">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="street">Rua</label>
-                        <input type="text" id="street" name="street" required onblur="updateProgress()">
+                        <input type="text" id="street" name="street" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="number">Número</label>
-                        <input type="text" id="number" name="number" required onblur="updateProgress()">
+                        <input type="text" id="number" name="number" required onchange="updateProgress()">
                     </div>
                 </div>
                 <div class="checkbox-group">
-                    <input type="checkbox" id="terms" name="terms" required onblur="updateProgress()">
+                    <input type="checkbox" id="terms" name="terms" required onchange="updateProgress()">
                     <label for="terms">Concordo com os <a
                             href="https://arrastao.org.br/site/wp-content/uploads/2024/07/Politica-de-Governanca-LGPD.pdf"
                             target="_blank" id="terms-link">termos de uso</a> dos meus dados</label>
@@ -198,21 +196,22 @@
 
                 <div class="form-group">
                     <label for="username">Nome do Usuário</label>
-                    <input type="text" id="usernameRecruiter" name="username" required onblur="updateProgress()">
+                    <input type="text" id="usernameRecruiter" name="username" required onchange="updateProgress()">
                 </div>
 
                 <div class="form-group">
                     <label for="firstname">Primeiro Nome</label>
-                    <input type="text" id="firstnameRecruiter" name="firstname" required onblur="updateProgress()">
+                    <input type="text" id="firstnameRecruiter" name="firstname" required onchange="updateProgress()">
                 </div>
                 <div class="form-group">
                     <label for="lastname">Sobrenome</label>
-                    <input type="text" id="lastnameRecruiter" name="lastname" required onblur="updateProgress()">
+                    <input type="text" id="lastnameRecruiter" name="lastname" required onchange="updateProgress()">
                 </div>
 
                 <div class="form-group">
                     <label for="cpf">CPF</label>
-                    <input type="text" id="cpfRecruiter" name="cpf" required onblur="formatarCPF(event)" maxlength="14">
+                    <input type="text" id="cpfRecruiter" name="cpf" required onchange="formatarCPF(event)"
+                        maxlength="14">
                 </div>
 
                 <div class="btn-group">
@@ -231,7 +230,7 @@
                     <div class="form-group">
                         <label for="telefone">Telefone</label>
                         <input type="text" id="telefoneRecruiter" name="telefone" required
-                            onblur="formatarTelefone(event)" maxlength="15">
+                            onchange="formatarTelefone(event)" maxlength="15">
 
                     </div>
                 </div>
@@ -239,27 +238,27 @@
                     <div class="form-group">
                         <label for="recruiterEmail">E-mail do Recrutador</label>
                         <input type="email" id="recruiterEmail" name="recruiterEmail" required
-                            onblur="updateProgress()">
+                            onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="companyEmail">Senha</label>
                         <input type="password" id="passwordRecruiter" name="password" required
-                            onblur="updateProgress()">
+                            onchange="updateProgress()">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="company">Empresa</label>
-                        <input type="text" id="companyRecruiter" name="company" required onblur="updateProgress()">
+                        <input type="text" id="companyRecruiter" name="company" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="cnpj">CNPJ da Empresa</label>
-                        <input type="text" id="cnpjRecruiter" name="cnpj" required onblur="formatarCNPJ(event)"
+                        <input type="text" id="cnpjRecruiter" name="cnpj" required onchange="formatarCNPJ(event)"
                             maxlength="18">
                     </div>
                 </div>
                 <div class="checkbox-group">
-                    <input type="checkbox" id="terms" name="terms" required onblur="updateProgress()">
+                    <input type="checkbox" id="terms" name="terms" required onchange="updateProgress()">
                     <label for="terms">Concordo com os <a
                             href="https://arrastao.org.br/site/wp-content/uploads/2024/07/Politica-de-Governanca-LGPD.pdf"
                             target="_blank" id="terms-link">termos de uso</a> dos meus dados</label>
@@ -281,11 +280,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="companyName">Nome da Empresa</label>
-                        <input type="text" id="companyName" name="companyName" required onblur="updateProgress()">
+                        <input type="text" id="companyName" name="companyName" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="cnpj">CNPJ da Empresa</label>
-                        <input type="text" id="cnpjCompany" name="cnpj" required onblur="formatarCNPJ(event)"
+                        <input type="text" id="cnpjCompany" name="cnpj" required onchange="formatarCNPJ(event)"
                             maxlength="18">
                     </div>
                 </div>
@@ -293,32 +292,34 @@
 
                     <div class="form-group">
                         <label for="email">E-mail da Empresa</label>
-                        <input type="email" id="companyEmail" name="companyEmail" required onblur="updateProgress()">
+                        <input type="email" id="companyEmail" name="companyEmail" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="password">Senha</label>
-                        <input type="password" id="passwordCompany" name="password" required onblur="updateProgress()">
+                        <input type="password" id="passwordCompany" name="password" required
+                            onchange="updateProgress()">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="setorIndustria">Setor Industria</label>
-                        <input type="text" id="setorIndustria" name="setorIndustria" required onblur="updateProgress()">
+                        <input type="text" id="setorIndustria" name="setorIndustria" required
+                            onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="telefone">Telefone</label>
                         <input type="text" id="telefoneCompany" name="telefone" required
-                            onblur="formatarTelefone(event)" maxlength="15">
+                            onchange="formatarTelefone(event)" maxlength="15">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstname">Representante Legal</label>
-                        <input type="text" id="firstnameCompany" name="firstname" required onblur="updateProgress()">
+                        <input type="text" id="firstnameCompany" name="firstname" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="lastname">Sobrenome</label>
-                        <input type="text" id="lastnameCompany" name="lastname" required onblur="updateProgress()">
+                        <input type="text" id="lastnameCompany" name="lastname" required onchange="updateProgress()">
                     </div>
                 </div>
 
@@ -330,31 +331,31 @@
             <div id="empresaStep2" class="step" style="display:none">
                 <div class="form-group">
                     <label for="cep">CEP</label>
-                    <input type="text" id="cepCompany" name="cep" required onblur="formatarCep()" maxlength="9"
-                        onchange="buscarCep()" onblur="updateProgress()">
+                    <input type="text" id="cepCompany" name="cep" required onchange="formatarCep()" maxlength="9"
+                        onchange="buscarCep()" onchange="updateProgress()">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="city">Cidade</label>
-                        <input type="text" id="cityCompany" name="city" required onblur="updateProgress()">
+                        <input type="text" id="cityCompany" name="city" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="state">Estado</label>
-                        <input type="text" id="stateCompany" name="state" required onblur="updateProgress()">
+                        <input type="text" id="stateCompany" name="state" required onchange="updateProgress()">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="street">Rua</label>
-                        <input type="text" id="streetCompany" name="street" required onblur="updateProgress()">
+                        <input type="text" id="streetCompany" name="street" required onchange="updateProgress()">
                     </div>
                     <div class="form-group">
                         <label for="number">Número</label>
-                        <input type="text" id="numberCompany" name="number" required onblur="updateProgress()">
+                        <input type="text" id="numberCompany" name="number" required onchange="updateProgress()">
                     </div>
                 </div>
                 <div class="checkbox-group">
-                    <input type="checkbox" id="terms" name="terms" required onblur="updateProgress()">
+                    <input type="checkbox" id="terms" name="terms" required onchange="updateProgress()">
                     <label for="terms">Concordo com os <a
                             href="https://arrastao.org.br/site/wp-content/uploads/2024/07/Politica-de-Governanca-LGPD.pdf"
                             target="_blank" id="terms-link">termos de uso</a> dos meus dados</label>
@@ -590,3 +591,4 @@
 </body>
 
 </html>
+<script type="module" src="../js/script_api.js"></script>

@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:8080";
+import backendUrl from "./backendUrl.js";
+
 const tipoUsuarioEnum = {
   Aluno: 1,
   Recrutador: 2,
@@ -99,7 +100,10 @@ async function realizarCadastro() {
   const termsAccepted = sessionStorage.getItem("terms");
 
   if (termsAccepted !== "true") {
-    showAlert("error", "Por favor, aceite os termos para continuar o cadastro.");
+    showAlert(
+      "error",
+      "Por favor, aceite os termos para continuar o cadastro."
+    );
     return;
   }
 
@@ -122,19 +126,28 @@ async function realizarCadastro() {
     } else {
       try {
         const cnpjRecruiter = document.getElementById("cnpjRecruiter").value;
-        idEndereco = await getEnderecoByCnpj(removerFormatacaoCNPJ(cnpjRecruiter));
+        idEndereco = await getEnderecoByCnpj(
+          removerFormatacaoCNPJ(cnpjRecruiter)
+        );
         console.log(idEndereco);
         if (!idEndereco) {
           throw new Error("Erro ao buscar endereço da Empresa");
         }
       } catch (error) {
         console.error("Erro ao tentar cadastrar o endereço:", error);
-        showAlert("error", "Erro ao tentar cadastrar, CNPJ inválido ou não encontrado");
+        showAlert(
+          "error",
+          "Erro ao tentar cadastrar, CNPJ inválido ou não encontrado"
+        );
         return null;
       }
     }
 
-    const idUsuario = await cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO);
+    const idUsuario = await cadastrarUsuario(
+      idEndereco,
+      tipoUsuario,
+      dataNascimentoISO
+    );
     if (!idUsuario) {
       throw new Error("Erro ao cadastrar usuário");
     }
@@ -159,7 +172,6 @@ async function realizarCadastro() {
   }
 }
 
-
 async function cadastrarEndereco(tipoUsuario) {
   const endereco = {
     1: {
@@ -179,7 +191,7 @@ async function cadastrarEndereco(tipoUsuario) {
   };
 
   try {
-    const response = await fetch(`${API_URL}/enderecos/cadastro`, {
+    const response = await fetch(`${backendUrl}/enderecos/cadastro`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(endereco[tipoUsuario]),
@@ -247,8 +259,8 @@ async function cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO) {
   try {
     const url =
       tipoUsuario !== tipoUsuarioEnum.Empresa
-        ? `${API_URL}/usuarios/cadastro`
-        : `${API_URL}/empresa/cadastro`;
+        ? `${backendUrl}/usuarios/cadastro`
+        : `${backendUrl}/empresa/cadastro`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -262,7 +274,7 @@ async function cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO) {
 
       if (tipoUsuario === tipoUsuarioEnum.Empresa) {
         setTimeout(() => {
-          window.location.href = "./login.html"; 
+          window.location.href = "./login.html";
         }, 2000);
       }
 
@@ -280,16 +292,16 @@ async function cadastrarUsuario(idEndereco, tipoUsuario, dataNascimentoISO) {
 }
 
 async function realizarLoginAutomatico(email, senha, tipoUsuario) {
-  if (tipoUsuario !=3) {
+  if (tipoUsuario != 3) {
     try {
-      const response = await fetch(`${API_URL}/usuarios/login`, {
+      const response = await fetch(`${backendUrl}/usuarios/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),
       });
-  
+
       if (!response.ok) throw new Error("Erro ao tentar fazer login");
-  
+
       const data = await response.json();
       if (data.id) {
         sessionStorage.setItem("user", JSON.stringify(data));
@@ -298,9 +310,8 @@ async function realizarLoginAutomatico(email, senha, tipoUsuario) {
             tipoUsuario === tipoUsuarioEnum.Aluno
               ? "dash_aluno.html"
               : "tela_rh_vagas.html";
-        }, 3000); 
-      }
-       else {
+        }, 3000);
+      } else {
         showAlert("error", "Erro ao fazer login");
       }
     } catch (error) {
@@ -309,7 +320,7 @@ async function realizarLoginAutomatico(email, senha, tipoUsuario) {
   }
 }
 
-function buscarCep() {
+window.buscarCep = function buscarCep() {
   const cepInputs = ["cep", "cepCompany"];
   cepInputs.forEach((cepId) => {
     const cepInput = document.getElementById(cepId);
@@ -345,9 +356,9 @@ function buscarCep() {
       }
     }
   });
-}
+};
 
-function formatarCep(event) {
+window.formatarCep = function formatarCep(event) {
   const cepInput = event.target;
   let cepFormatado = cepInput.value.replace(/\D/g, "");
 
@@ -357,7 +368,7 @@ function formatarCep(event) {
   }
 
   cepInput.value = cepFormatado;
-}
+};
 
 function formatarCPF(event) {
   const cpfInput = event.target;
@@ -550,9 +561,12 @@ function converterDataParaFormatoISO(data) {
 
 async function getEnderecoByCnpj(cnpj) {
   try {
-    const response = await fetch(`${API_URL}/empresa/buscar-por-cnpj/${cnpj}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${backendUrl}/empresa/buscar-por-cnpj/${cnpj}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -560,7 +574,10 @@ async function getEnderecoByCnpj(cnpj) {
       return data.endereco.id;
     } else {
       const errorData = await response.json();
-      showAlert("error", errorData.message || "Erro ao buscaraaaaaaaaa endereço");
+      showAlert(
+        "error",
+        errorData.message || "Erro ao buscaraaaaaaaaa endereço"
+      );
       return null;
     }
   } catch (error) {
@@ -573,7 +590,7 @@ async function getEnderecoByCnpj(cnpj) {
 function formatarCNPJ(event) {
   const cnpjInput = event.target;
   let cnpjFormatado = cnpjInput.value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
-  
+
   if (cnpjFormatado.length <= 2) {
     cnpjFormatado = cnpjFormatado.replace(/(\d{1,2})/, "$1");
   } else if (cnpjFormatado.length <= 5) {

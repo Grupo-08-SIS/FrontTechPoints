@@ -1,3 +1,5 @@
+import backEndUrl from "./backendUrl.js";
+
 document.addEventListener("DOMContentLoaded", async function () {
   const user = JSON.parse(sessionStorage.getItem("user"));
 
@@ -11,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   async function carregarDados(dataInicio, dataFim) {
     try {
-      const baseURL = `http://localhost:8080/pontuacoes`;
+      const baseURL = `${backendUrl}/pontuacoes`;
 
       const atividadesData = await fetchData(
         `${baseURL}/kpi-entregas/${user.id}${gerarQueryString(
@@ -54,14 +56,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           dataFim
         )}`
       );
-      
+
       await initMedalhaSelect(dataInicio, dataFim);
 
       const topCurso = getTopCurso(pontosPorCursoData);
       updateTopCursoDisplay(topCurso);
 
       const progressoAtualMetaEstudo = await fetchData(
-        `http://localhost:8080/meta-de-estudo/${user.id}`
+        `${backendUrl}/meta-de-estudo/${user.id}`
       );
       if (progressoAtualMetaEstudo) {
         const progressoAtualMetaEstudo2 = getProgressoAtualMetaEstudo(
@@ -115,8 +117,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function updateAtividadesDisplay(porcentagemFeitas) {
-    if(porcentagemFeitas == 'NaN'){
-      porcentagemFeitas = 0
+    if (porcentagemFeitas == "NaN") {
+      porcentagemFeitas = 0;
     }
 
     const atividadesChangeElement = document.getElementById(
@@ -136,28 +138,27 @@ document.addEventListener("DOMContentLoaded", async function () {
   function updatePontosSemanaDisplay(data) {
     const pontosSemanaElement = document.getElementById("pontos-semana");
     const semanaPassadaPontosElement = document.getElementById(
-        "semana-passada-pontos"
+      "semana-passada-pontos"
     );
     const pontosSemanaChangeElement = document.getElementById(
-        "pontos-semana-change"
+      "pontos-semana-change"
     );
 
     const totalSemanaPassada = Object.values(data.semanaPassada).reduce(
-        (acc, pontos) => acc + pontos,
-        0
+      (acc, pontos) => acc + pontos,
+      0
     );
     const totalSemanaAtual = Object.values(data.semanaAtual).reduce(
-        (acc, pontos) => acc + pontos,
-        0
+      (acc, pontos) => acc + pontos,
+      0
     );
     const diferenca = totalSemanaAtual - totalSemanaPassada;
 
     pontosSemanaElement.innerText = `${totalSemanaAtual} pts`;
     semanaPassadaPontosElement.innerText = `${totalSemanaPassada} pts`;
 
-    const diferencaImagem = diferenca >= 0 
-        ? "/imgs/seta-verde.png" 
-        : "/imgs/seta-vermelha.png";
+    const diferencaImagem =
+      diferenca >= 0 ? "/imgs/seta-verde.png" : "/imgs/seta-vermelha.png";
 
     pontosSemanaChangeElement.innerHTML = `
         <img src="${diferencaImagem}" alt="Seta"> 
@@ -165,12 +166,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     `;
 
     const setaElement = pontosSemanaChangeElement.querySelector("img");
-    setaElement.style.width = "40px"; 
+    setaElement.style.width = "40px";
 
     if (diferenca < 0) {
-        setaElement.style.transform = "rotate(180deg)";
+      setaElement.style.transform = "rotate(180deg)";
     }
-}
+  }
 
   function processGraficoLinhaData(data) {
     const cursosGraficoLinha = {};
@@ -179,12 +180,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (!cursosGraficoLinha[cursoId]) cursosGraficoLinha[cursoId] = {};
 
       atividades.forEach((atividade) => {
-
         const dateObj = new Date(atividade.dataEntrega);
         const date = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1)
           .toString()
-          .padStart(2, '0')}-${dateObj.getDate().toString().padStart(2, '0')}`;
-      
+          .padStart(2, "0")}-${dateObj.getDate().toString().padStart(2, "0")}`;
+
         if (!cursosGraficoLinha[cursoId][date]) {
           cursosGraficoLinha[cursoId][date] = 0;
         }
@@ -301,18 +301,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   async function initMedalhaSelect(dataInicio, dataFim) {
     try {
       const queryString = gerarQueryString(dataInicio, dataFim);
-      const response = await fetch(`http://localhost:8080/pontuacoes/pontos-totais/${user.id}${queryString}`);
-  
+      const response = await fetch(
+        `${backendUrl}/pontuacoes/pontos-totais/${user.id}${queryString}`
+      );
+
       if (!response.ok) {
         throw new Error("Erro na resposta da API");
       }
-  
+
       const data = await response.json();
-  
+
       const courseSelect = document.getElementById("course-select");
       const medalhaCurso = document.getElementById("medalha-curso");
-  
-      courseSelect.innerHTML = '<option value="" disabled selected>Selecione um curso</option>';
+
+      courseSelect.innerHTML =
+        '<option value="" disabled selected>Selecione um curso</option>';
 
       Object.keys(data)
         .filter((key) => data[key].pontosTotais > 0)
@@ -322,15 +325,15 @@ document.addEventListener("DOMContentLoaded", async function () {
           option.textContent = data[key].nomeCurso;
           courseSelect.appendChild(option);
         });
-  
+
       courseSelect.addEventListener("change", function () {
         const selectedCourseId = this.value;
         const selectedCourse = data[selectedCourseId];
-  
+
         if (selectedCourse) {
           const points = selectedCourse.pontosTotais;
           let medalSrc = "../imgs/ouro_dash.png";
-  
+
           if (points >= 300) {
             medalSrc = "../imgs/gold_medal.png";
           } else if (points >= 260) {
@@ -338,14 +341,12 @@ document.addEventListener("DOMContentLoaded", async function () {
           } else if (points >= 100) {
             medalSrc = "../imgs/bronze_medal.png";
           }
-  
+
           medalhaCurso.src = medalSrc;
         }
       });
-  
-  
+
       medalhaCurso.src = "../imgs/ouro_dash.png";
-  
     } catch (error) {
       console.error("Erro ao buscar dados de pontos:", error);
     }
@@ -970,7 +971,7 @@ async function cadastrarMetaEstudo(studyPlan, days) {
 
   const hoje = new Date();
   const dia = String(hoje.getDate()).padStart(2, "0");
-  const mes = String(hoje.getMonth() + 1).padStart(2, "0"); 
+  const mes = String(hoje.getMonth() + 1).padStart(2, "0");
   const ano = hoje.getFullYear();
   const dataHoje = `${dia}-${mes}-${ano}`;
 
@@ -978,7 +979,7 @@ async function cadastrarMetaEstudo(studyPlan, days) {
     const nomeDia = day;
     const qtdTempoEstudo = studyPlan[day];
 
-    const url = new URL("http://localhost:8080/meta-de-estudo/cadastro");
+    const url = new URL(`${backendUrl}/meta-de-estudo/cadastro`);
     url.searchParams.append("metaEstudoSemanaId", user.id);
     url.searchParams.append("nomeDia", nomeDia);
     url.searchParams.append("qtdTempoEstudo", qtdTempoEstudo);
@@ -1006,7 +1007,7 @@ async function cadastrarMetaEstudo(studyPlan, days) {
 async function carregarTabelaPontuacoes(idAluno) {
   try {
     const response = await fetch(
-      `http://localhost:8080/pontuacoes/lista?idAluno=${idAluno}`
+      `${backendUrl}/pontuacoes/lista?idAluno=${idAluno}`
     );
 
     if (!response.ok) {
